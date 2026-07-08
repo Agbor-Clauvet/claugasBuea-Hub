@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,14 +11,15 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/reset-password")({
   head: () => ({
     meta: [
-      { title: "Reset password — GasGo" },
-      { name: "description", content: "Choose a new password for your GasGo account." },
+      { title: "Reset password — ClauGas" },
+      { name: "description", content: "Choose a new password for your ClauGas account." },
     ],
   }),
   component: ResetPasswordPage,
 });
 
 function ResetPasswordPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -28,25 +30,25 @@ function ResetPasswordPage() {
     const { error } = await supabase.auth.updateUser({ password });
     setLoading(false);
     if (error) return toast.error(error.message);
-    toast.success("Password updated");
+    toast.success(t("auth.passwordUpdated"));
     navigate({ to: "/dashboard", replace: true });
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <Card className="w-full max-w-md">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-primary/5 via-background to-accent/5 px-4">
+      <Card className="w-full max-w-md shadow-xl">
         <CardHeader>
-          <CardTitle>Set a new password</CardTitle>
-          <CardDescription>Enter your new password below.</CardDescription>
+          <CardTitle>{t("auth.setNewPassword")}</CardTitle>
+          <CardDescription>{t("auth.setNewPasswordDesc")}</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="new-password">New password</Label>
+              <Label htmlFor="new-password">{t("auth.newPassword")}</Label>
               <Input id="new-password" type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} />
             </div>
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Updating..." : "Update password"}
+              {loading ? t("auth.updating") : t("auth.updatePassword")}
             </Button>
           </form>
         </CardContent>

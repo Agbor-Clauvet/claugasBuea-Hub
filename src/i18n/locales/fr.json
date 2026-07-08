@@ -1,0 +1,139 @@
+{
+  "brand": {
+    "name": "ClauGas",
+    "company": "ClauTech Digital Solutions",
+    "tagline": "Livraison intelligente de gaz au Cameroun",
+    "poweredBy": "Propulsé par ClauTech Digital Solutions"
+  },
+  "nav": {
+    "home": "Accueil",
+    "products": "Produits",
+    "howItWorks": "Comment ça marche",
+    "marketplace": "Marketplace",
+    "safety": "Conseils de sécurité",
+    "contact": "Contact",
+    "faq": "FAQ",
+    "login": "Connexion",
+    "register": "Inscription",
+    "dashboard": "Tableau de bord",
+    "signOut": "Déconnexion",
+    "language": "Langue",
+    "menu": "Menu"
+  },
+  "home": {
+    "hero": {
+      "title": "Livraison de gaz de cuisine rapide, sûre et fiable partout au Cameroun",
+      "subtitle": "Commandez du gaz à tout moment, où que vous soyez. Livraison rapide, paiement sécurisé, suivi en direct et service de confiance avec ClauGas.",
+      "ctaPrimary": "Commander maintenant",
+      "ctaSecondary": "Voir les bouteilles"
+    },
+    "featured": {
+      "title": "Bouteilles en vedette",
+      "subtitle": "Des marques de confiance, à prix justes, livrées chez vous.",
+      "loading": "Chargement du catalogue…",
+      "empty": "Aucune bouteille disponible pour le moment.",
+      "quickView": "Aperçu",
+      "order": "Commander",
+      "inStock": "En stock",
+      "outOfStock": "Rupture de stock",
+      "kg": "kg"
+    },
+    "how": {
+      "title": "Comment ça marche",
+      "s1Title": "Choisissez votre bouteille",
+      "s1Desc": "Sélectionnez la marque et la taille adaptées à votre cuisine.",
+      "s2Title": "Passez commande",
+      "s2Desc": "Ajoutez votre adresse et votre mode de paiement.",
+      "s3Title": "Livraison rapide",
+      "s3Desc": "Suivez votre livreur en temps réel jusqu'à l'arrivée."
+    },
+    "why": {
+      "title": "Pourquoi choisir ClauGas",
+      "f1": "Bouteilles certifiées et contrôlées",
+      "f2": "Prix transparents, sans surprise",
+      "f3": "Mobile Money & paiement à la livraison",
+      "f4": "Support local en anglais, français et pidgin"
+    },
+    "safety": {
+      "title": "Conseils de sécurité",
+      "t1": "Rangez toujours les bouteilles debout dans un endroit ventilé.",
+      "t2": "Vérifiez tuyaux et détendeurs avec de l'eau savonneuse.",
+      "t3": "Fermez la valve après usage, surtout la nuit."
+    },
+    "reviews": {
+      "title": "Ce que disent nos clients",
+      "r1Name": "Aïcha, Douala",
+      "r1Text": "Livraison en moins d'une heure. Livreur très professionnel.",
+      "r2Name": "Jean-Paul, Yaoundé",
+      "r2Text": "Les meilleurs prix, et je peux payer par MoMo.",
+      "r3Name": "Ngwa, Bamenda",
+      "r3Text": "Facile de commander en Pidgin. Super service !"
+    },
+    "faq": {
+      "title": "Questions fréquentes",
+      "q1": "Dans quelles villes livrez-vous ?",
+      "a1": "Nous livrons actuellement à Douala, Yaoundé, Bamenda et alentours.",
+      "q2": "Comment puis-je payer ?",
+      "a2": "Paiement à la livraison, MTN Mobile Money et Orange Money.",
+      "q3": "Puis-je échanger une bouteille vide ?",
+      "a3": "Oui — remettez votre bouteille vide au livreur à l'arrivée de la recharge."
+    },
+    "contact": {
+      "title": "Contactez-nous",
+      "subtitle": "Nous serions ravis de vous entendre.",
+      "phone": "Téléphone",
+      "email": "Email",
+      "hours": "Lun–Dim, 7h–21h"
+    }
+  },
+  "auth": {
+    "title": "Connectez-vous ou créez un compte",
+    "resetTitle": "Réinitialiser votre mot de passe",
+    "signIn": "Se connecter",
+    "register": "S'inscrire",
+    "email": "Email",
+    "password": "Mot de passe",
+    "passwordHint": "Mot de passe (6 caractères min)",
+    "fullName": "Nom complet",
+    "phone": "Téléphone",
+    "signingIn": "Connexion...",
+    "creating": "Création...",
+    "createAccount": "Créer le compte",
+    "forgot": "Mot de passe oublié ?",
+    "sendReset": "Envoyer le lien",
+    "sending": "Envoi...",
+    "backToSignIn": "Retour à la connexion",
+    "signedIn": "Connecté",
+    "signedOut": "Déconnecté",
+    "accountCreated": "Compte créé. Vérifiez votre email si une confirmation est requise.",
+    "resetSent": "Email de réinitialisation envoyé",
+    "newPassword": "Nouveau mot de passe",
+    "setNewPassword": "Définir un nouveau mot de passe",
+    "setNewPasswordDesc": "Entrez votre nouveau mot de passe ci-dessous.",
+    "updating": "Mise à jour...",
+    "updatePassword": "Mettre à jour",
+    "passwordUpdated": "Mot de passe mis à jour"
+  },
+  "dashboard": {
+    "welcome": "Bienvenue",
+    "profile": "Profil",
+    "yourAccount": "Votre compte",
+    "name": "Nom",
+    "phone": "Téléphone",
+    "activeCylinders": "Bouteilles actives",
+    "publicCatalog": "Catalogue public",
+    "myOrders": "Mes commandes",
+    "rlsScoped": "Restreint par RLS",
+    "rlsCheck": "Vérification RLS",
+    "rlsDesc": "Confirme que cette session ne voit que sa propre ligne de profil",
+    "ok": "ok",
+    "unexpected": "inattendu"
+  },
+  "footer": {
+    "rights": "Tous droits réservés.",
+    "poweredBy": "Propulsé par ClauTech Digital Solutions"
+  },
+  "common": {
+    "loading": "Chargement…"
+  }
+}
