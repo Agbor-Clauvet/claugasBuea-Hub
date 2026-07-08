@@ -1,0 +1,139 @@
+{
+  "brand": {
+    "name": "ClauGas",
+    "company": "ClauTech Digital Solutions",
+    "tagline": "Sharp Gas Delivery for Cameroon",
+    "poweredBy": "Na ClauTech Digital Solutions dey power am"
+  },
+  "nav": {
+    "home": "Home",
+    "products": "Products",
+    "howItWorks": "How E Dey Work",
+    "marketplace": "Market",
+    "safety": "Safety Tips",
+    "contact": "Contact",
+    "faq": "Questions",
+    "login": "Login",
+    "register": "Register",
+    "dashboard": "Dashboard",
+    "signOut": "Comot",
+    "language": "Language",
+    "menu": "Menu"
+  },
+  "home": {
+    "hero": {
+      "title": "Sharp, Safe an Correct Cooking Gas Delivery For All Cameroon",
+      "subtitle": "Order cooking gas any time, any place. Fast delivery, safe payment, live tracking, and correct service from ClauGas.",
+      "ctaPrimary": "Order Gas Now-Now",
+      "ctaSecondary": "See Cylinders"
+    },
+    "featured": {
+      "title": "Top Cylinders",
+      "subtitle": "Correct brands, fair price, dem go bring am for your door.",
+      "loading": "Catalog dey load…",
+      "empty": "No cylinder dey for now.",
+      "quickView": "Quick look",
+      "order": "Order",
+      "inStock": "Dey ground",
+      "outOfStock": "Don finish",
+      "kg": "kg"
+    },
+    "how": {
+      "title": "How E Dey Work",
+      "s1Title": "Pick your cylinder",
+      "s1Desc": "Choose the brand and size wey fit your kitchen.",
+      "s2Title": "Make your order",
+      "s2Desc": "Put your address and how you go pay.",
+      "s3Title": "Sharp delivery",
+      "s3Desc": "Follow the rider live until e reach you."
+    },
+    "why": {
+      "title": "Why You Go Choose ClauGas",
+      "f1": "Cylinders wey dem check for safety",
+      "f2": "Clear price, no wahala",
+      "f3": "Mobile Money and pay when e reach",
+      "f4": "Support for English, French and Pidgin"
+    },
+    "safety": {
+      "title": "Safety Tips",
+      "t1": "Always keep cylinder stand-up for place wey get air.",
+      "t2": "Check hose and regulator with soap water for leak.",
+      "t3": "Off the valve when you no dey use am, especially for night."
+    },
+    "reviews": {
+      "title": "Wetin Customers Talk",
+      "r1Name": "Aïcha, Douala",
+      "r1Text": "Delivery reach me before one hour. Rider dey correct.",
+      "r2Name": "Jean-Paul, Yaoundé",
+      "r2Text": "Better price pass all. I fit pay with MoMo.",
+      "r3Name": "Ngwa, Bamenda",
+      "r3Text": "Easy to order for Pidgin. Sweet service!"
+    },
+    "faq": {
+      "title": "Questions Wey People Dey Ask",
+      "q1": "Which town una dey deliver?",
+      "a1": "For now na Douala, Yaoundé, Bamenda an the places near.",
+      "q2": "How I go pay?",
+      "a2": "Pay when e reach, MTN Mobile Money an Orange Money.",
+      "q3": "I fit change empty cylinder?",
+      "a3": "Yes — give the rider your empty one when the fresh one come."
+    },
+    "contact": {
+      "title": "Contact Us",
+      "subtitle": "We wan hear from you.",
+      "phone": "Phone",
+      "email": "Email",
+      "hours": "Mon–Sun, 7am–9pm"
+    }
+  },
+  "auth": {
+    "title": "Login or open new account",
+    "resetTitle": "Reset your password",
+    "signIn": "Login",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "passwordHint": "Password (6 letters minimum)",
+    "fullName": "Full name",
+    "phone": "Phone",
+    "signingIn": "E dey login...",
+    "creating": "E dey create...",
+    "createAccount": "Open account",
+    "forgot": "You forget password?",
+    "sendReset": "Send reset link",
+    "sending": "E dey send...",
+    "backToSignIn": "Back to login",
+    "signedIn": "You don login",
+    "signedOut": "You don comot",
+    "accountCreated": "Account don ready. Check your email if confirmation dey needed.",
+    "resetSent": "Reset email don go",
+    "newPassword": "New password",
+    "setNewPassword": "Put new password",
+    "setNewPasswordDesc": "Type your new password for down.",
+    "updating": "E dey update...",
+    "updatePassword": "Update password",
+    "passwordUpdated": "Password don change"
+  },
+  "dashboard": {
+    "welcome": "Welcome",
+    "profile": "Profile",
+    "yourAccount": "Your account",
+    "name": "Name",
+    "phone": "Phone",
+    "activeCylinders": "Cylinders wey dey",
+    "publicCatalog": "Public catalog",
+    "myOrders": "My orders",
+    "rlsScoped": "RLS dey scope am",
+    "rlsCheck": "RLS check",
+    "rlsDesc": "Dis session dey see only im own profile line",
+    "ok": "ok",
+    "unexpected": "no correct"
+  },
+  "footer": {
+    "rights": "All rights dey reserved.",
+    "poweredBy": "Na ClauTech Digital Solutions dey power am"
+  },
+  "common": {
+    "loading": "E dey load…"
+  }
+}

@@ -13,6 +13,8 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { loadStoredLanguage } from "@/i18n";
+import logoAsset from "@/assets/clautech-logo.png.asset.json";
 
 function NotFoundComponent() {
   return (
@@ -79,16 +81,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "GasGo — Gas cylinder delivery" },
-      { name: "description", content: "Order LPG cylinder refills and get them delivered fast." },
-      { property: "og:title", content: "GasGo — Gas cylinder delivery" },
-      { property: "og:description", content: "Order LPG cylinder refills and get them delivered fast." },
+      { title: "ClauGas — Smart Gas Delivery for Cameroon" },
+      { name: "description", content: "Fast, safe and reliable cooking gas delivery across Cameroon. Order anytime with live tracking and secure payment." },
+      { property: "og:title", content: "ClauGas — Smart Gas Delivery for Cameroon" },
+      { property: "og:description", content: "Fast, safe and reliable cooking gas delivery across Cameroon. Order anytime with live tracking and secure payment." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", type: "image/png", href: logoAsset.url },
     ],
   }),
   shellComponent: RootShell,
@@ -114,6 +116,10 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
+
+  useEffect(() => {
+    loadStoredLanguage();
+  }, []);
 
   useEffect(() => {
     const { data } = supabase.auth.onAuthStateChange((event) => {

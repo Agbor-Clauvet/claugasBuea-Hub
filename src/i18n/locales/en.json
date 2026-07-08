@@ -1,0 +1,139 @@
+{
+  "brand": {
+    "name": "ClauGas",
+    "company": "ClauTech Digital Solutions",
+    "tagline": "Smart Gas Delivery for Cameroon",
+    "poweredBy": "Powered by ClauTech Digital Solutions"
+  },
+  "nav": {
+    "home": "Home",
+    "products": "Products",
+    "howItWorks": "How It Works",
+    "marketplace": "Marketplace",
+    "safety": "Safety Tips",
+    "contact": "Contact",
+    "faq": "FAQ",
+    "login": "Login",
+    "register": "Register",
+    "dashboard": "Dashboard",
+    "signOut": "Sign out",
+    "language": "Language",
+    "menu": "Menu"
+  },
+  "home": {
+    "hero": {
+      "title": "Fast, Safe & Reliable Cooking Gas Delivery Across Cameroon",
+      "subtitle": "Order cooking gas anytime, anywhere. Get fast delivery, secure payments, live order tracking, and trusted service from ClauGas.",
+      "ctaPrimary": "Order Gas Now",
+      "ctaSecondary": "Browse Cylinders"
+    },
+    "featured": {
+      "title": "Featured Cylinders",
+      "subtitle": "Trusted brands, fair prices, delivered to your door.",
+      "loading": "Loading catalog…",
+      "empty": "No cylinders available yet.",
+      "quickView": "Quick view",
+      "order": "Order",
+      "inStock": "In stock",
+      "outOfStock": "Out of stock",
+      "kg": "kg"
+    },
+    "how": {
+      "title": "How It Works",
+      "s1Title": "Choose your cylinder",
+      "s1Desc": "Pick the brand and size that fits your kitchen.",
+      "s2Title": "Place your order",
+      "s2Desc": "Add your delivery address and preferred payment.",
+      "s3Title": "Fast delivery",
+      "s3Desc": "Track your rider in real time until it arrives."
+    },
+    "why": {
+      "title": "Why Choose ClauGas",
+      "f1": "Certified, safety-checked cylinders",
+      "f2": "Transparent prices, no surprises",
+      "f3": "Mobile Money & Cash on Delivery",
+      "f4": "Local support in English, French & Pidgin"
+    },
+    "safety": {
+      "title": "Safety Tips",
+      "t1": "Always store cylinders upright in a ventilated area.",
+      "t2": "Check hoses and regulators for leaks with soapy water.",
+      "t3": "Turn off the valve when not in use, especially overnight."
+    },
+    "reviews": {
+      "title": "What customers say",
+      "r1Name": "Aïcha, Douala",
+      "r1Text": "Delivery in under an hour. Very professional rider.",
+      "r2Name": "Jean-Paul, Yaoundé",
+      "r2Text": "Best prices I've found, and I can pay with MoMo.",
+      "r3Name": "Ngwa, Bamenda",
+      "r3Text": "Easy to order in Pidgin. Very sweet service!"
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "q1": "Which cities do you deliver to?",
+      "a1": "We currently deliver in Douala, Yaoundé, Bamenda and surrounding areas.",
+      "q2": "How can I pay?",
+      "a2": "Cash on Delivery, MTN Mobile Money and Orange Money.",
+      "q3": "Can I exchange an empty cylinder?",
+      "a3": "Yes — hand over your empty cylinder to the rider when your refill arrives."
+    },
+    "contact": {
+      "title": "Contact Us",
+      "subtitle": "We'd love to hear from you.",
+      "phone": "Phone",
+      "email": "Email",
+      "hours": "Mon–Sun, 7am–9pm"
+    }
+  },
+  "auth": {
+    "title": "Sign in or create an account",
+    "resetTitle": "Reset your password",
+    "signIn": "Sign in",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "passwordHint": "Password (min 6 chars)",
+    "fullName": "Full name",
+    "phone": "Phone",
+    "signingIn": "Signing in...",
+    "creating": "Creating...",
+    "createAccount": "Create account",
+    "forgot": "Forgot password?",
+    "sendReset": "Send reset link",
+    "sending": "Sending...",
+    "backToSignIn": "Back to sign in",
+    "signedIn": "Signed in",
+    "signedOut": "Signed out",
+    "accountCreated": "Account created. Check your email if confirmation is required.",
+    "resetSent": "Password reset email sent",
+    "newPassword": "New password",
+    "setNewPassword": "Set a new password",
+    "setNewPasswordDesc": "Enter your new password below.",
+    "updating": "Updating...",
+    "updatePassword": "Update password",
+    "passwordUpdated": "Password updated"
+  },
+  "dashboard": {
+    "welcome": "Welcome",
+    "profile": "Profile",
+    "yourAccount": "Your account",
+    "name": "Name",
+    "phone": "Phone",
+    "activeCylinders": "Active cylinders",
+    "publicCatalog": "Public catalog",
+    "myOrders": "My orders",
+    "rlsScoped": "RLS scoped",
+    "rlsCheck": "RLS self-check",
+    "rlsDesc": "Confirms this session only sees its own profile row",
+    "ok": "ok",
+    "unexpected": "unexpected"
+  },
+  "footer": {
+    "rights": "All rights reserved.",
+    "poweredBy": "Powered by ClauTech Digital Solutions"
+  },
+  "common": {
+    "loading": "Loading…"
+  }
+}
