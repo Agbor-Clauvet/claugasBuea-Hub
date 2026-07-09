@@ -21,11 +21,13 @@ export type Database = {
           id: string
           is_default: boolean
           label: string | null
+          landmark: string | null
           latitude: number | null
           line1: string
           line2: string | null
           longitude: number | null
           notes: string | null
+          quarter: string | null
           region: string | null
           updated_at: string
           user_id: string
@@ -36,11 +38,13 @@ export type Database = {
           id?: string
           is_default?: boolean
           label?: string | null
+          landmark?: string | null
           latitude?: number | null
           line1: string
           line2?: string | null
           longitude?: number | null
           notes?: string | null
+          quarter?: string | null
           region?: string | null
           updated_at?: string
           user_id: string
@@ -51,11 +55,13 @@ export type Database = {
           id?: string
           is_default?: boolean
           label?: string | null
+          landmark?: string | null
           latitude?: number | null
           line1?: string
           line2?: string | null
           longitude?: number | null
           notes?: string | null
+          quarter?: string | null
           region?: string | null
           updated_at?: string
           user_id?: string
@@ -216,6 +222,36 @@ export type Database = {
           full_name?: string | null
           id?: string
           phone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      service_areas: {
+        Row: {
+          city: string
+          created_at: string
+          id: string
+          is_active: boolean
+          quarter: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          city?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          quarter: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          city?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          quarter?: string
+          sort_order?: number
           updated_at?: string
         }
         Relationships: []
