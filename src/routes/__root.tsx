@@ -87,6 +87,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:description", content: "Fast, safe and reliable cooking gas delivery across Cameroon. Order anytime with live tracking and secure payment." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "ClauGas — Smart Gas Delivery for Cameroon" },
+      { name: "twitter:description", content: "Fast, safe and reliable cooking gas delivery across Cameroon. Order anytime with live tracking and secure payment." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f82870e7-f7ff-4566-936f-0d2e60b1900b/id-preview-a6745608--1b781210-c8d7-437c-9112-a1c2a0ac5f2f.lovable.app-1783582739100.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f82870e7-f7ff-4566-936f-0d2e60b1900b/id-preview-a6745608--1b781210-c8d7-437c-9112-a1c2a0ac5f2f.lovable.app-1783582739100.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
