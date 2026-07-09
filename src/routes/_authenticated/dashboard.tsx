@@ -87,6 +87,11 @@ function DashboardPage() {
               <Badge key={r} variant="secondary">{r}</Badge>
             ))}
           </div>
+          <div className="mt-3">
+            <Link to="/addresses" className="text-sm font-medium text-primary hover:underline">
+              {t("address.title")} →
+            </Link>
+          </div>
         </div>
 
         <div className="grid gap-4 md:grid-cols-3">
