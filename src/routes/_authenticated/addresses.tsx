@@ -11,7 +11,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { toast } from "sonner";
-import { Trash2 } from "lucide-react";
+import { Trash2, Pencil } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/addresses")({
   head: () => ({
@@ -183,9 +183,12 @@ function AddressesPage() {
                   <Checkbox checked={makeDefault} onCheckedChange={(v) => setMakeDefault(!!v)} />
                   {t("address.makeDefault")}
                 </label>
-                <Button type="submit" className="w-full" disabled={saving}>
-                  {t("address.add")}
-                </Button>
+                <div className="flex gap-2">
+                  <Button type="submit" className="flex-1" disabled={saving}>
+                    {editingId ? t("address.saveChanges") : t("address.add")}
+                  </Button>
+                  {editingId ? <Button type="button" variant="outline" onClick={resetForm}>{t("address.cancel")}</Button> : null}
+                </div>
               </form>
             </CardContent>
           </Card>
@@ -210,9 +213,14 @@ function AddressesPage() {
                       </div>
                       {a.notes ? <div className="text-xs text-muted-foreground mt-1">{a.notes}</div> : null}
                     </div>
-                    <Button variant="ghost" size="icon" onClick={() => handleDelete(a.id)} aria-label={t("address.delete")}>
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
+                    <div className="flex flex-col gap-1">
+                      <Button variant="ghost" size="icon" onClick={() => startEdit(a)} aria-label={t("address.edit")}>
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                      <Button variant="ghost" size="icon" onClick={() => handleDelete(a.id)} aria-label={t("address.delete")}>
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </div>
                 ))
               )}
