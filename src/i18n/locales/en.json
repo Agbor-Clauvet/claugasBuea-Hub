@@ -34,6 +34,7 @@
       "empty": "No cylinders available yet.",
       "quickView": "Quick view",
       "order": "Order",
+      "bookRefill": "Book Refill",
       "inStock": "In stock",
       "outOfStock": "Out of stock",
       "kg": "kg"
@@ -146,7 +147,57 @@
     "saved": "Address saved",
     "removed": "Address removed",
     "saveFailed": "Could not save address",
-    "loading": "Loading addresses…"
+    "loading": "Loading addresses…",
+    "saveChanges": "Save changes",
+    "cancel": "Cancel",
+    "quarterRequired": "Please choose a quarter",
+    "deleteConfirm": "Delete this address?"
+  },
+  "booking": {
+    "title": "Book a Refill",
+    "details": "Booking details",
+    "address": "Delivery address",
+    "noAddress": "No saved address.",
+    "needAddress": "Add an address first",
+    "consumerNumber": "Consumer number (optional)",
+    "preferredDate": "Preferred delivery date",
+    "notes": "Notes for the rider",
+    "confirm": "Confirm booking",
+    "placing": "Placing…",
+    "placed": "Booking placed"
+  },
+  "order": {
+    "myOrders": "My orders",
+    "orderNumber": "Order",
+    "tabAll": "All",
+    "tabBookings": "Cylinder Bookings",
+    "tabOther": "Other",
+    "booking": "Booking",
+    "empty": "No orders yet.",
+    "tracking": "Tracking",
+    "items": "Items",
+    "delivery": "Delivery",
+    "total": "Total",
+    "eta": "Preferred delivery",
+    "status": {
+      "pending": "Order Placed",
+      "confirmed": "Confirmed",
+      "assigned": "Confirmed",
+      "in_transit": "Out for Delivery",
+      "delivered": "Delivered",
+      "cancelled": "Cancelled"
+    }
+  },
+  "admin": {
+    "cylinderPricing": "Cylinder Pricing",
+    "orders": "Orders",
+    "priceXaf": "Price (XAF)",
+    "save": "Save",
+    "active": "Active",
+    "priceUpdated": "Price updated",
+    "statusUpdated": "Status updated",
+    "invalidPrice": "Enter a valid price",
+    "forbidden": "Admins only."
   },
   "dashboard": {
     "welcome": "Welcome",

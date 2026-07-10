@@ -34,6 +34,7 @@
       "empty": "No cylinder dey for now.",
       "quickView": "Quick look",
       "order": "Order",
+      "bookRefill": "Book Refill",
       "inStock": "Dey ground",
       "outOfStock": "Don finish",
       "kg": "kg"
@@ -146,7 +147,57 @@
     "saved": "Address don save",
     "removed": "Address don comot",
     "saveFailed": "Address no fit save",
-    "loading": "Addresses dey load…"
+    "loading": "Addresses dey load…",
+    "saveChanges": "Save change",
+    "cancel": "Cancel",
+    "quarterRequired": "Abeg choose quarter",
+    "deleteConfirm": "You wan delete dis address?"
+  },
+  "booking": {
+    "title": "Book Refill",
+    "details": "Booking details",
+    "address": "Delivery address",
+    "noAddress": "No address dey save.",
+    "needAddress": "Add address first",
+    "consumerNumber": "Consumer number (if you get)",
+    "preferredDate": "When you want make dem bring am",
+    "notes": "Note for the rider",
+    "confirm": "Confirm booking",
+    "placing": "Dey send…",
+    "placed": "Booking don enter"
+  },
+  "order": {
+    "myOrders": "My orders",
+    "orderNumber": "Order",
+    "tabAll": "All",
+    "tabBookings": "Cylinder Bookings",
+    "tabOther": "Others",
+    "booking": "Booking",
+    "empty": "No order dey yet.",
+    "tracking": "Tracking",
+    "items": "Items",
+    "delivery": "Delivery",
+    "total": "Total",
+    "eta": "Preferred date",
+    "status": {
+      "pending": "Order don enter",
+      "confirmed": "Confirmed",
+      "assigned": "Confirmed",
+      "in_transit": "Rider don comot",
+      "delivered": "Don deliver",
+      "cancelled": "Cancel"
+    }
+  },
+  "admin": {
+    "cylinderPricing": "Cylinder Price",
+    "orders": "Orders",
+    "priceXaf": "Price (XAF)",
+    "save": "Save",
+    "active": "Active",
+    "priceUpdated": "Price don change",
+    "statusUpdated": "Status don change",
+    "invalidPrice": "Price no correct",
+    "forbidden": "Na admin only."
   },
   "dashboard": {
     "welcome": "Welcome",

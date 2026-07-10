@@ -11,7 +11,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { toast } from "sonner";
-import { Trash2 } from "lucide-react";
+import { Trash2, Pencil } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/addresses")({
   head: () => ({
@@ -42,6 +42,7 @@ function AddressesPage() {
   const [areas, setAreas] = useState<ServiceArea[]>([]);
   const [addresses, setAddresses] = useState<Address[] | null>(null);
   const [saving, setSaving] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   const [label, setLabel] = useState("");
   const [quarter, setQuarter] = useState("");
@@ -49,6 +50,16 @@ function AddressesPage() {
   const [street, setStreet] = useState("");
   const [notes, setNotes] = useState("");
   const [makeDefault, setMakeDefault] = useState(false);
+
+  function resetForm() {
+    setEditingId(null); setLabel(""); setQuarter(""); setLandmark(""); setStreet(""); setNotes(""); setMakeDefault(false);
+  }
+  function startEdit(a: Address) {
+    setEditingId(a.id);
+    setLabel(a.label ?? ""); setQuarter(a.quarter ?? ""); setLandmark(a.landmark ?? "");
+    setStreet(a.line1 ?? ""); setNotes(a.notes ?? ""); setMakeDefault(a.is_default);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
 
   async function loadAddresses() {
     const { data } = await supabase
@@ -81,13 +92,13 @@ function AddressesPage() {
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
-    if (!quarter) return;
+    if (!quarter) return toast.error(t("address.quarterRequired"));
     setSaving(true);
     const { data: u } = await supabase.auth.getUser();
     if (!u.user) { setSaving(false); return; }
     const selected = areas.find((a) => a.quarter === quarter);
     const line1 = street.trim() || landmark.trim() || quarter;
-    const { error } = await supabase.from("addresses").insert({
+    const payload = {
       user_id: u.user.id,
       label: label.trim() || null,
       line1,
@@ -98,20 +109,26 @@ function AddressesPage() {
       landmark: landmark.trim() || null,
       notes: notes.trim() || null,
       is_default: makeDefault,
-    });
+    };
+    const { error } = editingId
+      ? await supabase.from("addresses").update(payload).eq("id", editingId)
+      : await supabase.from("addresses").insert(payload);
     setSaving(false);
     if (error) return toast.error(t("address.saveFailed"));
     toast.success(t("address.saved"));
-    setLabel(""); setQuarter(""); setLandmark(""); setStreet(""); setNotes(""); setMakeDefault(false);
+    resetForm();
     loadAddresses();
   }
 
   async function handleDelete(id: string) {
+    if (!confirm(t("address.deleteConfirm"))) return;
     const { error } = await supabase.from("addresses").delete().eq("id", id);
     if (error) return toast.error(error.message);
+    if (editingId === id) resetForm();
     toast.success(t("address.removed"));
     loadAddresses();
   }
+
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -166,9 +183,12 @@ function AddressesPage() {
                   <Checkbox checked={makeDefault} onCheckedChange={(v) => setMakeDefault(!!v)} />
                   {t("address.makeDefault")}
                 </label>
-                <Button type="submit" className="w-full" disabled={saving}>
-                  {t("address.add")}
-                </Button>
+                <div className="flex gap-2">
+                  <Button type="submit" className="flex-1" disabled={saving}>
+                    {editingId ? t("address.saveChanges") : t("address.add")}
+                  </Button>
+                  {editingId ? <Button type="button" variant="outline" onClick={resetForm}>{t("address.cancel")}</Button> : null}
+                </div>
               </form>
             </CardContent>
           </Card>
@@ -193,9 +213,14 @@ function AddressesPage() {
                       </div>
                       {a.notes ? <div className="text-xs text-muted-foreground mt-1">{a.notes}</div> : null}
                     </div>
-                    <Button variant="ghost" size="icon" onClick={() => handleDelete(a.id)} aria-label={t("address.delete")}>
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
+                    <div className="flex flex-col gap-1">
+                      <Button variant="ghost" size="icon" onClick={() => startEdit(a)} aria-label={t("address.edit")}>
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                      <Button variant="ghost" size="icon" onClick={() => handleDelete(a.id)} aria-label={t("address.delete")}>
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </div>
                 ))
               )}

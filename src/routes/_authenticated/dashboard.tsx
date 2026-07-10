@@ -87,10 +87,15 @@ function DashboardPage() {
               <Badge key={r} variant="secondary">{r}</Badge>
             ))}
           </div>
-          <div className="mt-3">
-            <Link to="/addresses" className="text-sm font-medium text-primary hover:underline">
-              {t("address.title")} →
-            </Link>
+          <div className="mt-3 flex flex-wrap gap-4 text-sm">
+            <Link to="/addresses" className="font-medium text-primary hover:underline">{t("address.title")} →</Link>
+            <Link to="/orders" className="font-medium text-primary hover:underline">{t("order.myOrders")} →</Link>
+            {roles.includes("admin") ? (
+              <>
+                <Link to="/admin/cylinders" className="font-medium text-primary hover:underline">{t("admin.cylinderPricing")} →</Link>
+                <Link to="/admin/orders" className="font-medium text-primary hover:underline">{t("admin.orders")} →</Link>
+              </>
+            ) : null}
           </div>
         </div>
 

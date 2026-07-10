@@ -152,11 +152,14 @@ export type Database = {
       orders: {
         Row: {
           address_id: string | null
+          consumer_number: string | null
           created_at: string
           customer_id: string
           delivery_fee: number
           id: string
           notes: string | null
+          order_type: string
+          preferred_delivery_date: string | null
           rider_id: string | null
           status: Database["public"]["Enums"]["order_status"]
           subtotal: number
@@ -165,11 +168,14 @@ export type Database = {
         }
         Insert: {
           address_id?: string | null
+          consumer_number?: string | null
           created_at?: string
           customer_id: string
           delivery_fee?: number
           id?: string
           notes?: string | null
+          order_type?: string
+          preferred_delivery_date?: string | null
           rider_id?: string | null
           status?: Database["public"]["Enums"]["order_status"]
           subtotal?: number
@@ -178,11 +184,14 @@ export type Database = {
         }
         Update: {
           address_id?: string | null
+          consumer_number?: string | null
           created_at?: string
           customer_id?: string
           delivery_fee?: number
           id?: string
           notes?: string | null
+          order_type?: string
+          preferred_delivery_date?: string | null
           rider_id?: string | null
           status?: Database["public"]["Enums"]["order_status"]
           subtotal?: number
