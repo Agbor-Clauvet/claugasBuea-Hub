@@ -42,6 +42,7 @@ function AddressesPage() {
   const [areas, setAreas] = useState<ServiceArea[]>([]);
   const [addresses, setAddresses] = useState<Address[] | null>(null);
   const [saving, setSaving] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   const [label, setLabel] = useState("");
   const [quarter, setQuarter] = useState("");
@@ -49,6 +50,16 @@ function AddressesPage() {
   const [street, setStreet] = useState("");
   const [notes, setNotes] = useState("");
   const [makeDefault, setMakeDefault] = useState(false);
+
+  function resetForm() {
+    setEditingId(null); setLabel(""); setQuarter(""); setLandmark(""); setStreet(""); setNotes(""); setMakeDefault(false);
+  }
+  function startEdit(a: Address) {
+    setEditingId(a.id);
+    setLabel(a.label ?? ""); setQuarter(a.quarter ?? ""); setLandmark(a.landmark ?? "");
+    setStreet(a.line1 ?? ""); setNotes(a.notes ?? ""); setMakeDefault(a.is_default);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
 
   async function loadAddresses() {
     const { data } = await supabase
@@ -81,13 +92,13 @@ function AddressesPage() {
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
-    if (!quarter) return;
+    if (!quarter) return toast.error(t("address.quarterRequired"));
     setSaving(true);
     const { data: u } = await supabase.auth.getUser();
     if (!u.user) { setSaving(false); return; }
     const selected = areas.find((a) => a.quarter === quarter);
     const line1 = street.trim() || landmark.trim() || quarter;
-    const { error } = await supabase.from("addresses").insert({
+    const payload = {
       user_id: u.user.id,
       label: label.trim() || null,
       line1,
@@ -98,20 +109,26 @@ function AddressesPage() {
       landmark: landmark.trim() || null,
       notes: notes.trim() || null,
       is_default: makeDefault,
-    });
+    };
+    const { error } = editingId
+      ? await supabase.from("addresses").update(payload).eq("id", editingId)
+      : await supabase.from("addresses").insert(payload);
     setSaving(false);
     if (error) return toast.error(t("address.saveFailed"));
     toast.success(t("address.saved"));
-    setLabel(""); setQuarter(""); setLandmark(""); setStreet(""); setNotes(""); setMakeDefault(false);
+    resetForm();
     loadAddresses();
   }
 
   async function handleDelete(id: string) {
+    if (!confirm(t("address.deleteConfirm"))) return;
     const { error } = await supabase.from("addresses").delete().eq("id", id);
     if (error) return toast.error(error.message);
+    if (editingId === id) resetForm();
     toast.success(t("address.removed"));
     loadAddresses();
   }
+
 
   return (
     <div className="flex min-h-screen flex-col">
