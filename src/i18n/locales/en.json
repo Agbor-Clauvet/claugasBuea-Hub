@@ -198,6 +198,7 @@
     "statusUpdated": "Status updated",
     "invalidPrice": "Enter a valid price",
     "forbidden": "Admins only."
+  },
   "dashboard": {
     "welcome": "Welcome",
     "profile": "Profile",
