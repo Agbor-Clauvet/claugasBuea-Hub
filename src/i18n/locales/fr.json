@@ -34,6 +34,7 @@
       "empty": "Aucune bouteille disponible pour le moment.",
       "quickView": "Aperçu",
       "order": "Commander",
+      "bookRefill": "Réserver une recharge",
       "inStock": "En stock",
       "outOfStock": "Rupture de stock",
       "kg": "kg"
@@ -146,7 +147,57 @@
     "saved": "Adresse enregistrée",
     "removed": "Adresse supprimée",
     "saveFailed": "Impossible d'enregistrer l'adresse",
-    "loading": "Chargement des adresses…"
+    "loading": "Chargement des adresses…",
+    "saveChanges": "Enregistrer",
+    "cancel": "Annuler",
+    "quarterRequired": "Veuillez choisir un quartier",
+    "deleteConfirm": "Supprimer cette adresse ?"
+  },
+  "booking": {
+    "title": "Réserver une recharge",
+    "details": "Détails de la réservation",
+    "address": "Adresse de livraison",
+    "noAddress": "Aucune adresse enregistrée.",
+    "needAddress": "Ajoutez d'abord une adresse",
+    "consumerNumber": "Numéro consommateur (facultatif)",
+    "preferredDate": "Date de livraison souhaitée",
+    "notes": "Notes pour le livreur",
+    "confirm": "Confirmer la réservation",
+    "placing": "Envoi…",
+    "placed": "Réservation enregistrée"
+  },
+  "order": {
+    "myOrders": "Mes commandes",
+    "orderNumber": "Commande",
+    "tabAll": "Toutes",
+    "tabBookings": "Réservations",
+    "tabOther": "Autres",
+    "booking": "Réservation",
+    "empty": "Aucune commande.",
+    "tracking": "Suivi",
+    "items": "Articles",
+    "delivery": "Livraison",
+    "total": "Total",
+    "eta": "Livraison souhaitée",
+    "status": {
+      "pending": "Commande passée",
+      "confirmed": "Confirmée",
+      "assigned": "Confirmée",
+      "in_transit": "En livraison",
+      "delivered": "Livrée",
+      "cancelled": "Annulée"
+    }
+  },
+  "admin": {
+    "cylinderPricing": "Tarifs bouteilles",
+    "orders": "Commandes",
+    "priceXaf": "Prix (XAF)",
+    "save": "Enregistrer",
+    "active": "Actif",
+    "priceUpdated": "Prix mis à jour",
+    "statusUpdated": "Statut mis à jour",
+    "invalidPrice": "Prix invalide",
+    "forbidden": "Réservé aux admins."
   },
   "dashboard": {
     "welcome": "Bienvenue",
