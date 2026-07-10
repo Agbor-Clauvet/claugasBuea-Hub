@@ -1,0 +1,119 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { supabase } from "@/integrations/supabase/client";
+import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { CheckCircle2, Circle } from "lucide-react";
+import { BOOKING_STAGES, stageIndex, statusColor, type OrderStatus } from "@/lib/order-status";
+
+export const Route = createFileRoute("/_authenticated/orders/$id")({
+  head: () => ({ meta: [{ title: "Order — ClauGas" }] }),
+  component: OrderDetailPage,
+  errorComponent: ({ error }) => <div className="p-6 text-sm text-destructive">{error.message}</div>,
+  notFoundComponent: () => <div className="p-6 text-sm">Order not found.</div>,
+});
+
+type Order = {
+  id: string;
+  status: OrderStatus;
+  total: number;
+  subtotal: number;
+  delivery_fee: number;
+  created_at: string;
+  notes: string | null;
+  order_type: string;
+  consumer_number: string | null;
+  preferred_delivery_date: string | null;
+  address_id: string | null;
+};
+type Address = { line1: string; quarter: string | null; landmark: string | null; city: string };
+type Item = { quantity: number; unit_price: number; cylinder: { name: string; size_kg: number } | null };
+
+function OrderDetailPage() {
+  const { id } = Route.useParams();
+  const { t } = useTranslation();
+  const [order, setOrder] = useState<Order | null>(null);
+  const [address, setAddress] = useState<Address | null>(null);
+  const [items, setItems] = useState<Item[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      const { data: o } = await supabase.from("orders").select("*").eq("id", id).maybeSingle();
+      setOrder(o as Order | null);
+      if (o && (o as Order).address_id) {
+        const { data: a } = await supabase.from("addresses").select("line1,quarter,landmark,city").eq("id", (o as Order).address_id!).maybeSingle();
+        setAddress(a as Address | null);
+      }
+      const { data: it } = await supabase.from("order_items").select("quantity,unit_price,cylinder:cylinders(name,size_kg)").eq("order_id", id);
+      setItems((it ?? []) as unknown as Item[]);
+    })();
+  }, [id]);
+
+  if (!order) return <div className="p-6 text-sm">{t("common.loading")}</div>;
+  const idx = stageIndex(order.status);
+
+  return (
+    <div className="flex min-h-screen flex-col">
+      <Navbar />
+      <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-8 space-y-4">
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-bold text-primary">{t("order.orderNumber")} #{order.id.slice(0, 8)}</h1>
+          <Badge variant={statusColor(order.status)}>{t(`order.status.${order.status}`)}</Badge>
+        </div>
+
+        <Card>
+          <CardHeader><CardTitle>{t("order.tracking")}</CardTitle></CardHeader>
+          <CardContent>
+            <ol className="flex items-center justify-between gap-2">
+              {BOOKING_STAGES.map((s, i) => {
+                const done = idx >= i;
+                return (
+                  <li key={s} className="flex-1 flex flex-col items-center text-center">
+                    {done ? <CheckCircle2 className="h-6 w-6 text-primary" /> : <Circle className="h-6 w-6 text-muted-foreground" />}
+                    <span className={`mt-1 text-xs ${done ? "font-semibold" : "text-muted-foreground"}`}>{t(`order.status.${s}`)}</span>
+                  </li>
+                );
+              })}
+            </ol>
+            {order.preferred_delivery_date ? (
+              <p className="mt-4 text-sm text-muted-foreground">{t("order.eta")}: <span className="font-medium text-foreground">{order.preferred_delivery_date}</span></p>
+            ) : null}
+          </CardContent>
+        </Card>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          <Card>
+            <CardHeader><CardTitle>{t("order.items")}</CardTitle></CardHeader>
+            <CardContent className="space-y-2 text-sm">
+              {items.map((it, i) => (
+                <div key={i} className="flex justify-between">
+                  <span>{it.cylinder?.name ?? "—"} × {it.quantity}</span>
+                  <span>{(Number(it.unit_price) * it.quantity).toLocaleString()} XAF</span>
+                </div>
+              ))}
+              <div className="border-t pt-2 flex justify-between font-semibold">
+                <span>{t("order.total")}</span><span>{Number(order.total).toLocaleString()} XAF</span>
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader><CardTitle>{t("order.delivery")}</CardTitle></CardHeader>
+            <CardContent className="space-y-1 text-sm">
+              {address ? (
+                <>
+                  <div>{[address.quarter, address.landmark, address.line1, address.city].filter(Boolean).join(" · ")}</div>
+                </>
+              ) : <div className="text-muted-foreground">—</div>}
+              {order.consumer_number ? <div className="mt-2">{t("booking.consumerNumber")}: <span className="font-medium">{order.consumer_number}</span></div> : null}
+              {order.notes ? <div className="mt-2 text-muted-foreground">{order.notes}</div> : null}
+            </CardContent>
+          </Card>
+        </div>
+      </main>
+      <Footer />
+    </div>
+  );
+}
