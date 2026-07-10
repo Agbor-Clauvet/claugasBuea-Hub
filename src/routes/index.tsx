@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Flame, ShieldCheck, Truck, Wallet, CheckCircle2, Phone, Mail, Clock, Star } from "lucide-react";
@@ -43,6 +43,7 @@ function Index() {
   }, []);
 
   const goOrder = () => navigate({ to: signedIn ? "/dashboard" : "/auth" });
+  const goBook = (id: string) => navigate({ to: signedIn ? "/book/$cylinderId" : "/auth", params: { cylinderId: id } });
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -121,10 +122,9 @@ function Index() {
                       <div className="text-2xl font-bold text-primary">{Number(c.price).toLocaleString()} XAF</div>
                       <div className="text-sm text-muted-foreground">{c.size_kg} {t("home.featured.kg")}</div>
                     </div>
-                    <div className="flex gap-2">
-                      <Button variant="outline" size="sm" className="flex-1">{t("home.featured.quickView")}</Button>
-                      <Button size="sm" className="flex-1" onClick={goOrder}>{t("home.featured.order")}</Button>
-                    </div>
+                    <Button size="sm" className="w-full" onClick={() => goBook(c.id)}>
+                      <Flame className="mr-2 h-4 w-4" /> {t("home.featured.bookRefill")}
+                    </Button>
                   </CardContent>
                 </Card>
               ))}

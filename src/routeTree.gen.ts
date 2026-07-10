@@ -13,8 +13,13 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedOrdersRouteImport } from './routes/_authenticated/orders'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedAddressesRouteImport } from './routes/_authenticated/addresses'
+import { Route as AuthenticatedOrdersIdRouteImport } from './routes/_authenticated/orders.$id'
+import { Route as AuthenticatedBookCylinderIdRouteImport } from './routes/_authenticated/book.$cylinderId'
+import { Route as AuthenticatedAdminOrdersRouteImport } from './routes/_authenticated/admin.orders'
+import { Route as AuthenticatedAdminCylindersRouteImport } from './routes/_authenticated/admin.cylinders'
 
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
@@ -35,6 +40,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedOrdersRoute = AuthenticatedOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -45,6 +55,29 @@ const AuthenticatedAddressesRoute = AuthenticatedAddressesRouteImport.update({
   path: '/addresses',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedOrdersIdRoute = AuthenticatedOrdersIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AuthenticatedOrdersRoute,
+} as any)
+const AuthenticatedBookCylinderIdRoute =
+  AuthenticatedBookCylinderIdRouteImport.update({
+    id: '/book/$cylinderId',
+    path: '/book/$cylinderId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAdminOrdersRoute =
+  AuthenticatedAdminOrdersRouteImport.update({
+    id: '/admin/orders',
+    path: '/admin/orders',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAdminCylindersRoute =
+  AuthenticatedAdminCylindersRouteImport.update({
+    id: '/admin/cylinders',
+    path: '/admin/cylinders',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -52,6 +85,11 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/addresses': typeof AuthenticatedAddressesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/orders': typeof AuthenticatedOrdersRouteWithChildren
+  '/admin/cylinders': typeof AuthenticatedAdminCylindersRoute
+  '/admin/orders': typeof AuthenticatedAdminOrdersRoute
+  '/book/$cylinderId': typeof AuthenticatedBookCylinderIdRoute
+  '/orders/$id': typeof AuthenticatedOrdersIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -59,6 +97,11 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/addresses': typeof AuthenticatedAddressesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/orders': typeof AuthenticatedOrdersRouteWithChildren
+  '/admin/cylinders': typeof AuthenticatedAdminCylindersRoute
+  '/admin/orders': typeof AuthenticatedAdminOrdersRoute
+  '/book/$cylinderId': typeof AuthenticatedBookCylinderIdRoute
+  '/orders/$id': typeof AuthenticatedOrdersIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -68,12 +111,37 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/addresses': typeof AuthenticatedAddressesRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/orders': typeof AuthenticatedOrdersRouteWithChildren
+  '/_authenticated/admin/cylinders': typeof AuthenticatedAdminCylindersRoute
+  '/_authenticated/admin/orders': typeof AuthenticatedAdminOrdersRoute
+  '/_authenticated/book/$cylinderId': typeof AuthenticatedBookCylinderIdRoute
+  '/_authenticated/orders/$id': typeof AuthenticatedOrdersIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/reset-password' | '/addresses' | '/dashboard'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/reset-password'
+    | '/addresses'
+    | '/dashboard'
+    | '/orders'
+    | '/admin/cylinders'
+    | '/admin/orders'
+    | '/book/$cylinderId'
+    | '/orders/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/reset-password' | '/addresses' | '/dashboard'
+  to:
+    | '/'
+    | '/auth'
+    | '/reset-password'
+    | '/addresses'
+    | '/dashboard'
+    | '/orders'
+    | '/admin/cylinders'
+    | '/admin/orders'
+    | '/book/$cylinderId'
+    | '/orders/$id'
   id:
     | '__root__'
     | '/'
@@ -82,6 +150,11 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/_authenticated/addresses'
     | '/_authenticated/dashboard'
+    | '/_authenticated/orders'
+    | '/_authenticated/admin/cylinders'
+    | '/_authenticated/admin/orders'
+    | '/_authenticated/book/$cylinderId'
+    | '/_authenticated/orders/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -121,6 +194,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/orders': {
+      id: '/_authenticated/orders'
+      path: '/orders'
+      fullPath: '/orders'
+      preLoaderRoute: typeof AuthenticatedOrdersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -135,17 +215,64 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAddressesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/orders/$id': {
+      id: '/_authenticated/orders/$id'
+      path: '/$id'
+      fullPath: '/orders/$id'
+      preLoaderRoute: typeof AuthenticatedOrdersIdRouteImport
+      parentRoute: typeof AuthenticatedOrdersRoute
+    }
+    '/_authenticated/book/$cylinderId': {
+      id: '/_authenticated/book/$cylinderId'
+      path: '/book/$cylinderId'
+      fullPath: '/book/$cylinderId'
+      preLoaderRoute: typeof AuthenticatedBookCylinderIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/orders': {
+      id: '/_authenticated/admin/orders'
+      path: '/admin/orders'
+      fullPath: '/admin/orders'
+      preLoaderRoute: typeof AuthenticatedAdminOrdersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/cylinders': {
+      id: '/_authenticated/admin/cylinders'
+      path: '/admin/cylinders'
+      fullPath: '/admin/cylinders'
+      preLoaderRoute: typeof AuthenticatedAdminCylindersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
+
+interface AuthenticatedOrdersRouteChildren {
+  AuthenticatedOrdersIdRoute: typeof AuthenticatedOrdersIdRoute
+}
+
+const AuthenticatedOrdersRouteChildren: AuthenticatedOrdersRouteChildren = {
+  AuthenticatedOrdersIdRoute: AuthenticatedOrdersIdRoute,
+}
+
+const AuthenticatedOrdersRouteWithChildren =
+  AuthenticatedOrdersRoute._addFileChildren(AuthenticatedOrdersRouteChildren)
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAddressesRoute: typeof AuthenticatedAddressesRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedOrdersRoute: typeof AuthenticatedOrdersRouteWithChildren
+  AuthenticatedAdminCylindersRoute: typeof AuthenticatedAdminCylindersRoute
+  AuthenticatedAdminOrdersRoute: typeof AuthenticatedAdminOrdersRoute
+  AuthenticatedBookCylinderIdRoute: typeof AuthenticatedBookCylinderIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAddressesRoute: AuthenticatedAddressesRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedOrdersRoute: AuthenticatedOrdersRouteWithChildren,
+  AuthenticatedAdminCylindersRoute: AuthenticatedAdminCylindersRoute,
+  AuthenticatedAdminOrdersRoute: AuthenticatedAdminOrdersRoute,
+  AuthenticatedBookCylinderIdRoute: AuthenticatedBookCylinderIdRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
