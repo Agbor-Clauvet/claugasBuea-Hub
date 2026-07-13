@@ -2,7 +2,7 @@
   "brand": {
     "name": "ClauGas",
     "company": "ClauTech Digital Solutions",
-    "tagline": "Smart Gas Delivery for Cameroon",
+    "tagline": "Smart Gas Delivery for Buea",
     "poweredBy": "Powered by ClauTech Digital Solutions"
   },
   "nav": {
@@ -22,7 +22,7 @@
   },
   "home": {
     "hero": {
-      "title": "Fast, Safe & Reliable Cooking Gas Delivery Across Cameroon",
+      "title": "Fast, Safe & Reliable Cooking Gas Delivery in Buea",
       "subtitle": "Order cooking gas anytime, anywhere. Get fast delivery, secure payments, live order tracking, and trusted service from ClauGas.",
       "ctaPrimary": "Order Gas Now",
       "ctaSecondary": "Browse Cylinders"
@@ -63,11 +63,11 @@
     },
     "reviews": {
       "title": "What customers say",
-      "r1Name": "Aïcha, Douala",
+      "r1Name": "Aïcha, Molyko",
       "r1Text": "Delivery in under an hour. Very professional rider.",
-      "r2Name": "Jean-Paul, Yaoundé",
+      "r2Name": "Jean-Paul, Great Soppo",
       "r2Text": "Best prices I've found, and I can pay with MoMo.",
-      "r3Name": "Ngwa, Bamenda",
+      "r3Name": "Ngwa, GRA",
       "r3Text": "Easy to order in Pidgin. Very sweet service!"
     },
     "faq": {

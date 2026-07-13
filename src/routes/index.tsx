@@ -73,7 +73,7 @@ function Index() {
               <Flame className="h-40 w-40 text-accent" strokeWidth={1.2} />
             </div>
             <div className="absolute -bottom-4 -left-4 rounded-2xl border bg-card p-4 shadow-xl">
-              <div className="flex items-center gap-2 text-sm font-medium"><Truck className="h-4 w-4 text-primary" /> Douala · Yaoundé · Bamenda</div>
+              <div className="flex items-center gap-2 text-sm font-medium"><Truck className="h-4 w-4 text-primary" /> Molyko · Great Soppo · GRA · Bonduma</div>
             </div>
           </div>
         </div>
@@ -228,12 +228,12 @@ function Index() {
           <Card><CardContent className="pt-6 text-center">
             <Phone className="mx-auto mb-2 h-6 w-6 text-primary" />
             <div className="text-sm font-semibold">{t("home.contact.phone")}</div>
-            <div className="text-sm text-muted-foreground">+237 6 00 00 00 00</div>
+            <a href="tel:+237650556715" className="text-sm text-muted-foreground hover:text-primary transition-colors">+237 650 556 715</a>
           </CardContent></Card>
           <Card><CardContent className="pt-6 text-center">
             <Mail className="mx-auto mb-2 h-6 w-6 text-primary" />
             <div className="text-sm font-semibold">{t("home.contact.email")}</div>
-            <div className="text-sm text-muted-foreground">hello@claugas.cm</div>
+            <a href="mailto:www.agborclauvet@gmail.com" className="text-sm text-muted-foreground hover:text-primary transition-colors break-all">www.agborclauvet@gmail.com</a>
           </CardContent></Card>
           <Card><CardContent className="pt-6 text-center">
             <Clock className="mx-auto mb-2 h-6 w-6 text-primary" />

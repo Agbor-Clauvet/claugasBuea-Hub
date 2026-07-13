@@ -2,7 +2,7 @@
   "brand": {
     "name": "ClauGas",
     "company": "ClauTech Digital Solutions",
-    "tagline": "Livraison intelligente de gaz au Cameroun",
+    "tagline": "Livraison intelligente de gaz à Buea",
     "poweredBy": "Propulsé par ClauTech Digital Solutions"
   },
   "nav": {
@@ -22,7 +22,7 @@
   },
   "home": {
     "hero": {
-      "title": "Livraison de gaz de cuisine rapide, sûre et fiable partout au Cameroun",
+      "title": "Livraison de gaz de cuisine rapide, sûre et fiable à Buea",
       "subtitle": "Commandez du gaz à tout moment, où que vous soyez. Livraison rapide, paiement sécurisé, suivi en direct et service de confiance avec ClauGas.",
       "ctaPrimary": "Commander maintenant",
       "ctaSecondary": "Voir les bouteilles"
@@ -63,11 +63,11 @@
     },
     "reviews": {
       "title": "Ce que disent nos clients",
-      "r1Name": "Aïcha, Douala",
+      "r1Name": "Aïcha, Molyko",
       "r1Text": "Livraison en moins d'une heure. Livreur très professionnel.",
-      "r2Name": "Jean-Paul, Yaoundé",
+      "r2Name": "Jean-Paul, Great Soppo",
       "r2Text": "Les meilleurs prix, et je peux payer par MoMo.",
-      "r3Name": "Ngwa, Bamenda",
+      "r3Name": "Ngwa, GRA",
       "r3Text": "Facile de commander en Pidgin. Super service !"
     },
     "faq": {

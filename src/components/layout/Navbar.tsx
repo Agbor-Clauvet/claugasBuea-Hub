@@ -25,7 +25,6 @@ export function Navbar() {
     { to: "/", label: t("nav.home") },
     { to: "/", label: t("nav.products"), hash: "products" },
     { to: "/", label: t("nav.howItWorks"), hash: "how" },
-    { to: "/", label: t("nav.marketplace"), hash: "products" },
     { to: "/", label: t("nav.safety"), hash: "safety" },
     { to: "/", label: t("nav.contact"), hash: "contact" },
   ];
