@@ -159,6 +159,7 @@ export type Database = {
           id: string
           notes: string | null
           order_type: string
+          payment_method: string
           preferred_delivery_date: string | null
           rider_id: string | null
           status: Database["public"]["Enums"]["order_status"]
@@ -175,6 +176,7 @@ export type Database = {
           id?: string
           notes?: string | null
           order_type?: string
+          payment_method?: string
           preferred_delivery_date?: string | null
           rider_id?: string | null
           status?: Database["public"]["Enums"]["order_status"]
@@ -191,6 +193,7 @@ export type Database = {
           id?: string
           notes?: string | null
           order_type?: string
+          payment_method?: string
           preferred_delivery_date?: string | null
           rider_id?: string | null
           status?: Database["public"]["Enums"]["order_status"]

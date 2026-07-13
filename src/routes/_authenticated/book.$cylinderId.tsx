@@ -8,8 +8,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "sonner";
-import { Flame } from "lucide-react";
+import { Flame, Minus, Plus, Banknote, Smartphone } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/book/$cylinderId")({
   head: () => ({ meta: [{ title: "Book Refill — ClauGas" }] }),
@@ -20,6 +22,7 @@ export const Route = createFileRoute("/_authenticated/book/$cylinderId")({
 
 type Cylinder = { id: string; name: string; size_kg: number; price: number; image_url: string | null };
 type Address = { id: string; label: string | null; quarter: string | null; line1: string; city: string };
+type PaymentMethod = "cash_on_delivery" | "mobile_money";
 
 function BookPage() {
   const { cylinderId } = Route.useParams();
@@ -28,6 +31,8 @@ function BookPage() {
   const [cyl, setCyl] = useState<Cylinder | null>(null);
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [addressId, setAddressId] = useState<string>("");
+  const [quantity, setQuantity] = useState(1);
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("cash_on_delivery");
   const [consumerNo, setConsumerNo] = useState("");
   const [preferredDate, setPreferredDate] = useState("");
   const [notes, setNotes] = useState("");
@@ -44,30 +49,39 @@ function BookPage() {
       });
   }, [cylinderId]);
 
+  const unit = cyl ? Number(cyl.price) : 0;
+  const subtotal = unit * quantity;
+  const deliveryFee: number = 0;
+  const total = subtotal + deliveryFee;
+
+  function adjustQty(delta: number) {
+    setQuantity((q) => Math.min(10, Math.max(1, q + delta)));
+  }
+
   async function handleBook(e: React.FormEvent) {
     e.preventDefault();
     if (!cyl || !addressId) return toast.error(t("booking.needAddress"));
     setSubmitting(true);
     const { data: u } = await supabase.auth.getUser();
     if (!u.user) { setSubmitting(false); return; }
-    const unit = Number(cyl.price);
     const { data: order, error } = await supabase.from("orders").insert({
       customer_id: u.user.id,
       address_id: addressId,
       status: "pending",
-      subtotal: unit,
-      delivery_fee: 0,
-      total: unit,
+      subtotal,
+      delivery_fee: deliveryFee,
+      total,
       notes: notes || null,
       order_type: "cylinder_booking",
       consumer_number: consumerNo || null,
       preferred_delivery_date: preferredDate || null,
+      payment_method: paymentMethod,
     } as never).select("id").single();
     if (error || !order) { setSubmitting(false); return toast.error(error?.message ?? "Failed"); }
     const { error: itemErr } = await supabase.from("order_items").insert({
       order_id: (order as { id: string }).id,
       cylinder_id: cyl.id,
-      quantity: 1,
+      quantity,
       unit_price: unit,
     });
     setSubmitting(false);
@@ -89,8 +103,38 @@ function BookPage() {
                 {cyl?.image_url ? <img src={cyl.image_url} alt={cyl.name} className="h-full w-full object-cover" /> : <Flame className="h-20 w-20 text-primary" />}
               </div>
               <div className="mt-4 flex items-baseline justify-between">
-                <div className="text-3xl font-bold text-primary">{cyl ? Number(cyl.price).toLocaleString() : "—"} XAF</div>
+                <div className="text-3xl font-bold text-primary">{cyl ? unit.toLocaleString() : "—"} XAF</div>
                 <div className="text-sm text-muted-foreground">{cyl?.size_kg} {t("home.featured.kg")}</div>
+              </div>
+
+              {/* Quantity stepper */}
+              <div className="mt-4 space-y-1.5">
+                <Label>{t("booking.quantity")}</Label>
+                <div className="flex items-center gap-3">
+                  <Button type="button" variant="outline" size="icon" onClick={() => adjustQty(-1)} disabled={quantity <= 1} aria-label="Decrease quantity">
+                    <Minus className="h-4 w-4" />
+                  </Button>
+                  <span className="w-10 text-center text-lg font-semibold tabular-nums">{quantity}</span>
+                  <Button type="button" variant="outline" size="icon" onClick={() => adjustQty(1)} disabled={quantity >= 10} aria-label="Increase quantity">
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+
+              {/* Price breakdown */}
+              <div className="mt-4 space-y-1 rounded-md border bg-muted/30 p-3 text-sm">
+                <div className="flex justify-between text-muted-foreground">
+                  <span>{t("booking.subtotal")}</span>
+                  <span>{subtotal.toLocaleString()} XAF</span>
+                </div>
+                <div className="flex justify-between text-muted-foreground">
+                  <span>{t("order.delivery")}</span>
+                  <span>{deliveryFee === 0 ? t("booking.freeDelivery") : `${deliveryFee.toLocaleString()} XAF`}</span>
+                </div>
+                <div className="flex justify-between font-semibold text-foreground border-t pt-1 mt-1">
+                  <span>{t("order.total")}</span>
+                  <span>{total.toLocaleString()} XAF</span>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -98,7 +142,7 @@ function BookPage() {
           <Card>
             <CardHeader><CardTitle>{t("booking.details")}</CardTitle></CardHeader>
             <CardContent>
-              <form onSubmit={handleBook} className="space-y-3">
+              <form onSubmit={handleBook} className="space-y-4">
                 <div className="space-y-1.5">
                   <Label htmlFor="addr">{t("booking.address")}</Label>
                   {addresses.length === 0 ? (
@@ -107,16 +151,50 @@ function BookPage() {
                       <a className="text-primary underline" href="/addresses">{t("address.add")}</a>
                     </div>
                   ) : (
-                    <select id="addr" required value={addressId} onChange={(e) => setAddressId(e.target.value)}
-                      className="flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm">
-                      {addresses.map((a) => (
-                        <option key={a.id} value={a.id}>
-                          {[a.label, a.quarter, a.line1].filter(Boolean).join(" · ")}
-                        </option>
-                      ))}
-                    </select>
+                    <Select value={addressId} onValueChange={setAddressId}>
+                      <SelectTrigger id="addr">
+                        <SelectValue placeholder={t("address.chooseQuarter")} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {addresses.map((a) => (
+                          <SelectItem key={a.id} value={a.id}>
+                            {[a.label, a.quarter, a.line1].filter(Boolean).join(" · ")}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   )}
                 </div>
+
+                {/* Payment method */}
+                <div className="space-y-1.5">
+                  <Label>{t("booking.paymentMethod")}</Label>
+                  <RadioGroup value={paymentMethod} onValueChange={(v) => setPaymentMethod(v as PaymentMethod)} className="gap-2">
+                    <label
+                      htmlFor="pm-cod"
+                      className={`flex items-start gap-3 rounded-lg border p-3 cursor-pointer transition-colors ${paymentMethod === "cash_on_delivery" ? "border-primary bg-primary/5" : "border-input"}`}
+                    >
+                      <RadioGroupItem value="cash_on_delivery" id="pm-cod" className="mt-0.5" />
+                      <Banknote className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                      <div>
+                        <div className="text-sm font-medium">{t("booking.payCash")}</div>
+                        <div className="text-xs text-muted-foreground">{t("booking.payCashDesc")}</div>
+                      </div>
+                    </label>
+                    <label
+                      htmlFor="pm-momo"
+                      className={`flex items-start gap-3 rounded-lg border p-3 cursor-pointer transition-colors ${paymentMethod === "mobile_money" ? "border-primary bg-primary/5" : "border-input"}`}
+                    >
+                      <RadioGroupItem value="mobile_money" id="pm-momo" className="mt-0.5" />
+                      <Smartphone className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                      <div>
+                        <div className="text-sm font-medium">{t("booking.payMomo")}</div>
+                        <div className="text-xs text-muted-foreground">{t("booking.payMomoDesc")}</div>
+                      </div>
+                    </label>
+                  </RadioGroup>
+                </div>
+
                 <div className="space-y-1.5">
                   <Label htmlFor="consumer">{t("booking.consumerNumber")}</Label>
                   <Input id="consumer" placeholder="LPG-XXXXX" value={consumerNo} onChange={(e) => setConsumerNo(e.target.value)} maxLength={40} />
@@ -130,7 +208,7 @@ function BookPage() {
                   <Input id="bnotes" value={notes} onChange={(e) => setNotes(e.target.value)} maxLength={280} />
                 </div>
                 <Button type="submit" disabled={submitting || addresses.length === 0} className="w-full">
-                  {submitting ? t("booking.placing") : t("booking.confirm")}
+                  {submitting ? t("booking.placing") : `${t("booking.confirm")} · ${total.toLocaleString()} XAF`}
                 </Button>
               </form>
             </CardContent>

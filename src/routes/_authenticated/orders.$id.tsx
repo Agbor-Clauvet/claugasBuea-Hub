@@ -28,6 +28,7 @@ type Order = {
   consumer_number: string | null;
   preferred_delivery_date: string | null;
   address_id: string | null;
+  payment_method: "cash_on_delivery" | "mobile_money";
 };
 type Address = { line1: string; quarter: string | null; landmark: string | null; city: string };
 type Item = { quantity: number; unit_price: number; cylinder: { name: string; size_kg: number } | null };
@@ -107,6 +108,7 @@ function OrderDetailPage() {
                   <div>{[address.quarter, address.landmark, address.line1, address.city].filter(Boolean).join(" · ")}</div>
                 </>
               ) : <div className="text-muted-foreground">—</div>}
+              <div className="mt-2">{t("order.paymentMethod")}: <span className="font-medium">{t(`order.${order.payment_method === "mobile_money" ? "payMomo" : "payCash"}`)}</span></div>
               {order.consumer_number ? <div className="mt-2">{t("booking.consumerNumber")}: <span className="font-medium">{order.consumer_number}</span></div> : null}
               {order.notes ? <div className="mt-2 text-muted-foreground">{order.notes}</div> : null}
             </CardContent>

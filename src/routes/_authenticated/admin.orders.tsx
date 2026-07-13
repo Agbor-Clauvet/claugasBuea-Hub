@@ -14,7 +14,7 @@ export const Route = createFileRoute("/_authenticated/admin/orders")({
   component: AdminOrdersPage,
 });
 
-type Row = { id: string; status: OrderStatus; total: number; created_at: string; order_type: string; customer_id: string };
+type Row = { id: string; status: OrderStatus; total: number; created_at: string; order_type: string; customer_id: string; payment_method: "cash_on_delivery" | "mobile_money" };
 
 function AdminOrdersPage() {
   const { t } = useTranslation();
@@ -23,7 +23,7 @@ function AdminOrdersPage() {
 
   async function load() {
     const { data } = await supabase.from("orders")
-      .select("id,status,total,created_at,order_type,customer_id")
+      .select("id,status,total,created_at,order_type,customer_id,payment_method")
       .order("created_at", { ascending: false }).limit(200);
     setRows((data ?? []) as Row[]);
   }
@@ -64,6 +64,9 @@ function AdminOrdersPage() {
                 <span className="text-xs text-muted-foreground">{new Date(o.created_at).toLocaleString()}</span>
                 <Badge variant={statusColor(o.status)}>{t(`order.status.${o.status}`)}</Badge>
                 {o.order_type === "cylinder_booking" ? <Badge variant="outline">{t("order.booking")}</Badge> : null}
+                <Badge variant={o.payment_method === "mobile_money" ? "secondary" : "outline"}>
+                  {t(`order.${o.payment_method === "mobile_money" ? "payMomo" : "payCash"}`)}
+                </Badge>
                 <span className="ml-auto text-sm font-semibold">{Number(o.total).toLocaleString()} XAF</span>
                 <select value={o.status} onChange={(e) => setStatus(o.id, e.target.value as OrderStatus)}
                   className="h-8 rounded-md border border-input bg-background px-2 text-xs">
