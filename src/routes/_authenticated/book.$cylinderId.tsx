@@ -105,7 +105,7 @@ function BookPage() {
                 {cyl?.image_url ? (
                   <img src={cyl.image_url} alt={cyl.name} className="h-full w-full object-cover" />
                 ) : cyl ? (
-                  <img src={cylinderPhoto(cyl.size_kg)} alt={cyl.name} className="h-full w-full object-contain p-4" />
+                  <img src={cylinderPhoto(cyl.name)} alt={cyl.name} className="h-full w-full object-contain p-4" />
                 ) : (
                   <GasCylinderIcon color={sizeToColor(13)} className="h-32 w-32" />
                 )}

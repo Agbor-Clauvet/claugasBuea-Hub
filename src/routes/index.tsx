@@ -107,7 +107,7 @@ function Index() {
                       <img src={c.image_url} alt={c.name} className="h-full w-full object-cover group-hover:scale-105 transition-transform" />
                     ) : (
                       <img
-                        src={cylinderPhoto(Number(c.size_kg))}
+                        src={cylinderPhoto(c.name)}
                         alt={c.name}
                         className="h-full w-full object-contain p-4 group-hover:scale-105 transition-transform"
                       />
