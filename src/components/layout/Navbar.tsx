@@ -5,7 +5,7 @@ import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { supabase } from "@/integrations/supabase/client";
-import logoAsset from "@/assets/claugas-express-logo.jpeg.asset.json";
+import logoUrl from "@/assets/brand/claugas-express-logo.webp";
 
 export function Navbar() {
   const { t } = useTranslation();
@@ -33,7 +33,7 @@ export function Navbar() {
     <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
         <Link to="/" className="flex items-center gap-2">
-          <img src={logoAsset.url} alt="ClauGas Express — Hub Buea" className="h-10 w-10 rounded-full object-cover ring-1 ring-border" />
+          <img src={logoUrl} alt="ClauGas Express — Hub Buea" className="h-10 w-10 rounded-full object-cover ring-1 ring-border" />
           <span className="text-lg font-bold text-primary hidden sm:inline">ClauGas</span>
         </Link>
         <nav className="hidden md:flex items-center gap-1">

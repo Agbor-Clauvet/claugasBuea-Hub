@@ -14,7 +14,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { loadStoredLanguage } from "@/i18n";
-import logoAsset from "@/assets/clautech-logo.png.asset.json";
+import logoUrl from "@/assets/brand/claugas-express-logo.webp";
 
 function NotFoundComponent() {
   return (
@@ -94,7 +94,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", type: "image/png", href: logoAsset.url },
+      { rel: "icon", type: "image/png", href: logoUrl },
     ],
   }),
   shellComponent: RootShell,

@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
-import logoAsset from "@/assets/clautech-logo.png.asset.json";
+import logoUrl from "@/assets/brand/claugas-express-logo.webp";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
@@ -67,7 +67,7 @@ function DashboardPage() {
       <header className="border-b bg-background/80 backdrop-blur sticky top-0 z-40">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <Link to="/" className="flex items-center gap-2">
-            <img src={logoAsset.url} alt="ClauGas" className="h-8 w-auto rounded" />
+            <img src={logoUrl} alt="ClauGas" className="h-8 w-auto rounded" />
             <span className="text-lg font-semibold text-primary">ClauGas</span>
           </Link>
           <div className="flex items-center gap-2">

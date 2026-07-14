@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Flame, ShieldCheck, Truck, Wallet, CheckCircle2, Phone, Mail, Clock, Star } from "lucide-react";
+import { cylinderPhoto } from "@/components/icons/cylinderPhoto";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -105,7 +106,11 @@ function Index() {
                     {c.image_url ? (
                       <img src={c.image_url} alt={c.name} className="h-full w-full object-cover group-hover:scale-105 transition-transform" />
                     ) : (
-                      <Flame className="h-20 w-20 text-primary" strokeWidth={1.4} />
+                      <img
+                        src={cylinderPhoto(Number(c.size_kg))}
+                        alt={c.name}
+                        className="h-full w-full object-contain p-4 group-hover:scale-105 transition-transform"
+                      />
                     )}
                   </div>
                   <CardHeader>

@@ -11,7 +11,9 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "sonner";
-import { Flame, Minus, Plus, Banknote, Smartphone } from "lucide-react";
+import { Minus, Plus, Banknote, Smartphone } from "lucide-react";
+import { GasCylinderIcon, sizeToColor } from "@/components/icons/GasCylinderIcon";
+import { cylinderPhoto } from "@/components/icons/cylinderPhoto";
 
 export const Route = createFileRoute("/_authenticated/book/$cylinderId")({
   head: () => ({ meta: [{ title: "Book Refill — ClauGas" }] }),
@@ -100,7 +102,13 @@ function BookPage() {
             <CardHeader><CardTitle>{cyl?.name ?? "…"}</CardTitle></CardHeader>
             <CardContent>
               <div className="aspect-square rounded-md bg-muted/40 flex items-center justify-center overflow-hidden">
-                {cyl?.image_url ? <img src={cyl.image_url} alt={cyl.name} className="h-full w-full object-cover" /> : <Flame className="h-20 w-20 text-primary" />}
+                {cyl?.image_url ? (
+                  <img src={cyl.image_url} alt={cyl.name} className="h-full w-full object-cover" />
+                ) : cyl ? (
+                  <img src={cylinderPhoto(cyl.size_kg)} alt={cyl.name} className="h-full w-full object-contain p-4" />
+                ) : (
+                  <GasCylinderIcon color={sizeToColor(13)} className="h-32 w-32" />
+                )}
               </div>
               <div className="mt-4 flex items-baseline justify-between">
                 <div className="text-3xl font-bold text-primary">{cyl ? unit.toLocaleString() : "—"} XAF</div>

@@ -177,6 +177,11 @@
   "order": {
     "myOrders": "Mes commandes",
     "orderNumber": "Commande",
+    "receipt": "Reçu",
+    "printReceipt": "Imprimer / Enregistrer le reçu",
+    "trackingNumber": "Numéro de suivi",
+    "date": "Date",
+    "receiptFooter": "Merci d'avoir choisi ClauGas. Conservez ce reçu pour vos dossiers.",
     "tabAll": "Toutes",
     "tabBookings": "Réservations",
     "tabOther": "Autres",
@@ -191,6 +196,7 @@
     "payCash": "Paiement à la livraison",
     "payMomo": "Mobile Money",
     "status": {
+      "label": "Statut",
       "pending": "Commande passée",
       "confirmed": "Confirmée",
       "assigned": "Confirmée",

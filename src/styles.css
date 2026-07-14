@@ -143,3 +143,23 @@
     color: var(--color-foreground);
   }
 }
+
+/* Print-only receipt: hides everything except #receipt-printable when printing */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #receipt-printable,
+  #receipt-printable * {
+    visibility: visible;
+  }
+  #receipt-printable {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  .print\:hidden {
+    display: none !important;
+  }
+}

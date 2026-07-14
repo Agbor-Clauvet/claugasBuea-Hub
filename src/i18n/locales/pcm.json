@@ -177,6 +177,11 @@
   "order": {
     "myOrders": "My orders",
     "orderNumber": "Order",
+    "receipt": "Receipt",
+    "printReceipt": "Print / Save receipt",
+    "trackingNumber": "Tracking number",
+    "date": "Date",
+    "receiptFooter": "Thank you say you choose ClauGas. Keep this receipt well.",
     "tabAll": "All",
     "tabBookings": "Cylinder Bookings",
     "tabOther": "Others",
@@ -191,6 +196,7 @@
     "payCash": "Cash for Delivery",
     "payMomo": "Mobile Money",
     "status": {
+      "label": "Status",
       "pending": "Order don enter",
       "confirmed": "Confirmed",
       "assigned": "Confirmed",

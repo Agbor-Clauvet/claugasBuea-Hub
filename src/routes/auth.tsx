@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
-import logoAsset from "@/assets/claugas-express-logo.jpeg.asset.json";
+import logoUrl from "@/assets/brand/claugas-express-logo.webp";
 import { normalizeCameroonPhone, phoneToSyntheticEmail } from "@/lib/phone";
 
 export const Route = createFileRoute("/auth")({
@@ -112,7 +112,7 @@ function AuthPage() {
     <div className="flex min-h-screen flex-col bg-gradient-to-br from-primary/5 via-background to-accent/5">
       <div className="flex items-center justify-between px-4 py-3 border-b bg-background/60 backdrop-blur">
         <Link to="/" className="flex items-center gap-2">
-          <img src={logoAsset.url} alt="ClauGas Express — Hub Buea" className="h-9 w-9 rounded-full object-cover ring-1 ring-border" />
+          <img src={logoUrl} alt="ClauGas Express — Hub Buea" className="h-9 w-9 rounded-full object-cover ring-1 ring-border" />
           <span className="font-semibold text-primary">ClauGas</span>
         </Link>
         <LanguageSwitcher />
@@ -120,7 +120,7 @@ function AuthPage() {
       <div className="flex flex-1 items-center justify-center px-4 py-10">
         <Card className="w-full max-w-md shadow-xl">
           <CardHeader className="text-center">
-            <img src={logoAsset.url} alt="ClauGas Express" className="mx-auto h-16 w-16 rounded-full object-cover ring-1 ring-border mb-2" />
+            <img src={logoUrl} alt="ClauGas Express" className="mx-auto h-16 w-16 rounded-full object-cover ring-1 ring-border mb-2" />
             <CardTitle className="text-primary">ClauGas</CardTitle>
             <CardDescription>
               {mode === "forgot" ? t("auth.resetTitle") : t("auth.title")}

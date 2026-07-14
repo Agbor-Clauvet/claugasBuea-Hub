@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { BOOKING_STAGES, statusColor, type OrderStatus } from "@/lib/order-status";
+import { formatTrackingNumber } from "@/lib/tracking";
 
 export const Route = createFileRoute("/_authenticated/admin/orders")({
   head: () => ({ meta: [{ title: "Admin · Orders — ClauGas" }] }),
@@ -60,7 +61,7 @@ function AdminOrdersPage() {
           {rows.map((o) => (
             <Card key={o.id}>
               <CardContent className="p-3 flex flex-wrap items-center gap-3">
-                <Link to="/orders/$id" params={{ id: o.id }} className="text-sm font-mono text-primary hover:underline">#{o.id.slice(0, 8)}</Link>
+                <Link to="/orders/$id" params={{ id: o.id }} className="text-sm font-mono text-primary hover:underline">{formatTrackingNumber(o.id)}</Link>
                 <span className="text-xs text-muted-foreground">{new Date(o.created_at).toLocaleString()}</span>
                 <Badge variant={statusColor(o.status)}>{t(`order.status.${o.status}`)}</Badge>
                 {o.order_type === "cylinder_booking" ? <Badge variant="outline">{t("order.booking")}</Badge> : null}

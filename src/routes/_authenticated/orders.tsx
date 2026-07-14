@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { statusColor, type OrderStatus } from "@/lib/order-status";
+import { formatTrackingNumber } from "@/lib/tracking";
 
 export const Route = createFileRoute("/_authenticated/orders")({
   head: () => ({ meta: [{ title: "My Orders — ClauGas" }] }),
@@ -60,7 +61,7 @@ function OrdersPage() {
                   <Card className="hover:shadow-md transition">
                     <CardContent className="p-4 flex items-center justify-between gap-3">
                       <div className="min-w-0">
-                        <div className="text-sm font-medium">#{o.id.slice(0, 8)}</div>
+                        <div className="text-sm font-medium font-mono">{formatTrackingNumber(o.id)}</div>
                         <div className="text-xs text-muted-foreground">
                           {new Date(o.created_at).toLocaleDateString()}
                           {o.preferred_delivery_date ? ` · ${t("order.eta")}: ${o.preferred_delivery_date}` : ""}
