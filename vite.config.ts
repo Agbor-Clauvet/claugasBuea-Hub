@@ -7,6 +7,12 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
+  // Hard-pin to Vercel: this project deploys on Vercel, not Cloudflare.
+  // Without this, the shared Lovable config can force the Cloudflare preset,
+  // which breaks server-side dynamic routes (e.g. /orders/$id) once deployed.
+  nitro: {
+    preset: "vercel",
+  },
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
