@@ -18,7 +18,9 @@
     "dashboard": "Dashboard",
     "signOut": "Sign out",
     "language": "Language",
-    "menu": "Menu"
+    "menu": "Menu",
+    "darkMode": "Switch to dark mode",
+    "lightMode": "Switch to light mode"
   },
   "home": {
     "hero": {
@@ -232,7 +234,12 @@
     "confirmReject": "Reject this order?",
     "orderAccepted": "Order accepted",
     "orderRejected": "Order rejected",
-    "orderUpdated": "Order updated"
+    "orderUpdated": "Order updated",
+    "adminPreview": "ClauGas (admin preview)",
+    "refresh": "Refresh",
+    "retry": "Retry",
+    "outForDelivery": "Out for Delivery",
+    "completedOrders": "Completed Orders"
   },
   "dashboard": {
     "welcome": "Welcome",

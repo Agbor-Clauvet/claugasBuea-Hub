@@ -18,7 +18,9 @@
     "dashboard": "Dashboard",
     "signOut": "Comot",
     "language": "Language",
-    "menu": "Menu"
+    "menu": "Menu",
+    "darkMode": "Change to dark mode",
+    "lightMode": "Change to light mode"
   },
   "home": {
     "hero": {
@@ -232,7 +234,12 @@
     "confirmReject": "You wan reject this order?",
     "orderAccepted": "Order don accept",
     "orderRejected": "Order don reject",
-    "orderUpdated": "Order don update"
+    "orderUpdated": "Order don update",
+    "adminPreview": "ClauGas (admin preview)",
+    "refresh": "Refresh",
+    "retry": "Try again",
+    "outForDelivery": "E Dey Come",
+    "completedOrders": "Orders Wey Don Finish"
   },
   "dashboard": {
     "welcome": "Welcome",

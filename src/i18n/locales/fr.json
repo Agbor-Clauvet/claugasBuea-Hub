@@ -18,7 +18,9 @@
     "dashboard": "Tableau de bord",
     "signOut": "Déconnexion",
     "language": "Langue",
-    "menu": "Menu"
+    "menu": "Menu",
+    "darkMode": "Passer en mode sombre",
+    "lightMode": "Passer en mode clair"
   },
   "home": {
     "hero": {
@@ -232,7 +234,12 @@
     "confirmReject": "Refuser cette commande ?",
     "orderAccepted": "Commande acceptée",
     "orderRejected": "Commande refusée",
-    "orderUpdated": "Commande mise à jour"
+    "orderUpdated": "Commande mise à jour",
+    "adminPreview": "ClauGas (aperçu admin)",
+    "refresh": "Actualiser",
+    "retry": "Réessayer",
+    "outForDelivery": "En livraison",
+    "completedOrders": "Commandes terminées"
   },
   "dashboard": {
     "welcome": "Bienvenue",

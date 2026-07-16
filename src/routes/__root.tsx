@@ -82,15 +82,35 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "ClauGas — Smart Gas Delivery for Buea" },
-      { name: "description", content: "Fast, safe and reliable cooking gas cylinder delivery across Buea — Molyko, Great Soppo, GRA, Bonduma and more. Order anytime with live tracking and secure payment." },
+      {
+        name: "description",
+        content:
+          "Fast, safe and reliable cooking gas cylinder delivery across Buea — Molyko, Great Soppo, GRA, Bonduma and more. Order anytime with live tracking and secure payment.",
+      },
       { property: "og:title", content: "ClauGas — Smart Gas Delivery for Buea" },
-      { property: "og:description", content: "Fast, safe and reliable cooking gas cylinder delivery across Buea. Order anytime with live tracking and secure payment." },
+      {
+        property: "og:description",
+        content:
+          "Fast, safe and reliable cooking gas cylinder delivery across Buea. Order anytime with live tracking and secure payment.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "ClauGas — Smart Gas Delivery for Buea" },
-      { name: "twitter:description", content: "Fast, safe and reliable cooking gas cylinder delivery across Buea. Order anytime with live tracking and secure payment." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f82870e7-f7ff-4566-936f-0d2e60b1900b/id-preview-a6745608--1b781210-c8d7-437c-9112-a1c2a0ac5f2f.lovable.app-1783582739100.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f82870e7-f7ff-4566-936f-0d2e60b1900b/id-preview-a6745608--1b781210-c8d7-437c-9112-a1c2a0ac5f2f.lovable.app-1783582739100.png" },
+      {
+        name: "twitter:description",
+        content:
+          "Fast, safe and reliable cooking gas cylinder delivery across Buea. Order anytime with live tracking and secure payment.",
+      },
+      {
+        property: "og:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f82870e7-f7ff-4566-936f-0d2e60b1900b/id-preview-a6745608--1b781210-c8d7-437c-9112-a1c2a0ac5f2f.lovable.app-1783582739100.png",
+      },
+      {
+        name: "twitter:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f82870e7-f7ff-4566-936f-0d2e60b1900b/id-preview-a6745608--1b781210-c8d7-437c-9112-a1c2a0ac5f2f.lovable.app-1783582739100.png",
+      },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -108,6 +128,12 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="en">
       <head>
         <HeadContent />
+        {/* Applies the saved/system theme before first paint to avoid a light/dark flash */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('claugas-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}if(t==='dark'){document.documentElement.classList.add('dark');}}catch(e){}})();`,
+          }}
+        />
       </head>
       <body>
         {children}
