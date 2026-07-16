@@ -216,6 +216,24 @@
     "invalidPrice": "Price no correct",
     "forbidden": "Na admin only."
   },
+  "retailer": {
+    "dashboard": "Retailer Dashboard",
+    "forbidden": "Na retailer account dem fit see this page.",
+    "todaysOrders": "Today Orders",
+    "todaysRevenue": "Today Revenue",
+    "pendingOrders": "Orders Wey Dey Wait",
+    "accept": "Accept",
+    "reject": "Reject",
+    "markDelivered": "Mark Say E Don Deliver",
+    "markOutForDelivery": "E Dey Come",
+    "noOrdersToday": "No order today yet.",
+    "viewAll": "See all orders",
+    "customer": "Customer",
+    "confirmReject": "You wan reject this order?",
+    "orderAccepted": "Order don accept",
+    "orderRejected": "Order don reject",
+    "orderUpdated": "Order don update"
+  },
   "dashboard": {
     "welcome": "Welcome",
     "profile": "Profile",

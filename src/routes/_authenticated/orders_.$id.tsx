@@ -12,7 +12,7 @@ import { formatTrackingNumber } from "@/lib/tracking";
 import { Button } from "@/components/ui/button";
 import logoUrl from "@/assets/brand/claugas-express-logo.webp";
 
-export const Route = createFileRoute("/_authenticated/orders/$id")({
+export const Route = createFileRoute("/_authenticated/orders_/$id")({
   head: () => ({ meta: [{ title: "Order — ClauGas" }] }),
   component: OrderDetailPage,
   errorComponent: ({ error }) => <div className="p-6 text-sm text-destructive">{error.message}</div>,

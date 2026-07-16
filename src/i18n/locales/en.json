@@ -216,6 +216,24 @@
     "invalidPrice": "Enter a valid price",
     "forbidden": "Admins only."
   },
+  "retailer": {
+    "dashboard": "Retailer Dashboard",
+    "forbidden": "This page is only for retailer accounts.",
+    "todaysOrders": "Today's Orders",
+    "todaysRevenue": "Today's Revenue",
+    "pendingOrders": "Pending Orders",
+    "accept": "Accept",
+    "reject": "Reject",
+    "markDelivered": "Mark Delivered",
+    "markOutForDelivery": "Out for Delivery",
+    "noOrdersToday": "No orders today yet.",
+    "viewAll": "View all orders",
+    "customer": "Customer",
+    "confirmReject": "Reject this order?",
+    "orderAccepted": "Order accepted",
+    "orderRejected": "Order rejected",
+    "orderUpdated": "Order updated"
+  },
   "dashboard": {
     "welcome": "Welcome",
     "profile": "Profile",

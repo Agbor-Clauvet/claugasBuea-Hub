@@ -216,6 +216,24 @@
     "invalidPrice": "Prix invalide",
     "forbidden": "Réservé aux admins."
   },
+  "retailer": {
+    "dashboard": "Tableau de bord vendeur",
+    "forbidden": "Cette page est réservée aux comptes vendeurs.",
+    "todaysOrders": "Commandes du jour",
+    "todaysRevenue": "Revenu du jour",
+    "pendingOrders": "Commandes en attente",
+    "accept": "Accepter",
+    "reject": "Refuser",
+    "markDelivered": "Marquer livré",
+    "markOutForDelivery": "En livraison",
+    "noOrdersToday": "Aucune commande aujourd'hui.",
+    "viewAll": "Voir toutes les commandes",
+    "customer": "Client",
+    "confirmReject": "Refuser cette commande ?",
+    "orderAccepted": "Commande acceptée",
+    "orderRejected": "Commande refusée",
+    "orderUpdated": "Commande mise à jour"
+  },
   "dashboard": {
     "welcome": "Bienvenue",
     "profile": "Profil",
