@@ -121,7 +121,7 @@ function BookPage() {
   const total = subtotal + deliveryFee;
 
   function adjustQty(delta: number) {
-    setQuantity((q) => Math.min(10, Math.max(1, q + delta)));
+    setQuantity((q) => Math.min(30, Math.max(1, q + delta)));
   }
 
   async function handleBook(e: React.FormEvent) {
@@ -221,12 +221,20 @@ function BookPage() {
                     variant="outline"
                     size="icon"
                     onClick={() => adjustQty(1)}
-                    disabled={quantity >= 10}
+                    disabled={quantity >= 30}
                     aria-label="Increase quantity"
                   >
                     <Plus className="h-4 w-4" />
                   </Button>
                 </div>
+                {quantity >= 15 ? (
+                  <p className="text-xs text-muted-foreground">
+                    {t("booking.bulkNote")}{" "}
+                    <a href="/#contact" className="text-primary underline">
+                      {t("nav.contact")}
+                    </a>
+                  </p>
+                ) : null}
               </div>
 
               {/* Price breakdown */}

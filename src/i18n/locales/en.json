@@ -162,6 +162,7 @@
     "noAddress": "No saved address.",
     "needAddress": "Add an address first",
     "quantity": "Quantity",
+    "bulkNote": "Ordering for a business or need more than this? Reach out for bulk pricing:",
     "subtotal": "Subtotal",
     "freeDelivery": "Free",
     "deliveryDiscount": "50% delivery discount applied for orders over 20,000 XAF",
