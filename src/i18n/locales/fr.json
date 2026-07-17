@@ -164,6 +164,7 @@
     "quantity": "Quantité",
     "subtotal": "Sous-total",
     "freeDelivery": "Gratuit",
+    "deliveryDiscount": "Remise de 50% sur la livraison pour les commandes de plus de 20 000 XAF",
     "paymentMethod": "Comment allez-vous payer ?",
     "payCash": "Paiement à la livraison",
     "payCashDesc": "Payez le livreur en espèces à la réception de la bouteille.",

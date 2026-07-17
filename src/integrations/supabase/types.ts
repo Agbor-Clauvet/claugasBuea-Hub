@@ -244,6 +244,8 @@ export type Database = {
           created_at: string
           description: string | null
           id: string
+          lat: number | null
+          lng: number | null
           is_active: boolean
           is_verified: boolean
           logo_url: string | null
@@ -259,6 +261,8 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: string
+          lat?: number | null
+          lng?: number | null
           is_active?: boolean
           is_verified?: boolean
           logo_url?: string | null
@@ -274,6 +278,8 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: string
+          lat?: number | null
+          lng?: number | null
           is_active?: boolean
           is_verified?: boolean
           logo_url?: string | null
@@ -292,6 +298,8 @@ export type Database = {
           created_at: string
           id: string
           is_active: boolean
+          lat: number | null
+          lng: number | null
           quarter: string
           sort_order: number
           updated_at: string
@@ -301,6 +309,8 @@ export type Database = {
           created_at?: string
           id?: string
           is_active?: boolean
+          lat?: number | null
+          lng?: number | null
           quarter: string
           sort_order?: number
           updated_at?: string
@@ -310,6 +320,8 @@ export type Database = {
           created_at?: string
           id?: string
           is_active?: boolean
+          lat?: number | null
+          lng?: number | null
           quarter?: string
           sort_order?: number
           updated_at?: string

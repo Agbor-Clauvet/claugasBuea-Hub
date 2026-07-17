@@ -164,6 +164,7 @@
     "quantity": "Quantity",
     "subtotal": "Subtotal",
     "freeDelivery": "Free",
+    "deliveryDiscount": "50% delivery discount applied for orders over 20,000 XAF",
     "paymentMethod": "How will you pay?",
     "payCash": "Cash on Delivery",
     "payCashDesc": "Pay the rider in cash when your cylinder arrives.",
