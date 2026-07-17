@@ -10,6 +10,7 @@ import { CheckCircle2, Circle, Printer, Download, Loader2 } from "lucide-react";
 import { BOOKING_STAGES, stageIndex, statusColor, type OrderStatus } from "@/lib/order-status";
 import { formatTrackingNumber } from "@/lib/tracking";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import logoUrl from "@/assets/brand/claugas-express-logo.webp";
 import clautechLogoUrl from "@/assets/brand/clautech-logo.webp";
 
@@ -58,7 +59,7 @@ function OrderDetailPage() {
     setDownloading(true);
     try {
       const [{ default: html2canvas }, { default: jsPDF }] = await Promise.all([
-        import("html2canvas"),
+        import("html2canvas-pro"),
         import("jspdf"),
       ]);
       const canvas = await html2canvas(el, { scale: 2, backgroundColor: "#ffffff", useCORS: true });
@@ -70,6 +71,8 @@ function OrderDetailPage() {
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
       pdf.addImage(imgData, "PNG", margin, margin, imgWidth, imgHeight);
       pdf.save(`ClauGas-Receipt-${formatTrackingNumber(order.id)}.pdf`);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Could not generate PDF");
     } finally {
       setDownloading(false);
     }
