@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import clautechLogoUrl from "@/assets/brand/clautech-logo.webp";
 
@@ -10,12 +11,29 @@ export function Footer() {
         <div>
           <div className="text-sm font-semibold">ClauGas</div>
           <div className="text-xs text-muted-foreground">{t("brand.tagline")}</div>
+          <div className="mt-2 flex items-center justify-center gap-3 text-xs md:justify-start">
+            <Link
+              to="/terms"
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
+              {t("footer.terms")}
+            </Link>
+            <Link
+              to="/privacy"
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
+              {t("footer.privacy")}
+            </Link>
+          </div>
         </div>
         <div className="flex flex-col items-center gap-1 md:items-end">
           <div className="text-xs text-muted-foreground">
             © {year} ClauGas · {t("footer.rights")}
           </div>
-          <a href="#" className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors">
+          <a
+            href="#"
+            className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+          >
             {t("footer.poweredBy")}
             <img src={clautechLogoUrl} alt="ClauTech Digital Solutions" className="h-4 w-auto" />
           </a>

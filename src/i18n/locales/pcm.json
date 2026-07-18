@@ -268,7 +268,9 @@
   },
   "footer": {
     "rights": "All rights dey reserved.",
-    "poweredBy": "Na ClauTech Digital Solutions dey power am"
+    "poweredBy": "Na ClauTech Digital Solutions dey power am",
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy"
   },
   "common": {
     "loading": "E dey load…"

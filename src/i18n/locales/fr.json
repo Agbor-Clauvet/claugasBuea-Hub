@@ -268,7 +268,9 @@
   },
   "footer": {
     "rights": "Tous droits réservés.",
-    "poweredBy": "Propulsé par ClauTech Digital Solutions"
+    "poweredBy": "Propulsé par ClauTech Digital Solutions",
+    "terms": "Conditions d'utilisation",
+    "privacy": "Politique de confidentialité"
   },
   "common": {
     "loading": "Chargement…"
