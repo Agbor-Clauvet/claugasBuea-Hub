@@ -98,6 +98,22 @@ function OrderDetailPage() {
     })();
   }, [id]);
 
+  // Live status updates: if the retailer marks this order Confirmed / Out for
+  // Delivery / Delivered, this page updates instantly without a refresh.
+  useEffect(() => {
+    const channel = supabase
+      .channel(`order-${id}`)
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "orders", filter: `id=eq.${id}` },
+        (payload) => setOrder(payload.new as Order),
+      )
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [id]);
+
   if (!order) return <div className="p-6 text-sm">{t("common.loading")}</div>;
   const idx = stageIndex(order.status);
 

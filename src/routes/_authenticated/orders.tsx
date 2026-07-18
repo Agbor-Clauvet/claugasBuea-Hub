@@ -37,6 +37,23 @@ function OrdersPage() {
       .then(({ data }) => setOrders((data ?? []) as OrderRow[]));
   }, []);
 
+  // Live status updates: RLS already limits this to the signed-in customer's
+  // own orders, so no extra filter is needed here.
+  useEffect(() => {
+    const channel = supabase
+      .channel("my-orders-live")
+      .on("postgres_changes", { event: "UPDATE", schema: "public", table: "orders" }, (payload) => {
+        const updated = payload.new as OrderRow;
+        setOrders((rows) =>
+          rows ? rows.map((r) => (r.id === updated.id ? { ...r, ...updated } : r)) : rows,
+        );
+      })
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
   const filtered = (orders ?? []).filter((o) => tab === "all" || o.order_type === tab);
 
   return (
@@ -61,16 +78,26 @@ function OrdersPage() {
                   <Card className="hover:shadow-md transition">
                     <CardContent className="p-4 flex items-center justify-between gap-3">
                       <div className="min-w-0">
-                        <div className="text-sm font-medium font-mono">{formatTrackingNumber(o.id)}</div>
+                        <div className="text-sm font-medium font-mono">
+                          {formatTrackingNumber(o.id)}
+                        </div>
                         <div className="text-xs text-muted-foreground">
                           {new Date(o.created_at).toLocaleDateString()}
-                          {o.preferred_delivery_date ? ` · ${t("order.eta")}: ${o.preferred_delivery_date}` : ""}
+                          {o.preferred_delivery_date
+                            ? ` · ${t("order.eta")}: ${o.preferred_delivery_date}`
+                            : ""}
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
-                        <div className="text-sm font-semibold">{Number(o.total).toLocaleString()} XAF</div>
-                        <Badge variant={statusColor(o.status)}>{t(`order.status.${o.status}`)}</Badge>
-                        {o.order_type === "cylinder_booking" ? <Badge variant="outline">{t("order.booking")}</Badge> : null}
+                        <div className="text-sm font-semibold">
+                          {Number(o.total).toLocaleString()} XAF
+                        </div>
+                        <Badge variant={statusColor(o.status)}>
+                          {t(`order.status.${o.status}`)}
+                        </Badge>
+                        {o.order_type === "cylinder_booking" ? (
+                          <Badge variant="outline">{t("order.booking")}</Badge>
+                        ) : null}
                       </div>
                     </CardContent>
                   </Card>
