@@ -15,7 +15,14 @@ export const Route = createFileRoute("/_authenticated/admin/cylinders")({
   component: AdminCylindersPage,
 });
 
-type Row = { id: string; name: string; size_kg: number; price: number; is_active: boolean };
+type Row = {
+  id: string;
+  name: string;
+  size_kg: number;
+  price: number;
+  is_active: boolean;
+  in_stock: boolean;
+};
 
 function AdminCylindersPage() {
   const { t } = useTranslation();
@@ -29,7 +36,10 @@ function AdminCylindersPage() {
       if (!u.user) return setIsAdmin(false);
       const { data: r } = await supabase.from("user_roles").select("role").eq("user_id", u.user.id);
       setIsAdmin(((r ?? []) as { role: string }[]).some((x) => x.role === "admin"));
-      const { data } = await supabase.from("cylinders").select("id,name,size_kg,price,is_active").order("sort_order");
+      const { data } = await supabase
+        .from("cylinders")
+        .select("id,name,size_kg,price,is_active,in_stock")
+        .order("sort_order");
       setRows((data ?? []) as Row[]);
     })();
   }, []);
@@ -41,7 +51,11 @@ function AdminCylindersPage() {
     const { error } = await supabase.from("cylinders").update({ price }).eq("id", id);
     if (error) return toast.error(error.message);
     setRows((rs) => rs.map((r) => (r.id === id ? { ...r, price } : r)));
-    setDrafts((d) => { const n = { ...d }; delete n[id]; return n; });
+    setDrafts((d) => {
+      const n = { ...d };
+      delete n[id];
+      return n;
+    });
     toast.success(t("admin.priceUpdated"));
   }
 
@@ -49,12 +63,26 @@ function AdminCylindersPage() {
     const { error } = await supabase.from("cylinders").update({ is_active: v }).eq("id", id);
     if (error) return toast.error(error.message);
     setRows((rs) => rs.map((r) => (r.id === id ? { ...r, is_active: v } : r)));
+    toast.success(t("admin.statusUpdated"));
   }
 
-  if (isAdmin === false) return (
-    <div className="flex min-h-screen flex-col"><Navbar />
-      <main className="mx-auto max-w-lg flex-1 px-4 py-16 text-center text-sm text-muted-foreground">{t("admin.forbidden")}</main><Footer /></div>
-  );
+  async function toggleInStock(id: string, v: boolean) {
+    const { error } = await supabase.from("cylinders").update({ in_stock: v }).eq("id", id);
+    if (error) return toast.error(error.message);
+    setRows((rs) => rs.map((r) => (r.id === id ? { ...r, in_stock: v } : r)));
+    toast.success(t("admin.statusUpdated"));
+  }
+
+  if (isAdmin === false)
+    return (
+      <div className="flex min-h-screen flex-col">
+        <Navbar />
+        <main className="mx-auto max-w-lg flex-1 px-4 py-16 text-center text-sm text-muted-foreground">
+          {t("admin.forbidden")}
+        </main>
+        <Footer />
+      </div>
+    );
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -64,18 +92,35 @@ function AdminCylindersPage() {
         <div className="space-y-3">
           {rows.map((r) => (
             <Card key={r.id}>
-              <CardHeader><CardTitle className="text-base">{r.name} <span className="text-xs text-muted-foreground">({r.size_kg} kg)</span></CardTitle></CardHeader>
+              <CardHeader>
+                <CardTitle className="text-base">
+                  {r.name} <span className="text-xs text-muted-foreground">({r.size_kg} kg)</span>
+                </CardTitle>
+              </CardHeader>
               <CardContent className="flex flex-wrap items-end gap-3">
                 <div className="flex-1 min-w-[180px]">
                   <label className="text-xs text-muted-foreground">{t("admin.priceXaf")}</label>
-                  <Input type="number" min="0" step="50" value={drafts[r.id] ?? String(r.price)} onChange={(e) => setDrafts((d) => ({ ...d, [r.id]: e.target.value }))} />
+                  <Input
+                    type="number"
+                    min="0"
+                    step="50"
+                    value={drafts[r.id] ?? String(r.price)}
+                    onChange={(e) => setDrafts((d) => ({ ...d, [r.id]: e.target.value }))}
+                  />
                 </div>
-                <Button onClick={() => savePrice(r.id)} disabled={drafts[r.id] === undefined || Number(drafts[r.id]) === r.price}>
+                <Button
+                  onClick={() => savePrice(r.id)}
+                  disabled={drafts[r.id] === undefined || Number(drafts[r.id]) === r.price}
+                >
                   {t("admin.save")}
                 </Button>
                 <label className="flex items-center gap-2 text-sm">
+                  <Switch checked={r.in_stock} onCheckedChange={(v) => toggleInStock(r.id, v)} />
+                  {r.in_stock ? t("admin.inStock") : t("admin.outOfStock")}
+                </label>
+                <label className="flex items-center gap-2 text-sm">
                   <Switch checked={r.is_active} onCheckedChange={(v) => toggleActive(r.id, v)} />
-                  {t("admin.active")}
+                  {t("admin.listed")}
                 </label>
               </CardContent>
             </Card>

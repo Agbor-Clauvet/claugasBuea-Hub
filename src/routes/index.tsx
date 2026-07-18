@@ -1,14 +1,29 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Flame, ShieldCheck, Truck, Wallet, CheckCircle2, Phone, Mail, Clock, Star } from "lucide-react";
+import {
+  Flame,
+  ShieldCheck,
+  Truck,
+  Wallet,
+  CheckCircle2,
+  Phone,
+  Mail,
+  Clock,
+  Star,
+} from "lucide-react";
 import { cylinderPhoto } from "@/components/icons/cylinderPhoto";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 
@@ -44,7 +59,8 @@ function Index() {
   }, []);
 
   const goOrder = () => navigate({ to: signedIn ? "/dashboard" : "/auth" });
-  const goBook = (id: string) => navigate({ to: signedIn ? "/book/$cylinderId" : "/auth", params: { cylinderId: id } });
+  const goBook = (id: string) =>
+    navigate({ to: signedIn ? "/book/$cylinderId" : "/auth", params: { cylinderId: id } });
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -55,7 +71,9 @@ function Index() {
         <div className="absolute inset-0 -z-10 bg-gradient-to-br from-primary/10 via-background to-accent/10" />
         <div className="mx-auto max-w-6xl px-4 py-20 md:py-28 grid gap-10 md:grid-cols-2 items-center">
           <div>
-            <Badge className="mb-4 bg-accent/20 text-accent-foreground border-accent/30">{t("brand.tagline")}</Badge>
+            <Badge className="mb-4 bg-accent/20 text-accent-foreground border-accent/30">
+              {t("brand.tagline")}
+            </Badge>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
               {t("home.hero.title")}
             </h1>
@@ -74,7 +92,9 @@ function Index() {
               <Flame className="h-40 w-40 text-accent" strokeWidth={1.2} />
             </div>
             <div className="absolute -bottom-4 -left-4 rounded-2xl border bg-card p-4 shadow-xl">
-              <div className="flex items-center gap-2 text-sm font-medium"><Truck className="h-4 w-4 text-primary" /> Molyko · Great Soppo · GRA · Bonduma</div>
+              <div className="flex items-center gap-2 text-sm font-medium">
+                <Truck className="h-4 w-4 text-primary" /> Molyko · Great Soppo · GRA · Bonduma
+              </div>
             </div>
           </div>
         </div>
@@ -87,52 +107,76 @@ function Index() {
           <p className="mt-2 text-muted-foreground">{t("home.featured.subtitle")}</p>
         </div>
         <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3">
-          {cylinders === null
-            ? Array.from({ length: 3 }).map((_, i) => (
-                <Card key={i}>
-                  <CardHeader><Skeleton className="h-40 w-full rounded-md" /></CardHeader>
-                  <CardContent className="space-y-2">
-                    <Skeleton className="h-5 w-2/3" />
-                    <Skeleton className="h-4 w-1/3" />
-                    <Skeleton className="h-9 w-full" />
-                  </CardContent>
-                </Card>
-              ))
-            : cylinders.length === 0
-            ? <p className="col-span-full text-center text-sm text-muted-foreground">{t("home.featured.empty")}</p>
-            : cylinders.map((c) => (
-                <Card key={c.id} className="overflow-hidden group hover:shadow-xl transition-shadow">
-                  <div className="aspect-[4/3] bg-gradient-to-br from-primary/10 to-accent/20 flex items-center justify-center">
-                    {c.image_url ? (
-                      <img src={c.image_url} alt={c.name} className="h-full w-full object-cover group-hover:scale-105 transition-transform" />
-                    ) : (
-                      <img
-                        src={cylinderPhoto(c.name)}
-                        alt={c.name}
-                        className="h-full w-full object-contain p-4 group-hover:scale-105 transition-transform"
-                      />
-                    )}
+          {cylinders === null ? (
+            Array.from({ length: 3 }).map((_, i) => (
+              <Card key={i}>
+                <CardHeader>
+                  <Skeleton className="h-40 w-full rounded-md" />
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <Skeleton className="h-5 w-2/3" />
+                  <Skeleton className="h-4 w-1/3" />
+                  <Skeleton className="h-9 w-full" />
+                </CardContent>
+              </Card>
+            ))
+          ) : cylinders.length === 0 ? (
+            <p className="col-span-full text-center text-sm text-muted-foreground">
+              {t("home.featured.empty")}
+            </p>
+          ) : (
+            cylinders.map((c) => (
+              <Card key={c.id} className="overflow-hidden group hover:shadow-xl transition-shadow">
+                <div className="aspect-[4/3] bg-gradient-to-br from-primary/10 to-accent/20 flex items-center justify-center">
+                  {c.image_url ? (
+                    <img
+                      src={c.image_url}
+                      alt={c.name}
+                      className="h-full w-full object-cover group-hover:scale-105 transition-transform"
+                    />
+                  ) : (
+                    <img
+                      src={cylinderPhoto(c.name)}
+                      alt={c.name}
+                      className="h-full w-full object-contain p-4 group-hover:scale-105 transition-transform"
+                    />
+                  )}
+                </div>
+                <CardHeader>
+                  <div className="flex items-center justify-between gap-2">
+                    <CardTitle className="text-lg">{c.name}</CardTitle>
+                    <Badge variant={c.in_stock === false ? "destructive" : "secondary"}>
+                      {c.in_stock === false
+                        ? t("home.featured.outOfStock")
+                        : t("home.featured.inStock")}
+                    </Badge>
                   </div>
-                  <CardHeader>
-                    <div className="flex items-center justify-between gap-2">
-                      <CardTitle className="text-lg">{c.name}</CardTitle>
-                      <Badge variant={c.in_stock === false ? "destructive" : "secondary"}>
-                        {c.in_stock === false ? t("home.featured.outOfStock") : t("home.featured.inStock")}
-                      </Badge>
+                  {c.brand ? <p className="text-xs text-muted-foreground">{c.brand}</p> : null}
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="flex items-baseline justify-between">
+                    <div className="text-2xl font-bold text-primary">
+                      {Number(c.price).toLocaleString()} XAF
                     </div>
-                    {c.brand ? <p className="text-xs text-muted-foreground">{c.brand}</p> : null}
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    <div className="flex items-baseline justify-between">
-                      <div className="text-2xl font-bold text-primary">{Number(c.price).toLocaleString()} XAF</div>
-                      <div className="text-sm text-muted-foreground">{c.size_kg} {t("home.featured.kg")}</div>
+                    <div className="text-sm text-muted-foreground">
+                      {c.size_kg} {t("home.featured.kg")}
                     </div>
-                    <Button size="sm" className="w-full" onClick={() => goBook(c.id)}>
-                      <Flame className="mr-2 h-4 w-4" /> {t("home.featured.bookRefill")}
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
+                  </div>
+                  <Button
+                    size="sm"
+                    className="w-full"
+                    onClick={() => goBook(c.id)}
+                    disabled={c.in_stock === false}
+                  >
+                    <Flame className="mr-2 h-4 w-4" />
+                    {c.in_stock === false
+                      ? t("home.featured.outOfStock")
+                      : t("home.featured.bookRefill")}
+                  </Button>
+                </CardContent>
+              </Card>
+            ))
+          )}
         </div>
       </section>
 
@@ -198,10 +242,14 @@ function Index() {
             <Card key={k}>
               <CardContent className="pt-6">
                 <div className="flex gap-0.5 text-accent mb-2">
-                  {Array.from({ length: 5 }).map((_, i) => <Star key={i} className="h-4 w-4 fill-current" />)}
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star key={i} className="h-4 w-4 fill-current" />
+                  ))}
                 </div>
                 <p className="text-sm italic">"{t(`home.reviews.${k}Text`)}"</p>
-                <p className="mt-3 text-xs font-medium text-muted-foreground">— {t(`home.reviews.${k}Name`)}</p>
+                <p className="mt-3 text-xs font-medium text-muted-foreground">
+                  — {t(`home.reviews.${k}Name`)}
+                </p>
               </CardContent>
             </Card>
           ))}
@@ -230,20 +278,36 @@ function Index() {
           <p className="mt-2 text-muted-foreground">{t("home.contact.subtitle")}</p>
         </div>
         <div className="grid gap-4 md:grid-cols-3 max-w-3xl mx-auto">
-          <Card><CardContent className="pt-6 text-center">
-            <Phone className="mx-auto mb-2 h-6 w-6 text-primary" />
-            <div className="text-sm font-semibold">{t("home.contact.phone")}</div>
-            <a href="tel:+237650556715" className="text-sm text-muted-foreground hover:text-primary transition-colors">+237 650 556 715</a>
-          </CardContent></Card>
-          <Card><CardContent className="pt-6 text-center">
-            <Mail className="mx-auto mb-2 h-6 w-6 text-primary" />
-            <div className="text-sm font-semibold">{t("home.contact.email")}</div>
-            <a href="mailto:www.agborclauvet@gmail.com" className="text-sm text-muted-foreground hover:text-primary transition-colors break-all">www.agborclauvet@gmail.com</a>
-          </CardContent></Card>
-          <Card><CardContent className="pt-6 text-center">
-            <Clock className="mx-auto mb-2 h-6 w-6 text-primary" />
-            <div className="text-sm font-semibold">{t("home.contact.hours")}</div>
-          </CardContent></Card>
+          <Card>
+            <CardContent className="pt-6 text-center">
+              <Phone className="mx-auto mb-2 h-6 w-6 text-primary" />
+              <div className="text-sm font-semibold">{t("home.contact.phone")}</div>
+              <a
+                href="tel:+237650556715"
+                className="text-sm text-muted-foreground hover:text-primary transition-colors"
+              >
+                +237 650 556 715
+              </a>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="pt-6 text-center">
+              <Mail className="mx-auto mb-2 h-6 w-6 text-primary" />
+              <div className="text-sm font-semibold">{t("home.contact.email")}</div>
+              <a
+                href="mailto:www.agborclauvet@gmail.com"
+                className="text-sm text-muted-foreground hover:text-primary transition-colors break-all"
+              >
+                www.agborclauvet@gmail.com
+              </a>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="pt-6 text-center">
+              <Clock className="mx-auto mb-2 h-6 w-6 text-primary" />
+              <div className="text-sm font-semibold">{t("home.contact.hours")}</div>
+            </CardContent>
+          </Card>
         </div>
       </section>
 

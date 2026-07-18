@@ -15,7 +15,7 @@ import { statusColor, type OrderStatus } from "@/lib/order-status";
 import { formatTrackingNumber } from "@/lib/tracking";
 import { Check, X, Truck, PackageCheck, RefreshCw, AlertCircle, Inbox } from "lucide-react";
 
-export const Route = createFileRoute("/_authenticated/retailer/orders")({
+export const Route = createFileRoute()({
   head: () => ({ meta: [{ title: "Retailer Dashboard — ClauGas" }] }),
   component: RetailerOrdersPage,
 });

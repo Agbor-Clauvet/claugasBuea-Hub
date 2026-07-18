@@ -38,6 +38,7 @@ type Cylinder = {
   price: number;
   image_url: string | null;
   retailer_id: string | null;
+  in_stock: boolean;
 };
 type Address = {
   id: string;
@@ -68,7 +69,7 @@ function BookPage() {
   useEffect(() => {
     supabase
       .from("cylinders")
-      .select("id,name,size_kg,price,image_url,retailer_id")
+      .select("id,name,size_kg,price,image_url,retailer_id,in_stock")
       .eq("id", cylinderId)
       .maybeSingle()
       .then(async ({ data }) => {
@@ -127,6 +128,7 @@ function BookPage() {
   async function handleBook(e: React.FormEvent) {
     e.preventDefault();
     if (!cyl || !addressId) return toast.error(t("booking.needAddress"));
+    if (!cyl.in_stock) return toast.error(t("booking.outOfStock"));
     setSubmitting(true);
     const { data: u } = await supabase.auth.getUser();
     if (!u.user) {
@@ -362,9 +364,12 @@ function BookPage() {
                     maxLength={280}
                   />
                 </div>
+                {cyl && !cyl.in_stock ? (
+                  <p className="text-sm font-medium text-destructive">{t("booking.outOfStock")}</p>
+                ) : null}
                 <Button
                   type="submit"
-                  disabled={submitting || addresses.length === 0}
+                  disabled={submitting || addresses.length === 0 || (cyl ? !cyl.in_stock : false)}
                   className="w-full"
                 >
                   {submitting
