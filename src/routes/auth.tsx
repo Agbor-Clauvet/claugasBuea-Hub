@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
@@ -16,8 +16,14 @@ export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
       { title: "Sign in — ClauGas" },
-      { name: "description", content: "Sign in or create a ClauGas account to order cooking gas delivery in Buea." },
+      {
+        name: "description",
+        content: "Sign in or create a ClauGas account to order cooking gas delivery in Buea.",
+      },
     ],
+  }),
+  validateSearch: (search: Record<string, unknown>): { redirect?: string } => ({
+    redirect: typeof search.redirect === "string" ? search.redirect : undefined,
   }),
   component: AuthPage,
 });
@@ -27,7 +33,8 @@ type IdentifierKind = "phone" | "email";
 
 function AuthPage() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const search = Route.useSearch();
+  const destination = search.redirect || "/dashboard";
   const [loading, setLoading] = useState(false);
   const [mode, setMode] = useState<Mode>("login");
   const [loginKind, setLoginKind] = useState<IdentifierKind>("phone");
@@ -35,9 +42,10 @@ function AuthPage() {
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
-      if (data.user) navigate({ to: "/dashboard", replace: true });
+      if (data.user) window.location.assign(destination);
     });
-  }, [navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -61,7 +69,7 @@ function AuthPage() {
     setLoading(false);
     if (error) return toast.error(error.message);
     toast.success(t("auth.signedIn"));
-    navigate({ to: "/dashboard", replace: true });
+    window.location.assign(destination);
   }
 
   async function handleRegister(e: React.FormEvent) {
@@ -112,7 +120,11 @@ function AuthPage() {
     <div className="flex min-h-screen flex-col bg-gradient-to-br from-primary/5 via-background to-accent/5">
       <div className="flex items-center justify-between px-4 py-3 border-b bg-background/60 backdrop-blur">
         <Link to="/" className="flex items-center gap-2">
-          <img src={logoUrl} alt="ClauGas Express — Hub Buea" className="h-9 w-9 rounded-full object-cover ring-1 ring-border" />
+          <img
+            src={logoUrl}
+            alt="ClauGas Express — Hub Buea"
+            className="h-9 w-9 rounded-full object-cover ring-1 ring-border"
+          />
           <span className="font-semibold text-primary">ClauGas</span>
         </Link>
         <LanguageSwitcher />
@@ -120,7 +132,11 @@ function AuthPage() {
       <div className="flex flex-1 items-center justify-center px-4 py-10">
         <Card className="w-full max-w-md shadow-xl">
           <CardHeader className="text-center">
-            <img src={logoUrl} alt="ClauGas Express" className="mx-auto h-16 w-16 rounded-full object-cover ring-1 ring-border mb-2" />
+            <img
+              src={logoUrl}
+              alt="ClauGas Express"
+              className="mx-auto h-16 w-16 rounded-full object-cover ring-1 ring-border mb-2"
+            />
             <CardTitle className="text-primary">ClauGas</CardTitle>
             <CardDescription>
               {mode === "forgot" ? t("auth.resetTitle") : t("auth.title")}
@@ -136,21 +152,35 @@ function AuthPage() {
                   </TabsList>
                   <TabsContent value="phone" className="mt-4 space-y-2">
                     <Label htmlFor="fp-phone">{t("auth.phone")}</Label>
-                    <Input id="fp-phone" type="tel" inputMode="tel" placeholder={t("auth.phonePlaceholder")}
-                      value={phone} onChange={(e) => setPhone(e.target.value)} />
+                    <Input
+                      id="fp-phone"
+                      type="tel"
+                      inputMode="tel"
+                      placeholder={t("auth.phonePlaceholder")}
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                    />
                     <p className="text-xs text-muted-foreground">{t("auth.resetNoRecovery")}</p>
                   </TabsContent>
                   <TabsContent value="email" className="mt-4 space-y-2">
                     <Label htmlFor="fp-email">{t("auth.email")}</Label>
-                    <Input id="fp-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                    <Input
+                      id="fp-email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
                     <p className="text-xs text-muted-foreground">{t("auth.resetNote")}</p>
                   </TabsContent>
                 </Tabs>
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? t("auth.sending") : t("auth.sendReset")}
                 </Button>
-                <button type="button" className="text-sm text-muted-foreground hover:underline w-full text-center"
-                  onClick={() => setMode("login")}>
+                <button
+                  type="button"
+                  className="text-sm text-muted-foreground hover:underline w-full text-center"
+                  onClick={() => setMode("login")}
+                >
                   {t("auth.backToSignIn")}
                 </button>
               </form>
@@ -163,7 +193,10 @@ function AuthPage() {
 
                 <TabsContent value="login">
                   <form onSubmit={handleLogin} className="space-y-4 mt-4">
-                    <Tabs value={loginKind} onValueChange={(v) => setLoginKind(v as IdentifierKind)}>
+                    <Tabs
+                      value={loginKind}
+                      onValueChange={(v) => setLoginKind(v as IdentifierKind)}
+                    >
                       <TabsList className="grid w-full grid-cols-2">
                         <TabsTrigger value="phone">{t("auth.phoneTab")}</TabsTrigger>
                         <TabsTrigger value="email">{t("auth.emailTab")}</TabsTrigger>
@@ -171,28 +204,50 @@ function AuthPage() {
                       <TabsContent value="phone" className="mt-3 space-y-2">
                         <Label htmlFor="login-phone">{t("auth.phone")}</Label>
                         <div className="flex items-center gap-2">
-                          <span className="rounded-md border bg-muted px-2 py-2 text-sm text-muted-foreground">+237</span>
-                          <Input id="login-phone" type="tel" inputMode="tel" placeholder={t("auth.phonePlaceholder")}
-                            required value={phone} onChange={(e) => setPhone(e.target.value)} />
+                          <span className="rounded-md border bg-muted px-2 py-2 text-sm text-muted-foreground">
+                            +237
+                          </span>
+                          <Input
+                            id="login-phone"
+                            type="tel"
+                            inputMode="tel"
+                            placeholder={t("auth.phonePlaceholder")}
+                            required
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
+                          />
                         </div>
                         <p className="text-xs text-muted-foreground">{t("auth.phoneHint")}</p>
                       </TabsContent>
                       <TabsContent value="email" className="mt-3 space-y-2">
                         <Label htmlFor="login-email">{t("auth.email")}</Label>
-                        <Input id="login-email" type="email" required value={email}
-                          onChange={(e) => setEmail(e.target.value)} />
+                        <Input
+                          id="login-email"
+                          type="email"
+                          required
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                        />
                       </TabsContent>
                     </Tabs>
                     <div className="space-y-2">
                       <Label htmlFor="login-password">{t("auth.password")}</Label>
-                      <Input id="login-password" type="password" required value={password}
-                        onChange={(e) => setPassword(e.target.value)} />
+                      <Input
+                        id="login-password"
+                        type="password"
+                        required
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                      />
                     </div>
                     <Button type="submit" className="w-full" disabled={loading}>
                       {loading ? t("auth.signingIn") : t("auth.signIn")}
                     </Button>
-                    <button type="button" className="text-sm text-muted-foreground hover:underline w-full text-center"
-                      onClick={() => setMode("forgot")}>
+                    <button
+                      type="button"
+                      className="text-sm text-muted-foreground hover:underline w-full text-center"
+                      onClick={() => setMode("forgot")}
+                    >
                       {t("auth.forgot")}
                     </button>
                   </form>
@@ -202,31 +257,61 @@ function AuthPage() {
                   <form onSubmit={handleRegister} className="space-y-4 mt-4">
                     <div className="space-y-2">
                       <Label htmlFor="reg-name">{t("auth.fullName")}</Label>
-                      <Input id="reg-name" required value={fullName} onChange={(e) => setFullName(e.target.value)} />
+                      <Input
+                        id="reg-name"
+                        required
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="reg-phone">{t("auth.phone")}</Label>
                       <div className="flex items-center gap-2">
-                        <span className="rounded-md border bg-muted px-2 py-2 text-sm text-muted-foreground">+237</span>
-                        <Input id="reg-phone" type="tel" inputMode="tel" required placeholder={t("auth.phonePlaceholder")}
-                          value={phone} onChange={(e) => setPhone(e.target.value)} />
+                        <span className="rounded-md border bg-muted px-2 py-2 text-sm text-muted-foreground">
+                          +237
+                        </span>
+                        <Input
+                          id="reg-phone"
+                          type="tel"
+                          inputMode="tel"
+                          required
+                          placeholder={t("auth.phonePlaceholder")}
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value)}
+                        />
                       </div>
                       <p className="text-xs text-muted-foreground">{t("auth.phoneHint")}</p>
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="reg-email">{t("auth.emailOptional")}</Label>
-                      <Input id="reg-email" type="email" value={regEmail}
-                        onChange={(e) => setRegEmail(e.target.value)} />
+                      <Input
+                        id="reg-email"
+                        type="email"
+                        value={regEmail}
+                        onChange={(e) => setRegEmail(e.target.value)}
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="reg-password">{t("auth.passwordHint")}</Label>
-                      <Input id="reg-password" type="password" required minLength={6} value={password}
-                        onChange={(e) => setPassword(e.target.value)} />
+                      <Input
+                        id="reg-password"
+                        type="password"
+                        required
+                        minLength={6}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="reg-confirm">{t("auth.confirmPassword")}</Label>
-                      <Input id="reg-confirm" type="password" required minLength={6} value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)} />
+                      <Input
+                        id="reg-confirm"
+                        type="password"
+                        required
+                        minLength={6}
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                      />
                     </div>
                     <Button type="submit" className="w-full" disabled={loading}>
                       {loading ? t("auth.creating") : t("auth.createAccount")}
