@@ -14,6 +14,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { loadStoredLanguage } from "@/i18n";
+import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
 import logoUrl from "@/assets/brand/claugas-express-logo.webp";
 
 function NotFoundComponent() {
@@ -164,6 +165,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <Outlet />
       <Toaster richColors position="top-right" />
+      <WhatsAppButton />
     </QueryClientProvider>
   );
 }

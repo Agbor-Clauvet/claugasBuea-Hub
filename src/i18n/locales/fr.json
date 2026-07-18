@@ -274,5 +274,9 @@
   },
   "common": {
     "loading": "Chargement…"
+  },
+  "whatsapp": {
+    "ariaLabel": "Discutez avec ClauGas sur WhatsApp",
+    "prefilledMessage": "Bonjour ClauGas, j'aimerais avoir des informations sur..."
   }
 }

@@ -274,5 +274,9 @@
   },
   "common": {
     "loading": "E dey load…"
+  },
+  "whatsapp": {
+    "ariaLabel": "Chat with ClauGas for WhatsApp",
+    "prefilledMessage": "Hi ClauGas, I wan ask about..."
   }
 }
