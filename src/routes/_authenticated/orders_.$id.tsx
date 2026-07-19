@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Navbar } from "@/components/layout/Navbar";
@@ -78,6 +78,14 @@ function OrderDetailPage() {
     }
   };
 
+  const fetchOrderStatus = useCallback(async () => {
+    const { data: o } = await supabase.from("orders").select("status").eq("id", id).maybeSingle();
+    if (o)
+      setOrder((prev) =>
+        prev ? { ...prev, status: (o as { status: OrderStatus }).status } : prev,
+      );
+  }, [id]);
+
   useEffect(() => {
     (async () => {
       const { data: o } = await supabase.from("orders").select("*").eq("id", id).maybeSingle();
@@ -113,6 +121,22 @@ function OrderDetailPage() {
       supabase.removeChannel(channel);
     };
   }, [id]);
+
+  // Backstop: browsers can throttle/suspend a backgrounded tab's WebSocket,
+  // so a live update can be missed while this tab wasn't in focus. Re-check
+  // the status directly whenever the tab becomes visible again, so the page
+  // is always correct even if a realtime event slipped through.
+  useEffect(() => {
+    function handleVisibility() {
+      if (document.visibilityState === "visible") fetchOrderStatus();
+    }
+    document.addEventListener("visibilitychange", handleVisibility);
+    window.addEventListener("focus", handleVisibility);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibility);
+      window.removeEventListener("focus", handleVisibility);
+    };
+  }, [fetchOrderStatus]);
 
   if (!order) return <div className="p-6 text-sm">{t("common.loading")}</div>;
   const idx = stageIndex(order.status);

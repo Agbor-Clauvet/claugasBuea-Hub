@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Navbar } from "@/components/layout/Navbar";
@@ -29,13 +29,17 @@ function OrdersPage() {
   const [orders, setOrders] = useState<OrderRow[] | null>(null);
   const [tab, setTab] = useState<"all" | "cylinder_booking" | "standard">("all");
 
-  useEffect(() => {
-    supabase
+  const fetchOrders = useCallback(async () => {
+    const { data } = await supabase
       .from("orders")
       .select("id,status,total,created_at,order_type,preferred_delivery_date")
-      .order("created_at", { ascending: false })
-      .then(({ data }) => setOrders((data ?? []) as OrderRow[]));
+      .order("created_at", { ascending: false });
+    setOrders((data ?? []) as OrderRow[]);
   }, []);
+
+  useEffect(() => {
+    fetchOrders();
+  }, [fetchOrders]);
 
   // Live status updates: RLS already limits this to the signed-in customer's
   // own orders, so no extra filter is needed here.
@@ -53,6 +57,21 @@ function OrdersPage() {
       supabase.removeChannel(channel);
     };
   }, []);
+
+  // Backstop: browsers can throttle/suspend a backgrounded tab's WebSocket,
+  // so a live update can be missed while this tab wasn't in focus. Re-fetch
+  // the list whenever the tab becomes visible again.
+  useEffect(() => {
+    function handleVisibility() {
+      if (document.visibilityState === "visible") fetchOrders();
+    }
+    document.addEventListener("visibilitychange", handleVisibility);
+    window.addEventListener("focus", handleVisibility);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibility);
+      window.removeEventListener("focus", handleVisibility);
+    };
+  }, [fetchOrders]);
 
   const filtered = (orders ?? []).filter((o) => tab === "all" || o.order_type === tab);
 
