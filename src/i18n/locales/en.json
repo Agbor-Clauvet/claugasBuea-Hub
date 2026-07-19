@@ -226,7 +226,11 @@
     "priceUpdated": "Price updated",
     "statusUpdated": "Status updated",
     "invalidPrice": "Enter a valid price",
-    "forbidden": "Admins only."
+    "forbidden": "Admins only.",
+    "searchPlaceholder": "Search by name, phone, or tracking number",
+    "allStatuses": "All statuses",
+    "noOrdersMatch": "No orders match your search.",
+    "unknownCustomer": "Unknown customer"
   },
   "retailer": {
     "dashboard": "Retailer Dashboard",

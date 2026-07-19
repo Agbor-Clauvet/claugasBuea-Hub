@@ -226,7 +226,11 @@
     "priceUpdated": "Prix mis à jour",
     "statusUpdated": "Statut mis à jour",
     "invalidPrice": "Prix invalide",
-    "forbidden": "Réservé aux admins."
+    "forbidden": "Réservé aux admins.",
+    "searchPlaceholder": "Rechercher par nom, téléphone ou numéro de suivi",
+    "allStatuses": "Tous les statuts",
+    "noOrdersMatch": "Aucune commande ne correspond à votre recherche.",
+    "unknownCustomer": "Client inconnu"
   },
   "retailer": {
     "dashboard": "Tableau de bord vendeur",
