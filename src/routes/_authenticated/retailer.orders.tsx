@@ -13,7 +13,17 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { statusColor, type OrderStatus } from "@/lib/order-status";
 import { formatTrackingNumber } from "@/lib/tracking";
-import { Check, X, Truck, PackageCheck, RefreshCw, AlertCircle, Inbox } from "lucide-react";
+import {
+  Check,
+  X,
+  Truck,
+  PackageCheck,
+  RefreshCw,
+  AlertCircle,
+  Inbox,
+  Trash2,
+  Users,
+} from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/retailer/orders")({
   head: () => ({ meta: [{ title: "Retailer Dashboard — ClauGas" }] }),
@@ -148,6 +158,16 @@ function RetailerOrdersPage() {
     updateStatus(id, "cancelled");
   }
 
+  async function deleteOrder(id: string) {
+    if (!window.confirm(t("retailer.confirmDelete"))) return;
+    setBusyId(id);
+    const { error } = await supabase.from("orders").delete().eq("id", id);
+    setBusyId(null);
+    if (error) return toast.error(error.message);
+    setRows((rs) => (rs ? rs.filter((r) => r.id !== id) : rs));
+    toast.success(t("retailer.orderDeleted"));
+  }
+
   if (access === "denied") {
     return (
       <div className="flex min-h-screen flex-col">
@@ -205,10 +225,18 @@ function RetailerOrdersPage() {
             <h1 className="text-2xl font-bold text-primary">{t("retailer.dashboard")}</h1>
             <p className="text-sm text-muted-foreground">{retailerName}</p>
           </div>
-          <Button size="sm" variant="outline" onClick={() => load()} disabled={refreshing}>
-            <RefreshCw className={`mr-1.5 h-4 w-4 ${refreshing ? "animate-spin" : ""}`} />
-            {t("retailer.refresh")}
-          </Button>
+          <div className="flex items-center gap-2">
+            <Link to="/retailer/customers">
+              <Button size="sm" variant="outline">
+                <Users className="mr-1.5 h-4 w-4" />
+                {t("retailer.customers")}
+              </Button>
+            </Link>
+            <Button size="sm" variant="outline" onClick={() => load()} disabled={refreshing}>
+              <RefreshCw className={`mr-1.5 h-4 w-4 ${refreshing ? "animate-spin" : ""}`} />
+              {t("retailer.refresh")}
+            </Button>
+          </div>
         </div>
 
         {loadError ? (
@@ -342,6 +370,16 @@ function RetailerOrdersPage() {
                       <PackageCheck className="mr-1 h-4 w-4" /> {t("retailer.markDelivered")}
                     </Button>
                   )}
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="text-destructive hover:text-destructive"
+                    disabled={busyId === o.id}
+                    onClick={() => deleteOrder(o.id)}
+                    aria-label={t("retailer.deleteOrder")}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
                 </CardContent>
               </Card>
             );

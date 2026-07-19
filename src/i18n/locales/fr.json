@@ -249,7 +249,19 @@
     "refresh": "Actualiser",
     "retry": "Réessayer",
     "outForDelivery": "En livraison",
-    "completedOrders": "Commandes terminées"
+    "completedOrders": "Commandes terminées",
+    "customers": "Clients",
+    "customersSubtitle": "Voyez qui commande souvent et dépense le plus — de bons candidats pour une remise fidélité.",
+    "viewOrders": "Voir les commandes",
+    "orderCount": "Commandes",
+    "totalSpent": "Total dépensé",
+    "lastOrder": "Dernière commande",
+    "frequentBuyer": "Client fidèle",
+    "unknownCustomer": "Client inconnu",
+    "noCustomersYet": "Aucun client pour l'instant.",
+    "deleteOrder": "Supprimer la commande",
+    "confirmDelete": "Supprimer cette commande ? Cette action est irréversible.",
+    "orderDeleted": "Commande supprimée"
   },
   "dashboard": {
     "welcome": "Bienvenue",

@@ -249,7 +249,19 @@
     "refresh": "Refresh",
     "retry": "Try again",
     "outForDelivery": "E Dey Come",
-    "completedOrders": "Orders Wey Don Finish"
+    "completedOrders": "Orders Wey Don Finish",
+    "customers": "Customers",
+    "customersSubtitle": "See who dey order plenty and spend the most — good people to give loyalty discount.",
+    "viewOrders": "See Orders",
+    "orderCount": "Orders",
+    "totalSpent": "Total Wey E Spend",
+    "lastOrder": "Last Order",
+    "frequentBuyer": "Customer Wey Dey Come Back",
+    "unknownCustomer": "Customer wey we no sabi",
+    "noCustomersYet": "No customer yet.",
+    "deleteOrder": "Delete order",
+    "confirmDelete": "You wan delete this order? E no go fit come back.",
+    "orderDeleted": "Order don delete"
   },
   "dashboard": {
     "welcome": "Welcome",

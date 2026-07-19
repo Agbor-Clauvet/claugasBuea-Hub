@@ -249,7 +249,19 @@
     "refresh": "Refresh",
     "retry": "Retry",
     "outForDelivery": "Out for Delivery",
-    "completedOrders": "Completed Orders"
+    "completedOrders": "Completed Orders",
+    "customers": "Customers",
+    "customersSubtitle": "See who orders often and spends the most — good candidates for a loyalty discount.",
+    "viewOrders": "View Orders",
+    "orderCount": "Orders",
+    "totalSpent": "Total Spent",
+    "lastOrder": "Last Order",
+    "frequentBuyer": "Frequent Buyer",
+    "unknownCustomer": "Unknown customer",
+    "noCustomersYet": "No customers yet.",
+    "deleteOrder": "Delete order",
+    "confirmDelete": "Delete this order? This can't be undone.",
+    "orderDeleted": "Order deleted"
   },
   "dashboard": {
     "welcome": "Welcome",
