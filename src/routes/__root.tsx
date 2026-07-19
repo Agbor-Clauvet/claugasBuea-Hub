@@ -11,7 +11,6 @@ import { useEffect, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 
 import appCss from "../styles.css?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { loadStoredLanguage } from "@/i18n";
@@ -45,9 +44,6 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
   const { t } = useTranslation();
-  useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
-  }, [error]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -107,13 +103,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       {
         property: "og:image",
-        content:
-          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f82870e7-f7ff-4566-936f-0d2e60b1900b/id-preview-a6745608--1b781210-c8d7-437c-9112-a1c2a0ac5f2f.lovable.app-1783582739100.png",
+        content: `https://claugas-foundation.vercel.app${logoUrl}`,
       },
       {
         name: "twitter:image",
-        content:
-          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f82870e7-f7ff-4566-936f-0d2e60b1900b/id-preview-a6745608--1b781210-c8d7-437c-9112-a1c2a0ac5f2f.lovable.app-1783582739100.png",
+        content: `https://claugas-foundation.vercel.app${logoUrl}`,
       },
     ],
     links: [
