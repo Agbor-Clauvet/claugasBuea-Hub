@@ -291,6 +291,17 @@
   "common": {
     "loading": "E dey load…"
   },
+  "notFound": {
+    "title": "We no fit find this page",
+    "body": "The page wey you dey find no dey, or dem don move am.",
+    "goHome": "Go back home"
+  },
+  "errorPage": {
+    "title": "This page no load",
+    "body": "Something spoil for our side. You fit try again or go back home.",
+    "tryAgain": "Try again",
+    "goHome": "Go back home"
+  },
   "whatsapp": {
     "ariaLabel": "Chat with ClauGas for WhatsApp",
     "prefilledMessage": "Hi ClauGas, I wan ask about..."

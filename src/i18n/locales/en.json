@@ -291,6 +291,17 @@
   "common": {
     "loading": "Loading…"
   },
+  "notFound": {
+    "title": "Page not found",
+    "body": "The page you're looking for doesn't exist or has been moved.",
+    "goHome": "Go home"
+  },
+  "errorPage": {
+    "title": "This page didn't load",
+    "body": "Something went wrong on our end. You can try refreshing or head back home.",
+    "tryAgain": "Try again",
+    "goHome": "Go home"
+  },
   "whatsapp": {
     "ariaLabel": "Chat with ClauGas on WhatsApp",
     "prefilledMessage": "Hi ClauGas, I'd like to ask about..."

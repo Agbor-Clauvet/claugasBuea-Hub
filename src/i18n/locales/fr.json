@@ -291,6 +291,17 @@
   "common": {
     "loading": "Chargement…"
   },
+  "notFound": {
+    "title": "Page introuvable",
+    "body": "La page que vous recherchez n'existe pas ou a été déplacée.",
+    "goHome": "Retour à l'accueil"
+  },
+  "errorPage": {
+    "title": "Cette page n'a pas pu se charger",
+    "body": "Une erreur s'est produite de notre côté. Vous pouvez réessayer ou retourner à l'accueil.",
+    "tryAgain": "Réessayer",
+    "goHome": "Retour à l'accueil"
+  },
   "whatsapp": {
     "ariaLabel": "Discutez avec ClauGas sur WhatsApp",
     "prefilledMessage": "Bonjour ClauGas, j'aimerais avoir des informations sur..."

@@ -24,6 +24,11 @@ if (!i18n.isInitialized) {
     interpolation: { escapeValue: false },
     react: { useSuspense: false },
   });
+  i18n.on("languageChanged", (lng) => {
+    if (typeof document !== "undefined") {
+      document.documentElement.lang = lng;
+    }
+  });
 }
 
 export function loadStoredLanguage() {
