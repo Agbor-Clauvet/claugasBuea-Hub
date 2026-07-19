@@ -73,11 +73,15 @@ export function Navbar() {
                 size="sm"
                 variant="ghost"
                 className="hidden sm:inline-flex"
-                onClick={() => navigate({ to: "/auth" })}
+                onClick={() => navigate({ to: "/auth", search: { mode: "login" } })}
               >
                 {t("nav.login")}
               </Button>
-              <Button size="sm" onClick={() => navigate({ to: "/auth" })}>
+              <Button
+                size="sm"
+                className="hidden sm:inline-flex"
+                onClick={() => navigate({ to: "/auth", search: { mode: "register" } })}
+              >
                 {t("nav.register")}
               </Button>
             </>
@@ -106,6 +110,29 @@ export function Navbar() {
                 {l.label}
               </a>
             ))}
+            {signedIn ? null : (
+              <>
+                <div className="my-1 border-t" />
+                <button
+                  className="rounded-md px-3 py-2 text-left text-sm font-medium hover:bg-accent"
+                  onClick={() => {
+                    setOpen(false);
+                    navigate({ to: "/auth", search: { mode: "login" } });
+                  }}
+                >
+                  {t("nav.login")}
+                </button>
+                <button
+                  className="rounded-md px-3 py-2 text-left text-sm font-medium text-primary hover:bg-accent"
+                  onClick={() => {
+                    setOpen(false);
+                    navigate({ to: "/auth", search: { mode: "register" } });
+                  }}
+                >
+                  {t("nav.register")}
+                </button>
+              </>
+            )}
           </nav>
         </div>
       ) : null}

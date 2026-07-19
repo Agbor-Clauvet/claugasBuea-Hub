@@ -22,8 +22,9 @@ export const Route = createFileRoute("/auth")({
       },
     ],
   }),
-  validateSearch: (search: Record<string, unknown>): { redirect?: string } => ({
+  validateSearch: (search: Record<string, unknown>): { redirect?: string; mode?: "login" | "register" } => ({
     redirect: typeof search.redirect === "string" ? search.redirect : undefined,
+    mode: search.mode === "register" ? "register" : search.mode === "login" ? "login" : undefined,
   }),
   component: AuthPage,
 });
@@ -36,7 +37,7 @@ function AuthPage() {
   const search = Route.useSearch();
   const destination = search.redirect || "/dashboard";
   const [loading, setLoading] = useState(false);
-  const [mode, setMode] = useState<Mode>("login");
+  const [mode, setMode] = useState<Mode>(search.mode ?? "login");
   const [loginKind, setLoginKind] = useState<IdentifierKind>("phone");
   const [forgotKind, setForgotKind] = useState<IdentifierKind>("phone");
 
