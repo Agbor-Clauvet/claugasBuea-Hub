@@ -52,6 +52,21 @@ function OrderDetailPage() {
   const [items, setItems] = useState<Item[]>([]);
   const [generatedAt] = useState(() => new Date());
   const [downloading, setDownloading] = useState(false);
+  const [cancelling, setCancelling] = useState(false);
+
+  const handleCancel = async () => {
+    if (!order) return;
+    if (!window.confirm(t("order.confirmCancel"))) return;
+    setCancelling(true);
+    const { error } = await supabase
+      .from("orders")
+      .update({ status: "cancelled" })
+      .eq("id", order.id);
+    setCancelling(false);
+    if (error) return toast.error(error.message);
+    setOrder((prev) => (prev ? { ...prev, status: "cancelled" } : prev));
+    toast.success(t("order.orderCancelled"));
+  };
 
   const handleDownloadPdf = async () => {
     const el = document.getElementById("receipt-printable");
@@ -154,6 +169,17 @@ function OrderDetailPage() {
           </div>
           <div className="flex items-center gap-2">
             <Badge variant={statusColor(order.status)}>{t(`order.status.${order.status}`)}</Badge>
+            {(order.status === "pending" || order.status === "confirmed") && (
+              <Button
+                size="sm"
+                variant="outline"
+                className="text-destructive hover:text-destructive print:hidden"
+                disabled={cancelling}
+                onClick={handleCancel}
+              >
+                {cancelling ? t("order.cancelling") : t("order.cancelOrder")}
+              </Button>
+            )}
             <Button
               size="sm"
               variant="outline"
