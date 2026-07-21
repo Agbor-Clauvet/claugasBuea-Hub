@@ -1,0 +1,36 @@
+# Safety net: this runs automatically before every `git push`, so a broken
+# build never reaches GitHub (and therefore never reaches Vercel) again.
+#
+# We've hit this exact failure mode several times before — a stripped route
+# string, a duplicate/misnamed file from a manual drag-and-drop, a stale
+# route tree — each one only discovered after the deploy already failed on
+# Vercel. This catches all of those locally, in seconds, before the push
+# even goes out.
+#
+# If this ever blocks a push you're SURE is fine, you can skip it once with:
+#   git push --no-verify
+# but treat that as an emergency escape hatch, not a habit — a failed check
+# here means the exact same failure would happen on Vercel's build.
+
+echo ""
+echo "🔍 Running pre-push checks (type-check + build)..."
+echo ""
+
+npm run typecheck
+TYPECHECK_EXIT=$?
+
+npm run build
+BUILD_EXIT=$?
+
+if [ $TYPECHECK_EXIT -ne 0 ] || [ $BUILD_EXIT -ne 0 ]; then
+  echo ""
+  echo "❌ Push blocked — the type-check or build failed above."
+  echo "   Fix the error shown above, then try pushing again."
+  echo "   (To push anyway, in an emergency: git push --no-verify)"
+  echo ""
+  exit 1
+fi
+
+echo ""
+echo "✅ Type-check and build both passed — pushing now."
+echo ""

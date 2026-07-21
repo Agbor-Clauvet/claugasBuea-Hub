@@ -24,9 +24,7 @@ function NotFoundComponent() {
       <div className="max-w-md text-center">
         <h1 className="text-7xl font-bold text-foreground">404</h1>
         <h2 className="mt-4 text-xl font-semibold text-foreground">{t("notFound.title")}</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          {t("notFound.body")}
-        </p>
+        <p className="mt-2 text-sm text-muted-foreground">{t("notFound.body")}</p>
         <div className="mt-6">
           <Link
             to="/"
@@ -51,9 +49,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
         <h1 className="text-xl font-semibold tracking-tight text-foreground">
           {t("errorPage.title")}
         </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          {t("errorPage.body")}
-        </p>
+        <p className="mt-2 text-sm text-muted-foreground">{t("errorPage.body")}</p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
             onClick={() => {
@@ -113,6 +109,34 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "icon", type: "image/png", href: logoUrl },
+      { rel: "canonical", href: "https://claugas-foundation.vercel.app/" },
+    ],
+    scripts: [
+      {
+        attrs: { type: "application/ld+json" },
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "LocalBusiness",
+          name: "ClauGas",
+          description:
+            "Fast, safe and reliable cooking gas cylinder delivery across Buea, Cameroon.",
+          url: "https://claugas-foundation.vercel.app/",
+          image: `https://claugas-foundation.vercel.app${logoUrl}`,
+          telephone: "+237650556715",
+          email: "www.agborclauvet@gmail.com",
+          priceRange: "XAF",
+          areaServed: {
+            "@type": "City",
+            name: "Buea",
+          },
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: "Buea",
+            addressRegion: "South-West Region",
+            addressCountry: "CM",
+          },
+        }),
+      },
     ],
   }),
   shellComponent: RootShell,

@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /addresses
+Disallow: /orders
+Disallow: /book
+Disallow: /retailer
+Disallow: /admin
+Disallow: /auth
+Disallow: /reset-password
+
+Sitemap: https://claugas-foundation.vercel.app/sitemap.xml
