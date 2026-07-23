@@ -14,6 +14,7 @@ import appCss from "../styles.css?url";
 import { Toaster } from "@/components/ui/sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { loadStoredLanguage } from "@/i18n";
+import { initSentry, captureSentryException } from "@/lib/sentry";
 import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
 import logoUrl from "@/assets/brand/claugas-express-logo.webp";
 
@@ -40,6 +41,7 @@ function NotFoundComponent() {
 
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
+  captureSentryException(error);
   const router = useRouter();
   const { t } = useTranslation();
 
@@ -168,6 +170,10 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
+
+  useEffect(() => {
+    initSentry();
+  }, []);
 
   useEffect(() => {
     loadStoredLanguage();
