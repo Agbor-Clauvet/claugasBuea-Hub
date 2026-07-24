@@ -48,6 +48,29 @@ type Address = {
   city: string;
 };
 type PaymentMethod = "cash_on_delivery" | "mobile_money";
+
+// Calling Campay is wrapped so it can NEVER block or break checkout. If the
+// Edge Function isn't deployed yet, secrets aren't set, or Campay/network
+// hiccups, this just returns ok:false — the order itself was already saved
+// before this runs, so the customer still gets a normal order confirmation.
+async function initiateMobileMoneyPayment(
+  orderId: string,
+  phoneNumber: string,
+): Promise<{ ok: true; message?: string } | { ok: false }> {
+  try {
+    const { data, error } = await supabase.functions.invoke("campay-initiate", {
+      body: { orderId, phoneNumber },
+    });
+    if (error) {
+      console.warn("Campay initiation failed, order still placed:", error);
+      return { ok: false };
+    }
+    return { ok: true, message: (data as { message?: string })?.message };
+  } catch (err) {
+    console.warn("Campay initiation threw, order still placed:", err);
+    return { ok: false };
+  }
+}
 type QuarterCoord = { quarter: string; lat: number | null; lng: number | null };
 
 function BookPage() {
@@ -59,6 +82,7 @@ function BookPage() {
   const [addressId, setAddressId] = useState<string>("");
   const [quantity, setQuantity] = useState(1);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("cash_on_delivery");
+  const [momoPhone, setMomoPhone] = useState("");
   const [consumerNo, setConsumerNo] = useState("");
   const [preferredDate, setPreferredDate] = useState("");
   const [notes, setNotes] = useState("");
@@ -97,6 +121,15 @@ function BookPage() {
       .from("service_areas")
       .select("quarter,lat,lng")
       .then(({ data }) => setQuarterCoords((data ?? []) as QuarterCoord[]));
+    supabase.auth.getUser().then(async ({ data: u }) => {
+      if (!u.user) return;
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("phone")
+        .eq("id", u.user.id)
+        .maybeSingle();
+      if (profile?.phone) setMomoPhone(profile.phone);
+    });
   }, [cylinderId]);
 
   const unit = cyl ? Number(cyl.price) : 0;
@@ -129,6 +162,9 @@ function BookPage() {
     e.preventDefault();
     if (!cyl || !addressId) return toast.error(t("booking.needAddress"));
     if (!cyl.in_stock) return toast.error(t("booking.outOfStock"));
+    if (paymentMethod === "mobile_money" && !momoPhone.trim()) {
+      return toast.error(t("booking.needMomoPhone"));
+    }
     setSubmitting(true);
     const { data: u } = await supabase.auth.getUser();
     if (!u.user) {
@@ -162,9 +198,28 @@ function BookPage() {
       quantity,
       unit_price: unit,
     });
+    if (itemErr) {
+      setSubmitting(false);
+      return toast.error(itemErr.message);
+    }
+
+    // The order is already saved at this point no matter what happens below —
+    // Campay is best-effort and never blocks the customer reaching their order.
+    if (paymentMethod === "mobile_money") {
+      const result = await initiateMobileMoneyPayment(
+        (order as { id: string }).id,
+        momoPhone.trim(),
+      );
+      if (result.ok) {
+        toast.success(result.message ?? t("booking.momoPromptSent"));
+      } else {
+        toast.info(t("booking.momoUnavailable"));
+      }
+    } else {
+      toast.success(t("booking.placed"));
+    }
+
     setSubmitting(false);
-    if (itemErr) return toast.error(itemErr.message);
-    toast.success(t("booking.placed"));
     navigate({ to: "/orders/$id", params: { id: (order as { id: string }).id } });
   }
 
@@ -334,6 +389,21 @@ function BookPage() {
                     </label>
                   </RadioGroup>
                 </div>
+
+                {paymentMethod === "mobile_money" ? (
+                  <div className="space-y-1.5">
+                    <Label htmlFor="momoPhone">{t("booking.momoPhone")}</Label>
+                    <Input
+                      id="momoPhone"
+                      type="tel"
+                      placeholder="6XXXXXXXX"
+                      value={momoPhone}
+                      onChange={(e) => setMomoPhone(e.target.value)}
+                      required
+                    />
+                    <p className="text-xs text-muted-foreground">{t("booking.momoPhoneHint")}</p>
+                  </div>
+                ) : null}
 
                 <div className="space-y-1.5">
                   <Label htmlFor="consumer">{t("booking.consumerNumber")}</Label>
