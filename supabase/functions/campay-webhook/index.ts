@@ -1,144 +1,89 @@
-// campay-initiate
+// campay-webhook
 //
-// Called from checkout once a customer picks Mobile Money as payment.
-// Creates a payment_transactions row (status=PENDING) then asks Campay
-// to push a USSD payment prompt to the customer's phone. The customer
-// approves on their phone; Campay tells us the result via campay-webhook.
+// Configure this URL in your Campay dashboard as the webhook endpoint, e.g.:
+//   https://<project-ref>.supabase.co/functions/v1/campay-webhook?key=YOUR_WEBHOOK_SECRET
 //
-// The amount is NEVER trusted from the frontend — it's read straight off
-// the order row server-side, so a tampered client request can't pay a
-// different amount than what's actually owed.
+// The ?key= query param is a simple shared-secret check (Campay doesn't
+// require this, but appending one to the URL you register is the easiest
+// way to make sure random requests can't fake a "payment successful" call).
+// Set CAMPAY_WEBHOOK_SECRET to whatever you put after ?key=.
 //
-// Verify CAMPAY_BASE_URL, auth header format, and field names against
-// your current Campay dashboard docs before going live — payment
-// aggregator APIs change their exact contract more often than you'd like.
+// On success this ONLY does two things: update payment_transactions, and
+// flip orders.status to 'confirmed'. It does NOT send any SMS/WhatsApp/email
+// itself — that's handled automatically by the existing DB triggers
+// (trg_order_notify_sms_whatsapp, trg_order_notify_retailer,
+// trg_order_notify_email) the moment orders.status changes. One less place
+// for notification logic to drift out of sync.
 
 import { createClient } from "npm:@supabase/supabase-js@2";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-const CAMPAY_BASE_URL = Deno.env.get("CAMPAY_BASE_URL") ?? "https://www.campay.net";
-const CAMPAY_PERMANENT_TOKEN = Deno.env.get("CAMPAY_PERMANENT_TOKEN")!; // from Campay dashboard
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
+const CAMPAY_WEBHOOK_SECRET = Deno.env.get("CAMPAY_WEBHOOK_SECRET");
 
 Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+  const url = new URL(req.url);
+  if (CAMPAY_WEBHOOK_SECRET && url.searchParams.get("key") !== CAMPAY_WEBHOOK_SECRET) {
+    return new Response("Unauthorized", { status: 401 });
+  }
 
   try {
-    const { orderId, phoneNumber, description } = await req.json();
+    const payload = await req.json();
+    // Confirm these exact field names against a real Campay webhook payload
+    // in your dashboard's webhook logs — this matches Campay's documented
+    // collection webhook shape but aggregators do tweak fields over time.
+    const { reference, external_reference, status, operator } = payload;
 
-    if (!orderId || !phoneNumber) {
-      return new Response(JSON.stringify({ error: "orderId, phoneNumber required" }), {
-        status: 400,
-        headers: corsHeaders,
-      });
-    }
-
-    // Authenticate the caller (forwarded from the frontend's Supabase session)
-    // and make sure they actually own this order before we charge anything.
-    const authHeader = req.headers.get("Authorization");
-    if (!authHeader) {
-      return new Response(JSON.stringify({ error: "missing Authorization header" }), {
-        status: 401,
-        headers: corsHeaders,
-      });
-    }
-
-    const userClient = createClient(SUPABASE_URL, Deno.env.get("SUPABASE_ANON_KEY")!, {
-      global: { headers: { Authorization: authHeader } },
-    });
-    const {
-      data: { user },
-      error: authError,
-    } = await userClient.auth.getUser();
-    if (authError || !user) {
-      return new Response(JSON.stringify({ error: "invalid session" }), { status: 401, headers: corsHeaders });
+    if (!external_reference && !reference) {
+      return new Response(JSON.stringify({ error: "missing reference" }), { status: 400 });
     }
 
     const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
 
-    const { data: order, error: orderError } = await supabase
-      .from("orders")
-      .select("id, customer_id, total, payment_method, status")
-      .eq("id", orderId)
+    const { data: txn, error: fetchError } = await supabase
+      .from("payment_transactions")
+      .select("id, order_id, status")
+      .eq(external_reference ? "external_reference" : "campay_reference", external_reference ?? reference)
       .single();
 
-    if (orderError || !order) {
-      return new Response(JSON.stringify({ error: "order not found" }), { status: 404, headers: corsHeaders });
+    if (fetchError || !txn) {
+      return new Response(JSON.stringify({ error: "transaction not found" }), { status: 404 });
     }
-    if (order.customer_id !== user.id) {
-      return new Response(JSON.stringify({ error: "not your order" }), { status: 403, headers: corsHeaders });
-    }
-    if (order.payment_method !== "mobile_money") {
-      return new Response(JSON.stringify({ error: "order is not set to mobile_money payment" }), {
-        status: 400,
-        headers: corsHeaders,
+
+    // Idempotency: Campay may retry the same webhook — don't double-process.
+    if (txn.status !== "PENDING") {
+      return new Response(JSON.stringify({ ok: true, note: "already processed" }), {
+        headers: { "Content-Type": "application/json" },
       });
     }
 
-    const amount = order.total;
-    const externalReference = `claugas-${orderId}-${Date.now()}`;
-
-    // Create the local record first — this is our idempotency anchor even
-    // if the Campay call itself fails or times out.
-    const { error: insertError } = await supabase.from("payment_transactions").insert({
-      order_id: orderId,
-      external_reference: externalReference,
-      amount,
-      currency: "XAF",
-      phone_number: phoneNumber,
-      status: "PENDING",
-    });
-    if (insertError) throw insertError;
-
-    const campayRes = await fetch(`${CAMPAY_BASE_URL}/api/collect/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Token ${CAMPAY_PERMANENT_TOKEN}`,
-      },
-      body: JSON.stringify({
-        amount: String(amount),
-        currency: "XAF",
-        from: phoneNumber, // format: 2376XXXXXXXX
-        description: description ?? "ClaúGas order payment",
-        external_reference: externalReference,
-      }),
-    });
-
-    const campayData = await campayRes.json();
-
-    if (!campayRes.ok || !campayData?.reference) {
-      await supabase
-        .from("payment_transactions")
-        .update({ status: "FAILED", raw_webhook_payload: campayData })
-        .eq("external_reference", externalReference);
-
-      return new Response(JSON.stringify({ error: "Campay initiation failed", detail: campayData }), {
-        status: 502,
-        headers: corsHeaders,
-      });
-    }
+    const normalizedStatus =
+      status === "SUCCESSFUL" ? "SUCCESSFUL" : status === "FAILED" ? "FAILED" : "CANCELLED";
 
     await supabase
       .from("payment_transactions")
-      .update({ campay_reference: campayData.reference })
-      .eq("external_reference", externalReference);
+      .update({
+        status: normalizedStatus,
+        campay_reference: reference ?? undefined,
+        operator: operator ?? null,
+        raw_webhook_payload: payload,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", txn.id);
 
-    return new Response(
-      JSON.stringify({
-        reference: campayData.reference,
-        externalReference,
-        status: "PENDING",
-        message: "Payment prompt sent to your phone — approve it to complete the order.",
-      }),
-      { headers: { ...corsHeaders, "Content-Type": "application/json" } },
-    );
+    if (normalizedStatus === "SUCCESSFUL") {
+      // This update is what triggers your SMS/WhatsApp + email notifications
+      // automatically — see trg_order_notify_sms_whatsapp / trg_order_notify_retailer.
+      await supabase.from("orders").update({ status: "confirmed" }).eq("id", txn.order_id);
+    }
+    // FAILED/CANCELLED: leave the order status alone. Surface the failure
+    // in-app (poll payment_transactions or use Supabase Realtime) rather
+    // than texting a "payment failed" message that can read like a scam alert.
+
+    return new Response(JSON.stringify({ ok: true }), {
+      headers: { "Content-Type": "application/json" },
+    });
   } catch (err) {
-    return new Response(JSON.stringify({ error: String(err) }), { status: 500, headers: corsHeaders });
+    return new Response(JSON.stringify({ error: String(err) }), { status: 500 });
   }
 });
