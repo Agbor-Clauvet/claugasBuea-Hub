@@ -1,5 +1,6 @@
 {
-  "name": "tanstack_start_ts",
+  "name": "claugas",
+  "description": "Cooking gas cylinder delivery and ordering platform for Buea, Cameroon.",
   "private": true,
   "sideEffects": false,
   "type": "module",
