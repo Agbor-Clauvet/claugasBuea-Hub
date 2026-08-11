@@ -175,6 +175,7 @@
     "momoPhone": "Mobile Money number",
     "momoPhoneHint": "We go send payment prompt for this number.",
     "needMomoPhone": "Abeg enter the number wey go receive the payment prompt.",
+    "orderFailed": "We no fit place your order. Try again.",
     "momoPromptSent": "Payment prompt don go your phone — approve am make your order complete.",
     "momoUnavailable": "Order don place! We no fit send automatic payment prompt now — we go contact you make we arrange Mobile Money payment.",
     "consumerNumber": "Consumer number (if you get)",
