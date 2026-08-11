@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { statusColor, type OrderStatus } from "@/lib/order-status";
 import { formatTrackingNumber } from "@/lib/tracking";
+import { formatCurrency } from "@/lib/currency";
 
 export const Route = createFileRoute("/_authenticated/orders")({
   head: () => ({ meta: [{ title: "My Orders — ClauGas" }] }),
@@ -109,7 +110,7 @@ function OrdersPage() {
                       </div>
                       <div className="flex items-center gap-3">
                         <div className="text-sm font-semibold">
-                          {Number(o.total).toLocaleString()} XAF
+                          {formatCurrency(o.total)}
                         </div>
                         <Badge variant={statusColor(o.status)}>
                           {t(`order.status.${o.status}`)}

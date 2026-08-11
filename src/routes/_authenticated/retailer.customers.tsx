@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ListOrdered, AlertCircle, Star } from "lucide-react";
+import { formatCurrency } from "@/lib/currency";
 
 export const Route = createFileRoute("/_authenticated/retailer/customers")({
   head: () => ({ meta: [{ title: "Customers — ClauGas" }] }),
@@ -160,7 +161,7 @@ function RetailerCustomersPage() {
                     {t("retailer.lastOrder")}: {new Date(c.lastOrderAt).toLocaleDateString()}
                   </div>
                   <div className="ml-auto text-sm font-semibold">
-                    {t("retailer.totalSpent")}: {c.totalSpend.toLocaleString()} XAF
+                    {t("retailer.totalSpent")}: {formatCurrency(c.totalSpend)}
                   </div>
                 </CardContent>
               </Card>

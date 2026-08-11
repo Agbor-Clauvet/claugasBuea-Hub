@@ -21,6 +21,7 @@ import { Minus, Plus, Banknote, Smartphone } from "lucide-react";
 import { GasCylinderIcon, sizeToColor } from "@/components/icons/GasCylinderIcon";
 import { cylinderPhoto } from "@/components/icons/cylinderPhoto";
 import { calculateDeliveryFee, haversineDistanceKm, type Coordinates } from "@/lib/delivery-fee";
+import { formatCurrency } from "@/lib/currency";
 
 export const Route = createFileRoute("/_authenticated/book/$cylinderId")({
   head: () => ({ meta: [{ title: "Book Refill — ClauGas" }] }),
@@ -249,7 +250,7 @@ function BookPage() {
               </div>
               <div className="mt-4 flex items-baseline justify-between">
                 <div className="text-3xl font-bold text-primary">
-                  {cyl ? unit.toLocaleString() : "—"} XAF
+                  {formatCurrency(cyl ? unit : null)}
                 </div>
                 <div className="text-sm text-muted-foreground">
                   {cyl?.size_kg} {t("home.featured.kg")}
@@ -298,7 +299,7 @@ function BookPage() {
               <div className="mt-4 space-y-1 rounded-md border bg-muted/30 p-3 text-sm">
                 <div className="flex justify-between text-muted-foreground">
                   <span>{t("booking.subtotal")}</span>
-                  <span>{subtotal.toLocaleString()} XAF</span>
+                  <span>{formatCurrency(subtotal)}</span>
                 </div>
                 <div className="flex justify-between text-muted-foreground">
                   <span>
@@ -308,7 +309,7 @@ function BookPage() {
                   <span>
                     {deliveryFee === 0
                       ? t("booking.freeDelivery")
-                      : `${deliveryFee.toLocaleString()} XAF`}
+                      : `${formatCurrency(deliveryFee)}`}
                   </span>
                 </div>
                 {deliveryResult?.discountApplied ? (
@@ -316,7 +317,7 @@ function BookPage() {
                 ) : null}
                 <div className="flex justify-between font-semibold text-foreground border-t pt-1 mt-1">
                   <span>{t("order.total")}</span>
-                  <span>{total.toLocaleString()} XAF</span>
+                  <span>{formatCurrency(total)}</span>
                 </div>
               </div>
             </CardContent>
@@ -444,7 +445,7 @@ function BookPage() {
                 >
                   {submitting
                     ? t("booking.placing")
-                    : `${t("booking.confirm")} · ${total.toLocaleString()} XAF`}
+                    : `${t("booking.confirm")} · ${formatCurrency(total)}`}
                 </Button>
               </form>
             </CardContent>

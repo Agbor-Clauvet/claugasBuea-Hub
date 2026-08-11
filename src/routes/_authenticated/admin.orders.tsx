@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { BOOKING_STAGES, statusColor, type OrderStatus } from "@/lib/order-status";
 import { formatTrackingNumber } from "@/lib/tracking";
+import { formatCurrency } from "@/lib/currency";
 
 export const Route = createFileRoute("/_authenticated/admin/orders")({
   head: () => ({ meta: [{ title: "Admin · Orders — ClauGas" }] }),
@@ -145,7 +146,7 @@ function AdminOrdersPage() {
                 <Badge variant={o.payment_method === "mobile_money" ? "secondary" : "outline"}>
                   {t(`order.${o.payment_method === "mobile_money" ? "payMomo" : "payCash"}`)}
                 </Badge>
-                <span className="ml-auto text-sm font-semibold">{Number(o.total).toLocaleString()} XAF</span>
+                <span className="ml-auto text-sm font-semibold">{formatCurrency(Number(o.total))}</span>
                 <select value={o.status} onChange={(e) => setStatus(o.id, e.target.value as OrderStatus)}
                   className="h-8 rounded-md border border-input bg-background px-2 text-xs">
                   {BOOKING_STAGES.map((s) => <option key={s} value={s}>{t(`order.status.${s}`)}</option>)}

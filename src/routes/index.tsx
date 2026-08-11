@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/accordion";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { formatCurrency } from "@/lib/currency";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -156,7 +157,7 @@ function Index() {
                 <CardContent className="space-y-3">
                   <div className="flex items-baseline justify-between">
                     <div className="text-2xl font-bold text-primary">
-                      {Number(c.price).toLocaleString()} XAF
+                      {formatCurrency(Number(c.price))}
                     </div>
                     <div className="text-sm text-muted-foreground">
                       {c.size_kg} {t("home.featured.kg")}

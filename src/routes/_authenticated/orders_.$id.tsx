@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, Circle, Printer, Download, Loader2 } from "lucide-react";
 import { BOOKING_STAGES, stageIndex, statusColor, type OrderStatus } from "@/lib/order-status";
 import { formatTrackingNumber } from "@/lib/tracking";
+import { formatCurrency } from "@/lib/currency";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import logoUrl from "@/assets/brand/claugas-express-logo.webp";
@@ -235,12 +236,12 @@ function OrderDetailPage() {
                   <span>
                     {it.cylinder?.name ?? "—"} × {it.quantity}
                   </span>
-                  <span>{(Number(it.unit_price) * it.quantity).toLocaleString()} XAF</span>
+                  <span>{formatCurrency((Number(it.unit_price) * it.quantity))}</span>
                 </div>
               ))}
               <div className="border-t pt-2 flex justify-between font-semibold">
                 <span>{t("order.total")}</span>
-                <span>{Number(order.total).toLocaleString()} XAF</span>
+                <span>{formatCurrency(Number(order.total))}</span>
               </div>
             </CardContent>
           </Card>
@@ -328,7 +329,7 @@ function OrderDetailPage() {
                     <span>
                       {it.cylinder?.name ?? "—"} × {it.quantity}
                     </span>
-                    <span>{(Number(it.unit_price) * it.quantity).toLocaleString()} XAF</span>
+                    <span>{formatCurrency((Number(it.unit_price) * it.quantity))}</span>
                   </div>
                 ))}
               </div>
@@ -336,19 +337,19 @@ function OrderDetailPage() {
               <div className="border-t border-neutral-200 pt-3 space-y-1">
                 <div className="flex justify-between text-neutral-500">
                   <span>{t("booking.subtotal")}</span>
-                  <span>{Number(order.subtotal).toLocaleString()} XAF</span>
+                  <span>{formatCurrency(Number(order.subtotal))}</span>
                 </div>
                 <div className="flex justify-between text-neutral-500">
                   <span>{t("order.delivery")}</span>
                   <span>
                     {Number(order.delivery_fee) === 0
                       ? t("booking.freeDelivery")
-                      : `${Number(order.delivery_fee).toLocaleString()} XAF`}
+                      : `${formatCurrency(Number(order.delivery_fee))}`}
                   </span>
                 </div>
                 <div className="flex justify-between border-t border-neutral-200 pt-1 mt-1 text-base font-bold">
                   <span>{t("order.total")}</span>
-                  <span>{Number(order.total).toLocaleString()} XAF</span>
+                  <span>{formatCurrency(Number(order.total))}</span>
                 </div>
               </div>
 

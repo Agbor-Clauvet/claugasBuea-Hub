@@ -13,6 +13,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { statusColor, type OrderStatus } from "@/lib/order-status";
 import { formatTrackingNumber } from "@/lib/tracking";
+import { formatCurrency } from "@/lib/currency";
 import {
   Check,
   X,
@@ -266,7 +267,7 @@ function RetailerOrdersPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="text-2xl font-bold">
-                {todaysRevenue.toLocaleString()} XAF
+                {formatCurrency(todaysRevenue)}
               </CardContent>
             </Card>
             <Card>
@@ -328,7 +329,7 @@ function RetailerOrdersPage() {
                   </span>
                   <Badge variant={statusColor(o.status)}>{t(`order.status.${o.status}`)}</Badge>
                   <span className="ml-auto text-sm font-semibold">
-                    {Number(o.total).toLocaleString()} XAF
+                    {formatCurrency(Number(o.total))}
                   </span>
 
                   {o.status === "pending" && (
