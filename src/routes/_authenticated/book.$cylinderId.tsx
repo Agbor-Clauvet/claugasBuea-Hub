@@ -190,7 +190,7 @@ function BookPage() {
       .single();
     if (error || !order) {
       setSubmitting(false);
-      return toast.error(error?.message ?? "Failed");
+      return toast.error(error?.message ?? t("booking.orderFailed"));
     }
     const { error: itemErr } = await supabase.from("order_items").insert({
       order_id: (order as { id: string }).id,
