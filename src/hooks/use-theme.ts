@@ -22,12 +22,24 @@ function applyTheme(theme: Theme) {
  * same `.dark` class on <html> via the existing CSS variables.
  */
 export function useTheme(): [Theme, () => void] {
-  const [theme, setTheme] = useState<Theme>(() => getPreferredTheme());
+  // Always start at "light" so the very first client render matches the
+  // server-rendered HTML exactly (server has no window, so it can only
+  // ever assume "light"). The real theme is applied right after mount,
+  // which theme-init.js has already visually pre-applied to <html>, so
+  // there's no flash — just no hydration mismatch either.
+  const [theme, setTheme] = useState<Theme>("light");
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setTheme(getPreferredTheme());
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
     applyTheme(theme);
     window.localStorage.setItem(STORAGE_KEY, theme);
-  }, [theme]);
+  }, [theme, mounted]);
 
   const toggle = useCallback(() => {
     setTheme((t) => (t === "dark" ? "light" : "dark"));
