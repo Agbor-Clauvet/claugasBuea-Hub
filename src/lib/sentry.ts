@@ -17,7 +17,13 @@ export function initSentry() {
   if (initialized) return;
   initialized = true;
 
-  const dsn = import.meta.env.VITE_SENTRY_DSN as string | undefined;
+  const rawDsn = import.meta.env.VITE_SENTRY_DSN as string | undefined;
+  // Defensive cleanup: env vars are sometimes pasted in with surrounding
+  // quotes or a trailing comma still attached (e.g. copied from a .env
+  // line or JSON snippet), which makes Sentry reject the DSN as invalid.
+  // Strip that here so a copy-paste slip in Vercel's dashboard doesn't
+  // silently disable error tracking.
+  const dsn = rawDsn?.trim().replace(/^['"]|['",]+$/g, "");
   if (!dsn) {
     // No DSN configured yet — no-op rather than throwing, so the app keeps
     // working normally while Sentry is being set up.
