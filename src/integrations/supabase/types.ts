@@ -68,6 +68,33 @@ export type Database = {
         }
         Relationships: []
       }
+      commission_settings: {
+        Row: {
+          id: string
+          platform_rate: number
+          retailer_rate: number
+          rider_rate: number
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          id?: string
+          platform_rate?: number
+          retailer_rate?: number
+          rider_rate?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          id?: string
+          platform_rate?: number
+          retailer_rate?: number
+          rider_rate?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       cylinders: {
         Row: {
           created_at: string
@@ -107,6 +134,51 @@ export type Database = {
           size_kg?: number
           sort_order?: number
           updated_at?: string
+        }
+        Relationships: []
+      }
+      order_commissions: {
+        Row: {
+          computed_at: string
+          delivery_fee: number
+          order_id: string
+          platform_amount: number
+          platform_rate: number
+          retailer_amount: number
+          retailer_id: string | null
+          retailer_rate: number
+          rider_amount: number
+          rider_id: string | null
+          rider_rate: number
+          subtotal: number
+        }
+        Insert: {
+          computed_at?: string
+          delivery_fee: number
+          order_id: string
+          platform_amount: number
+          platform_rate: number
+          retailer_amount: number
+          retailer_id?: string | null
+          retailer_rate: number
+          rider_amount: number
+          rider_id?: string | null
+          rider_rate: number
+          subtotal: number
+        }
+        Update: {
+          computed_at?: string
+          delivery_fee?: number
+          order_id?: string
+          platform_amount?: number
+          platform_rate?: number
+          retailer_amount?: number
+          retailer_id?: string | null
+          retailer_rate?: number
+          rider_amount?: number
+          rider_id?: string | null
+          rider_rate?: number
+          subtotal?: number
         }
         Relationships: []
       }
