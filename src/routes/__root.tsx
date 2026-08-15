@@ -151,11 +151,19 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         name: "twitter:image",
         content: `https://claugas-foundation.vercel.app${logoUrl}`,
       },
+      // PWA installability
+      { name: "theme-color", content: "#0462d3" },
+      { name: "mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "default" },
+      { name: "apple-mobile-web-app-title", content: "ClauGas" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "icon", type: "image/png", href: logoUrl },
       { rel: "canonical", href: "https://claugas-foundation.vercel.app/" },
+      { rel: "manifest", href: "/manifest.json" },
+      { rel: "apple-touch-icon", href: "/icons/icon-192.png" },
     ],
     scripts: [
       {
@@ -217,6 +225,16 @@ function RootComponent() {
 
   useEffect(() => {
     loadStoredLanguage();
+  }, []);
+
+  useEffect(() => {
+    // Only register in production — during local dev this just adds cache
+    // confusion, and Vite's dev server doesn't need a cached shell anyway.
+    if (import.meta.env.PROD && "serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js").catch((error) => {
+        console.error("Service worker registration failed:", error);
+      });
+    }
   }, []);
 
   useEffect(() => {
