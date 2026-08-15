@@ -90,10 +90,14 @@ function DashboardPage() {
           <div className="mt-3 flex flex-wrap gap-4 text-sm">
             <Link to="/addresses" className="font-medium text-primary hover:underline">{t("address.title")} →</Link>
             <Link to="/orders" className="font-medium text-primary hover:underline">{t("order.myOrders")} →</Link>
+            {!roles.includes("rider") && (
+              <Link to="/become-rider" className="font-medium text-primary hover:underline">Become a Rider →</Link>
+            )}
             {roles.includes("admin") ? (
               <>
                 <Link to="/admin/cylinders" className="font-medium text-primary hover:underline">{t("admin.cylinderPricing")} →</Link>
                 <Link to="/admin/orders" className="font-medium text-primary hover:underline">{t("admin.orders")} →</Link>
+                <Link to="/admin/riders" className="font-medium text-primary hover:underline">Rider Applications →</Link>
               </>
             ) : null}
           </div>

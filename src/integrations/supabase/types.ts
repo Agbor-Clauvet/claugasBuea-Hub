@@ -220,6 +220,8 @@ export type Database = {
           created_at: string
           full_name: string | null
           id: string
+          is_rider_applicant: boolean
+          locality: string | null
           phone: string | null
           updated_at: string
         }
@@ -228,6 +230,8 @@ export type Database = {
           created_at?: string
           full_name?: string | null
           id: string
+          is_rider_applicant?: boolean
+          locality?: string | null
           phone?: string | null
           updated_at?: string
         }
@@ -236,6 +240,8 @@ export type Database = {
           created_at?: string
           full_name?: string | null
           id?: string
+          is_rider_applicant?: boolean
+          locality?: string | null
           phone?: string | null
           updated_at?: string
         }
