@@ -74,6 +74,50 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
+// Route-level errors (thrown while rendering a page) are already caught by
+// TanStack Router's `errorComponent` above. This boundary is a second,
+// broader safety net: it covers anything rendered OUTSIDE the router's
+// <Outlet> — Toaster, WhatsAppButton, or the provider tree itself — so a
+// crash there shows a friendly screen instead of a blank page.
+class RootErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
+  state = { hasError: false };
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error) {
+    console.error(error);
+    captureSentryException(error);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="flex min-h-screen items-center justify-center bg-background px-4">
+          <div className="max-w-md text-center">
+            <h1 className="text-xl font-semibold tracking-tight text-foreground">
+              Something went wrong
+            </h1>
+            <p className="mt-2 text-sm text-muted-foreground">
+              We hit an unexpected error. Please reload the page.
+            </p>
+            <div className="mt-6">
+              <a
+                href="/"
+                className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+              >
+                Go home
+              </a>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     meta: [
