@@ -28,6 +28,7 @@ import { Route as AuthenticatedAdminRidersRouteImport } from './routes/_authenti
 import { Route as AuthenticatedAdminOrdersRouteImport } from './routes/_authenticated/admin.orders'
 import { Route as AuthenticatedAdminCylindersRouteImport } from './routes/_authenticated/admin.cylinders'
 import { Route as AuthenticatedAdminCommissionSettingsRouteImport } from './routes/_authenticated/admin.commission-settings'
+import { Route as AuthenticatedAdminAdminsRouteImport } from './routes/_authenticated/admin.admins'
 
 const TestErrorRoute = TestErrorRouteImport.update({
   id: '/test-error',
@@ -131,6 +132,12 @@ const AuthenticatedAdminCommissionSettingsRoute =
     path: '/admin/commission-settings',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminAdminsRoute =
+  AuthenticatedAdminAdminsRouteImport.update({
+    id: '/admin/admins',
+    path: '/admin/admins',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -143,6 +150,7 @@ export interface FileRoutesByFullPath {
   '/become-rider': typeof AuthenticatedBecomeRiderRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/orders': typeof AuthenticatedOrdersRoute
+  '/admin/admins': typeof AuthenticatedAdminAdminsRoute
   '/admin/commission-settings': typeof AuthenticatedAdminCommissionSettingsRoute
   '/admin/cylinders': typeof AuthenticatedAdminCylindersRoute
   '/admin/orders': typeof AuthenticatedAdminOrdersRoute
@@ -163,6 +171,7 @@ export interface FileRoutesByTo {
   '/become-rider': typeof AuthenticatedBecomeRiderRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/orders': typeof AuthenticatedOrdersRoute
+  '/admin/admins': typeof AuthenticatedAdminAdminsRoute
   '/admin/commission-settings': typeof AuthenticatedAdminCommissionSettingsRoute
   '/admin/cylinders': typeof AuthenticatedAdminCylindersRoute
   '/admin/orders': typeof AuthenticatedAdminOrdersRoute
@@ -185,6 +194,7 @@ export interface FileRoutesById {
   '/_authenticated/become-rider': typeof AuthenticatedBecomeRiderRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/orders': typeof AuthenticatedOrdersRoute
+  '/_authenticated/admin/admins': typeof AuthenticatedAdminAdminsRoute
   '/_authenticated/admin/commission-settings': typeof AuthenticatedAdminCommissionSettingsRoute
   '/_authenticated/admin/cylinders': typeof AuthenticatedAdminCylindersRoute
   '/_authenticated/admin/orders': typeof AuthenticatedAdminOrdersRoute
@@ -207,6 +217,7 @@ export interface FileRouteTypes {
     | '/become-rider'
     | '/dashboard'
     | '/orders'
+    | '/admin/admins'
     | '/admin/commission-settings'
     | '/admin/cylinders'
     | '/admin/orders'
@@ -227,6 +238,7 @@ export interface FileRouteTypes {
     | '/become-rider'
     | '/dashboard'
     | '/orders'
+    | '/admin/admins'
     | '/admin/commission-settings'
     | '/admin/cylinders'
     | '/admin/orders'
@@ -248,6 +260,7 @@ export interface FileRouteTypes {
     | '/_authenticated/become-rider'
     | '/_authenticated/dashboard'
     | '/_authenticated/orders'
+    | '/_authenticated/admin/admins'
     | '/_authenticated/admin/commission-settings'
     | '/_authenticated/admin/cylinders'
     | '/_authenticated/admin/orders'
@@ -403,6 +416,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminCommissionSettingsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/admins': {
+      id: '/_authenticated/admin/admins'
+      path: '/admin/admins'
+      fullPath: '/admin/admins'
+      preLoaderRoute: typeof AuthenticatedAdminAdminsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -411,6 +431,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedBecomeRiderRoute: typeof AuthenticatedBecomeRiderRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedOrdersRoute: typeof AuthenticatedOrdersRoute
+  AuthenticatedAdminAdminsRoute: typeof AuthenticatedAdminAdminsRoute
   AuthenticatedAdminCommissionSettingsRoute: typeof AuthenticatedAdminCommissionSettingsRoute
   AuthenticatedAdminCylindersRoute: typeof AuthenticatedAdminCylindersRoute
   AuthenticatedAdminOrdersRoute: typeof AuthenticatedAdminOrdersRoute
@@ -426,6 +447,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedBecomeRiderRoute: AuthenticatedBecomeRiderRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedOrdersRoute: AuthenticatedOrdersRoute,
+  AuthenticatedAdminAdminsRoute: AuthenticatedAdminAdminsRoute,
   AuthenticatedAdminCommissionSettingsRoute:
     AuthenticatedAdminCommissionSettingsRoute,
   AuthenticatedAdminCylindersRoute: AuthenticatedAdminCylindersRoute,

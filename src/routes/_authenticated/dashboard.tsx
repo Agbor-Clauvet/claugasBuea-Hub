@@ -99,6 +99,9 @@ function DashboardPage() {
                 <Link to="/admin/orders" className="font-medium text-primary hover:underline">{t("admin.orders")} →</Link>
                 <Link to="/admin/riders" className="font-medium text-primary hover:underline">Rider Applications →</Link>
                 <Link to="/admin/commission-settings" className="font-medium text-primary hover:underline">Commission Settings →</Link>
+                {roles.includes("super_admin") && (
+                  <Link to="/admin/admins" className="font-medium text-primary hover:underline">Manage Admins →</Link>
+                )}
               </>
             ) : null}
           </div>
