@@ -16,6 +16,7 @@
 // for notification logic to drift out of sync.
 
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { checkRateLimit } from "../_shared/rate-limit.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -25,6 +26,22 @@ Deno.serve(async (req) => {
   const url = new URL(req.url);
   if (CAMPAY_WEBHOOK_SECRET && url.searchParams.get("key") !== CAMPAY_WEBHOOK_SECRET) {
     return new Response("Unauthorized", { status: 401 });
+  }
+
+  const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
+
+  // Light global throttle, after the secret-key gate above. This isn't
+  // meant to stop a determined attacker who already has the secret — it's
+  // just a cheap backstop against the DB getting hammered by a flood of
+  // requests (buggy retries, a leaked URL, etc). Generous limit since
+  // Campay's own legitimate retries must never be blocked.
+  const throttle = await checkRateLimit(supabase, {
+    key: "campay-webhook:global",
+    windowSeconds: 60,
+    maxHits: 100,
+  });
+  if (!throttle.allowed) {
+    return new Response("Too many requests", { status: 429 });
   }
 
   try {
@@ -37,8 +54,6 @@ Deno.serve(async (req) => {
     if (!external_reference && !reference) {
       return new Response(JSON.stringify({ error: "missing reference" }), { status: 400 });
     }
-
-    const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
 
     const { data: txn, error: fetchError } = await supabase
       .from("payment_transactions")

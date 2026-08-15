@@ -14,6 +14,7 @@
 // aggregator APIs change their exact contract more often than you'd like.
 
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { checkRateLimit } from "../_shared/rate-limit.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -60,6 +61,37 @@ Deno.serve(async (req) => {
     }
 
     const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
+
+    // Rate limit: cap how often one account can trigger a payment prompt.
+    // This matters here specifically because each call pushes a real USSD
+    // prompt to someone's phone AND costs money against Campay's API — a
+    // compromised or abusive account spamming this endpoint is both a
+    // nuisance to the phone owner and a direct cost to you.
+    const perUserLimit = await checkRateLimit(supabase, {
+      key: `campay-initiate:user:${user.id}`,
+      windowSeconds: 600, // 10 minutes
+      maxHits: 5,
+    });
+    if (!perUserLimit.allowed) {
+      return new Response(
+        JSON.stringify({ error: "Too many payment attempts. Please wait a few minutes and try again." }),
+        { status: 429, headers: { ...corsHeaders, "Retry-After": String(perUserLimit.retryAfterSeconds) } },
+      );
+    }
+    // Also cap retries on one specific order, tighter than the per-user
+    // limit — stops someone repeatedly re-triggering a USSD prompt to the
+    // same phone number for the same order.
+    const perOrderLimit = await checkRateLimit(supabase, {
+      key: `campay-initiate:order:${orderId}`,
+      windowSeconds: 600,
+      maxHits: 3,
+    });
+    if (!perOrderLimit.allowed) {
+      return new Response(
+        JSON.stringify({ error: "Too many payment attempts for this order. Please wait a few minutes." }),
+        { status: 429, headers: { ...corsHeaders, "Retry-After": String(perOrderLimit.retryAfterSeconds) } },
+      );
+    }
 
     const { data: order, error: orderError } = await supabase
       .from("orders")
