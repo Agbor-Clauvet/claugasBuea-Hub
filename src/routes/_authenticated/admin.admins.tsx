@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -23,6 +24,7 @@ type AdminRow = {
 };
 
 function AdminAdminsPage() {
+  const { t } = useTranslation();
   const [isSuperAdmin, setIsSuperAdmin] = useState<boolean | null>(null);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [rows, setRows] = useState<AdminRow[]>([]);
@@ -96,7 +98,7 @@ function AdminAdminsPage() {
     }
     if (!userId) {
       setAdding(false);
-      toast.error("No account found with that email. They need to sign up first.");
+      toast.error(t("admin.manageAdmins.noAccountFound"));
       return;
     }
 
@@ -108,7 +110,7 @@ function AdminAdminsPage() {
         return;
       }
     }
-    toast.success("Admin added.");
+    toast.success(t("admin.manageAdmins.addedToast"));
     setNewAdminEmail("");
     await loadAdmins();
   }
@@ -123,7 +125,9 @@ function AdminAdminsPage() {
       toast.error(error.message);
       return;
     }
-    toast.success(makeSuper ? "Now a super admin." : "Super admin access removed.");
+    toast.success(
+      makeSuper ? t("admin.manageAdmins.superAdminGrantedToast") : t("admin.manageAdmins.superAdminRemovedToast")
+    );
     await loadAdmins();
   }
 
@@ -139,7 +143,7 @@ function AdminAdminsPage() {
       toast.error(error.message);
       return;
     }
-    toast.success("Admin access removed.");
+    toast.success(t("admin.manageAdmins.adminRemovedToast"));
     await loadAdmins();
   }
 
@@ -148,7 +152,7 @@ function AdminAdminsPage() {
       <div className="flex min-h-screen flex-col">
         <Navbar />
         <main className="mx-auto max-w-lg flex-1 px-4 py-16 text-center">
-          <p className="text-muted-foreground">Only super admins can access this page.</p>
+          <p className="text-muted-foreground">{t("admin.manageAdmins.accessDenied")}</p>
         </main>
         <Footer />
       </div>
@@ -159,52 +163,52 @@ function AdminAdminsPage() {
     <div className="flex min-h-screen flex-col">
       <Navbar />
       <main className="mx-auto w-full max-w-2xl flex-1 px-4 py-10">
-        <h1 className="text-2xl font-bold text-primary mb-2">Manage Admins</h1>
-        <p className="text-sm text-muted-foreground mb-8">
-          Add or remove admin access, and promote trusted admins to super admin.
-        </p>
+        <h1 className="text-2xl font-bold text-primary mb-2">{t("admin.manageAdmins.title")}</h1>
+        <p className="text-sm text-muted-foreground mb-8">{t("admin.manageAdmins.subtitle")}</p>
 
         <Card className="mb-8">
           <CardHeader>
-            <CardTitle className="text-base">Add a new admin</CardTitle>
+            <CardTitle className="text-base">{t("admin.manageAdmins.addTitle")}</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleAddAdmin} className="flex flex-col gap-3 sm:flex-row sm:items-end">
               <div className="flex-1 space-y-2">
-                <Label htmlFor="newAdminEmail">Their account email</Label>
+                <Label htmlFor="newAdminEmail">{t("admin.manageAdmins.emailLabel")}</Label>
                 <Input
                   id="newAdminEmail"
                   type="email"
                   value={newAdminEmail}
                   onChange={(e) => setNewAdminEmail(e.target.value)}
-                  placeholder="name@example.com"
+                  placeholder={t("admin.manageAdmins.emailPlaceholder")}
                   required
                 />
               </div>
               <Button type="submit" disabled={adding}>
-                {adding ? "Adding…" : "Add as admin"}
+                {adding ? t("admin.manageAdmins.addButtonBusy") : t("admin.manageAdmins.addButton")}
               </Button>
             </form>
-            <p className="mt-2 text-xs text-muted-foreground">
-              They must already have a ClauGas account (they need to sign up first).
-            </p>
+            <p className="mt-2 text-xs text-muted-foreground">{t("admin.manageAdmins.addHint")}</p>
           </CardContent>
         </Card>
 
         {loading || isSuperAdmin === null ? (
-          <p className="text-sm text-muted-foreground">Loading…</p>
+          <p className="text-sm text-muted-foreground">{t("common.loading")}</p>
         ) : rows.length === 0 ? (
-          <p className="text-sm text-muted-foreground">No admins yet.</p>
+          <p className="text-sm text-muted-foreground">{t("admin.manageAdmins.none")}</p>
         ) : (
           <div className="space-y-3">
             {rows.map((row) => (
               <Card key={row.id}>
                 <CardHeader className="flex flex-row items-center justify-between gap-4 space-y-0">
                   <div>
-                    <CardTitle className="text-base">{row.full_name || "(No name)"}</CardTitle>
-                    <p className="text-sm text-muted-foreground">{row.phone || "No phone on file"}</p>
+                    <CardTitle className="text-base">
+                      {row.full_name || t("admin.manageAdmins.noName")}
+                    </CardTitle>
+                    <p className="text-sm text-muted-foreground">
+                      {row.phone || t("admin.manageAdmins.noPhone")}
+                    </p>
                   </div>
-                  {row.isSuperAdmin && <Badge>Super Admin</Badge>}
+                  {row.isSuperAdmin && <Badge>{t("admin.manageAdmins.superAdminBadge")}</Badge>}
                 </CardHeader>
                 <CardContent className="flex flex-wrap gap-2">
                   {row.isSuperAdmin ? (
@@ -214,7 +218,7 @@ function AdminAdminsPage() {
                       disabled={busyId === row.id}
                       onClick={() => toggleSuperAdmin(row.id, false)}
                     >
-                      Remove super admin
+                      {t("admin.manageAdmins.removeSuperAdmin")}
                     </Button>
                   ) : (
                     <Button
@@ -223,7 +227,7 @@ function AdminAdminsPage() {
                       disabled={busyId === row.id}
                       onClick={() => toggleSuperAdmin(row.id, true)}
                     >
-                      Make super admin
+                      {t("admin.manageAdmins.makeSuperAdmin")}
                     </Button>
                   )}
                   <Button
@@ -231,12 +235,16 @@ function AdminAdminsPage() {
                     variant="destructive"
                     disabled={busyId === row.id || row.id === currentUserId}
                     onClick={() => {
-                      if (confirm(`Remove admin access for ${row.full_name || "this user"}?`)) {
+                      if (
+                        confirm(
+                          `${t("admin.manageAdmins.removeConfirm")} ${row.full_name || t("admin.manageAdmins.noName")}?`
+                        )
+                      ) {
                         removeAdmin(row.id);
                       }
                     }}
                   >
-                    Remove admin access
+                    {t("admin.manageAdmins.removeAdmin")}
                   </Button>
                 </CardContent>
               </Card>

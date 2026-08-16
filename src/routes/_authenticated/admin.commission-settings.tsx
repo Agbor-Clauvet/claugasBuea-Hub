@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -23,6 +24,7 @@ type SettingsRow = {
 };
 
 function AdminCommissionSettingsPage() {
+  const { t } = useTranslation();
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -68,7 +70,7 @@ function AdminCommissionSettingsPage() {
     e.preventDefault();
     if (!settings) return;
     if (!totalIsValid) {
-      toast.error(`Rates must add up to 100%. Currently ${total.toFixed(1)}%.`);
+      toast.error(`${t("admin.commissionSettings.mustAddTo100")} ${total.toFixed(1)}%.`);
       return;
     }
 
@@ -89,7 +91,7 @@ function AdminCommissionSettingsPage() {
       toast.error(error.message);
       return;
     }
-    toast.success("Commission rates updated.");
+    toast.success(t("admin.commissionSettings.savedToast"));
     await loadSettings();
   }
 
@@ -98,7 +100,7 @@ function AdminCommissionSettingsPage() {
       <div className="flex min-h-screen flex-col">
         <Navbar />
         <main className="mx-auto max-w-lg flex-1 px-4 py-16 text-center">
-          <p className="text-muted-foreground">You don't have access to this page.</p>
+          <p className="text-muted-foreground">{t("admin.riderApplications.accessDenied")}</p>
         </main>
         <Footer />
       </div>
@@ -109,27 +111,21 @@ function AdminCommissionSettingsPage() {
     <div className="flex min-h-screen flex-col">
       <Navbar />
       <main className="mx-auto w-full max-w-lg flex-1 px-4 py-10">
-        <h1 className="text-2xl font-bold text-primary mb-2">Commission Settings</h1>
-        <p className="text-sm text-muted-foreground mb-8">
-          Set what share of each cylinder sale goes to the retailer, to ClauGas, and to the rider.
-          The delivery fee itself always goes entirely to the rider, on top of their share below.
-        </p>
+        <h1 className="text-2xl font-bold text-primary mb-2">{t("admin.commissionSettings.title")}</h1>
+        <p className="text-sm text-muted-foreground mb-8">{t("admin.commissionSettings.subtitle")}</p>
 
         {loading || isAdmin === null ? (
-          <p className="text-sm text-muted-foreground">Loading…</p>
+          <p className="text-sm text-muted-foreground">{t("common.loading")}</p>
         ) : (
           <Card>
             <CardHeader>
-              <CardTitle>Split of cylinder sale value</CardTitle>
-              <CardDescription>
-                Applies to every order the moment it's marked delivered. Past orders keep whatever
-                split was active when they were delivered — changing this won't rewrite history.
-              </CardDescription>
+              <CardTitle>{t("admin.commissionSettings.cardTitle")}</CardTitle>
+              <CardDescription>{t("admin.commissionSettings.cardDescription")}</CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSave} className="space-y-5">
                 <div className="space-y-2">
-                  <Label htmlFor="retailerRate">Retailer share (%)</Label>
+                  <Label htmlFor="retailerRate">{t("admin.commissionSettings.retailerShare")}</Label>
                   <Input
                     id="retailerRate"
                     type="number"
@@ -142,7 +138,7 @@ function AdminCommissionSettingsPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="platformRate">ClauGas platform share (%)</Label>
+                  <Label htmlFor="platformRate">{t("admin.commissionSettings.platformShare")}</Label>
                   <Input
                     id="platformRate"
                     type="number"
@@ -155,7 +151,7 @@ function AdminCommissionSettingsPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="riderRate">Rider share (%)</Label>
+                  <Label htmlFor="riderRate">{t("admin.commissionSettings.riderShare")}</Label>
                   <Input
                     id="riderRate"
                     type="number"
@@ -169,11 +165,12 @@ function AdminCommissionSettingsPage() {
                 </div>
 
                 <p className={`text-sm font-medium ${totalIsValid ? "text-green-600" : "text-destructive"}`}>
-                  Total: {total.toFixed(1)}% {totalIsValid ? "✓" : "— must equal 100%"}
+                  {t("admin.commissionSettings.total")}: {total.toFixed(1)}%{" "}
+                  {totalIsValid ? "✓" : `— ${t("admin.commissionSettings.totalMustEqual")}`}
                 </p>
 
                 <Button type="submit" className="w-full" disabled={saving || !totalIsValid}>
-                  {saving ? "Saving…" : "Save rates"}
+                  {saving ? t("admin.commissionSettings.saving") : t("admin.commissionSettings.save")}
                 </Button>
               </form>
             </CardContent>

@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -38,6 +39,7 @@ function formatXAF(n: number) {
 }
 
 function AdminFinancePage() {
+  const { t } = useTranslation();
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(true);
   const [period, setPeriod] = useState<Period>("30d");
@@ -111,7 +113,7 @@ function AdminFinancePage() {
       const cyl = cylinderMap.get(item.cylinder_id);
       const key = item.cylinder_id;
       const existing = byCylinder.get(key) ?? {
-        name: cyl?.name ?? "Unknown cylinder",
+        name: cyl?.name ?? t("admin.finance.unknownCylinder"),
         sizeKg: cyl?.size_kg ?? 0,
         units: 0,
         revenue: 0,
@@ -137,7 +139,7 @@ function AdminFinancePage() {
       <div className="flex min-h-screen flex-col">
         <Navbar />
         <main className="mx-auto max-w-lg flex-1 px-4 py-16 text-center">
-          <p className="text-muted-foreground">You don't have access to this page.</p>
+          <p className="text-muted-foreground">{t("admin.finance.accessDenied")}</p>
         </main>
         <Footer />
       </div>
@@ -150,46 +152,44 @@ function AdminFinancePage() {
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-10">
         <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-primary">Finance & Cylinders</h1>
-            <p className="text-sm text-muted-foreground">
-              What's gone out per cylinder, and what's come in by payment method — delivered orders only.
-            </p>
+            <h1 className="text-2xl font-bold text-primary">{t("admin.finance.title")}</h1>
+            <p className="text-sm text-muted-foreground">{t("admin.finance.subtitle")}</p>
           </div>
           <Tabs value={period} onValueChange={(v) => setPeriod(v as Period)}>
             <TabsList>
-              <TabsTrigger value="30d">30 days</TabsTrigger>
-              <TabsTrigger value="90d">90 days</TabsTrigger>
-              <TabsTrigger value="all">All time</TabsTrigger>
+              <TabsTrigger value="30d">{t("admin.finance.period30")}</TabsTrigger>
+              <TabsTrigger value="90d">{t("admin.finance.period90")}</TabsTrigger>
+              <TabsTrigger value="all">{t("admin.finance.periodAll")}</TabsTrigger>
             </TabsList>
           </Tabs>
         </div>
 
         {loading || isAdmin === null ? (
-          <p className="text-sm text-muted-foreground">Loading…</p>
+          <p className="text-sm text-muted-foreground">{t("common.loading")}</p>
         ) : (
           <div className="space-y-8">
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
               <Card>
                 <CardHeader className="pb-2">
-                  <CardDescription>Delivered orders</CardDescription>
+                  <CardDescription>{t("admin.finance.deliveredOrders")}</CardDescription>
                   <CardTitle className="text-2xl">{summary.deliveredOrderCount}</CardTitle>
                 </CardHeader>
               </Card>
               <Card>
                 <CardHeader className="pb-2">
-                  <CardDescription>Cylinders out</CardDescription>
+                  <CardDescription>{t("admin.finance.cylindersOut")}</CardDescription>
                   <CardTitle className="text-2xl">{summary.totalCylindersOut}</CardTitle>
                 </CardHeader>
               </Card>
               <Card>
                 <CardHeader className="pb-2">
-                  <CardDescription>Cash on delivery</CardDescription>
+                  <CardDescription>{t("admin.finance.cashOnDelivery")}</CardDescription>
                   <CardTitle className="text-2xl">{formatXAF(summary.cashRevenue)}</CardTitle>
                 </CardHeader>
               </Card>
               <Card>
                 <CardHeader className="pb-2">
-                  <CardDescription>Mobile money</CardDescription>
+                  <CardDescription>{t("admin.finance.mobileMoney")}</CardDescription>
                   <CardTitle className="text-2xl">{formatXAF(summary.mobileMoneyRevenue)}</CardTitle>
                 </CardHeader>
               </Card>
@@ -197,8 +197,8 @@ function AdminFinancePage() {
 
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">Total revenue</CardTitle>
-                <CardDescription>Cash on delivery + mobile money, delivered orders in this period</CardDescription>
+                <CardTitle className="text-base">{t("admin.finance.totalRevenueTitle")}</CardTitle>
+                <CardDescription>{t("admin.finance.totalRevenueDesc")}</CardDescription>
               </CardHeader>
               <CardContent>
                 <p className="text-3xl font-bold text-primary">{formatXAF(summary.totalRevenue)}</p>
@@ -207,12 +207,12 @@ function AdminFinancePage() {
 
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">Cylinders out, by type</CardTitle>
-                <CardDescription>Units delivered and the revenue each cylinder type generated</CardDescription>
+                <CardTitle className="text-base">{t("admin.finance.byTypeTitle")}</CardTitle>
+                <CardDescription>{t("admin.finance.byTypeDesc")}</CardDescription>
               </CardHeader>
               <CardContent>
                 {summary.cylinderBreakdown.length === 0 ? (
-                  <p className="text-sm text-muted-foreground">No deliveries in this period.</p>
+                  <p className="text-sm text-muted-foreground">{t("admin.finance.noDeliveries")}</p>
                 ) : (
                   <div className="space-y-3">
                     {summary.cylinderBreakdown.map((c) => (
@@ -224,7 +224,7 @@ function AdminFinancePage() {
                           {c.name} {c.sizeKg ? `(${c.sizeKg}kg)` : ""}
                         </span>
                         <span className="text-sm text-muted-foreground">
-                          {c.units} units · {formatXAF(c.revenue)}
+                          {c.units} {t("admin.finance.unitsLabel")} · {formatXAF(c.revenue)}
                         </span>
                       </div>
                     ))}

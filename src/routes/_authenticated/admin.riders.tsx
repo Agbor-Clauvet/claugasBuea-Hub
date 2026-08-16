@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -22,6 +23,7 @@ type ApplicantRow = {
 };
 
 function AdminRidersPage() {
+  const { t } = useTranslation();
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [rows, setRows] = useState<ApplicantRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -74,7 +76,7 @@ function AdminRidersPage() {
         return;
       }
     }
-    toast.success("Rider approved.");
+    toast.success(t("admin.riderApplications.approvedToast"));
     setRows((rs) => rs.map((r) => (r.id === userId ? { ...r, isApprovedRider: true } : r)));
   }
 
@@ -83,7 +85,7 @@ function AdminRidersPage() {
       <div className="flex min-h-screen flex-col">
         <Navbar />
         <main className="mx-auto max-w-lg flex-1 px-4 py-16 text-center">
-          <p className="text-muted-foreground">You don't have access to this page.</p>
+          <p className="text-muted-foreground">{t("admin.riderApplications.accessDenied")}</p>
         </main>
         <Footer />
       </div>
@@ -94,36 +96,42 @@ function AdminRidersPage() {
     <div className="flex min-h-screen flex-col">
       <Navbar />
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-10">
-        <h1 className="text-2xl font-bold text-primary mb-2">Rider Applications</h1>
-        <p className="text-sm text-muted-foreground mb-8">
-          Riders who've declared a locality. Approve to grant delivery access.
-        </p>
+        <h1 className="text-2xl font-bold text-primary mb-2">{t("admin.riderApplications.title")}</h1>
+        <p className="text-sm text-muted-foreground mb-8">{t("admin.riderApplications.subtitle")}</p>
 
         {loading || isAdmin === null ? (
-          <p className="text-sm text-muted-foreground">Loading…</p>
+          <p className="text-sm text-muted-foreground">{t("admin.riderApplications.loading")}</p>
         ) : rows.length === 0 ? (
-          <p className="text-sm text-muted-foreground">No rider applications yet.</p>
+          <p className="text-sm text-muted-foreground">{t("admin.riderApplications.none")}</p>
         ) : (
           <div className="space-y-3">
             {rows.map((row) => (
               <Card key={row.id}>
                 <CardHeader className="flex flex-row items-center justify-between gap-4 space-y-0">
                   <div>
-                    <CardTitle className="text-base">{row.full_name || "(No name)"}</CardTitle>
-                    <p className="text-sm text-muted-foreground">{row.phone || "No phone on file"}</p>
+                    <CardTitle className="text-base">
+                      {row.full_name || t("admin.riderApplications.noName")}
+                    </CardTitle>
+                    <p className="text-sm text-muted-foreground">
+                      {row.phone || t("admin.riderApplications.noPhone")}
+                    </p>
                   </div>
-                  <Badge variant="secondary">{row.locality || "No locality"}</Badge>
+                  <Badge variant="secondary">{row.locality || t("admin.riderApplications.noLocality")}</Badge>
                 </CardHeader>
                 <CardContent>
                   {row.isApprovedRider ? (
-                    <Badge className="bg-green-600 hover:bg-green-600">Approved rider</Badge>
+                    <Badge className="bg-green-600 hover:bg-green-600">
+                      {t("admin.riderApplications.approved")}
+                    </Badge>
                   ) : (
                     <Button
                       size="sm"
                       onClick={() => approveRider(row.id)}
                       disabled={busyId === row.id}
                     >
-                      {busyId === row.id ? "Approving…" : "Approve as rider"}
+                      {busyId === row.id
+                        ? t("admin.riderApplications.approving")
+                        : t("admin.riderApplications.approve")}
                     </Button>
                   )}
                 </CardContent>

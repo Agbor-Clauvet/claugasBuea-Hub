@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -21,8 +22,10 @@ export const Route = createFileRoute("/_authenticated/become-rider")({
   component: BecomeRiderPage,
 });
 
-// Common Buea quarters. "Other" lets someone in a quarter not listed here
-// still register — their typed value is saved as-is.
+// Common Buea quarters — real place names, so these stay the same across
+// every language. Only the "Other" option itself gets translated (see
+// OTHER_VALUE below, kept as a stable internal sentinel independent of
+// whatever label is displayed for it).
 const LOCALITIES = [
   "Molyko",
   "Great Soppo",
@@ -35,8 +38,8 @@ const LOCALITIES = [
   "Muea",
   "Check Point",
   "Buea Town",
-  "Other",
 ];
+const OTHER_VALUE = "Other";
 
 type ProfileRow = {
   full_name: string | null;
@@ -46,6 +49,7 @@ type ProfileRow = {
 };
 
 function BecomeRiderPage() {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [alreadyApplied, setAlreadyApplied] = useState(false);
@@ -80,7 +84,7 @@ function BecomeRiderPage() {
           if (LOCALITIES.includes(p.locality)) {
             setLocality(p.locality);
           } else {
-            setLocality("Other");
+            setLocality(OTHER_VALUE);
             setOtherLocality(p.locality);
           }
         }
@@ -92,9 +96,9 @@ function BecomeRiderPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const finalLocality = locality === "Other" ? otherLocality.trim() : locality;
+    const finalLocality = locality === OTHER_VALUE ? otherLocality.trim() : locality;
     if (!fullName.trim() || !phone.trim() || !finalLocality) {
-      toast.error("Please fill in your name, phone, and locality.");
+      toast.error(t("becomeRider.fillRequired"));
       return;
     }
 
@@ -122,74 +126,73 @@ function BecomeRiderPage() {
       return;
     }
     setAlreadyApplied(true);
-    toast.success("Application received! We'll be in touch.");
+    toast.success(t("becomeRider.successToast"));
   }
 
   return (
     <div className="flex min-h-screen flex-col">
       <Navbar />
       <main className="mx-auto w-full max-w-lg flex-1 px-4 py-10">
-        <h1 className="text-2xl font-bold text-primary mb-2">Become a ClauGas Rider</h1>
-        <p className="text-sm text-muted-foreground mb-8">
-          Tell us your locality so we can match you with deliveries near you.
-        </p>
+        <h1 className="text-2xl font-bold text-primary mb-2">{t("becomeRider.title")}</h1>
+        <p className="text-sm text-muted-foreground mb-8">{t("becomeRider.subtitle")}</p>
 
         {loading ? (
-          <p className="text-sm text-muted-foreground">Loading…</p>
+          <p className="text-sm text-muted-foreground">{t("becomeRider.loading")}</p>
         ) : alreadyRider ? (
           <Card>
             <CardHeader>
-              <CardTitle>You're already a rider</CardTitle>
-              <CardDescription>Your account already has rider access.</CardDescription>
+              <CardTitle>{t("becomeRider.alreadyRiderTitle")}</CardTitle>
+              <CardDescription>{t("becomeRider.alreadyRiderBody")}</CardDescription>
             </CardHeader>
             <CardContent>
               <Link to="/dashboard" className="text-sm font-medium text-primary hover:underline">
-                Go to your dashboard →
+                {t("becomeRider.goDashboard")}
               </Link>
             </CardContent>
           </Card>
         ) : alreadyApplied ? (
           <Card>
             <CardHeader>
-              <CardTitle>Application received</CardTitle>
+              <CardTitle>{t("becomeRider.appliedTitle")}</CardTitle>
               <CardDescription>
-                Thanks — we've got your details for <strong>{locality === "Other" ? otherLocality : locality}</strong>.
-                We'll reach out once your rider account is approved.
+                {t("becomeRider.appliedBodyPrefix")}{" "}
+                <strong>{locality === OTHER_VALUE ? otherLocality : locality}</strong>.{" "}
+                {t("becomeRider.appliedBodySuffix")}
               </CardDescription>
             </CardHeader>
             <CardContent>
               <Button variant="outline" onClick={() => setAlreadyApplied(false)}>
-                Update my details
+                {t("becomeRider.updateDetails")}
               </Button>
             </CardContent>
           </Card>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="fullName">Full name</Label>
+              <Label htmlFor="fullName">{t("becomeRider.fullName")}</Label>
               <Input
                 id="fullName"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                placeholder="Your full name"
+                placeholder={t("becomeRider.fullNamePlaceholder")}
                 required
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="phone">Phone number</Label>
+              <Label htmlFor="phone">{t("becomeRider.phone")}</Label>
               <Input
                 id="phone"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                placeholder="+237 6XX XXX XXX"
+                placeholder={t("becomeRider.phonePlaceholder")}
                 required
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="locality">Which locality are you based in?</Label>
+              <Label htmlFor="locality">{t("becomeRider.localityLabel")}</Label>
               <Select value={locality} onValueChange={setLocality}>
                 <SelectTrigger id="locality">
-                  <SelectValue placeholder="Select your locality" />
+                  <SelectValue placeholder={t("becomeRider.localityPlaceholder")} />
                 </SelectTrigger>
                 <SelectContent>
                   {LOCALITIES.map((loc) => (
@@ -197,23 +200,24 @@ function BecomeRiderPage() {
                       {loc}
                     </SelectItem>
                   ))}
+                  <SelectItem value={OTHER_VALUE}>{t("becomeRider.otherOption")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
-            {locality === "Other" && (
+            {locality === OTHER_VALUE && (
               <div className="space-y-2">
-                <Label htmlFor="otherLocality">Enter your locality</Label>
+                <Label htmlFor="otherLocality">{t("becomeRider.otherLocalityLabel")}</Label>
                 <Input
                   id="otherLocality"
                   value={otherLocality}
                   onChange={(e) => setOtherLocality(e.target.value)}
-                  placeholder="e.g. Wonya Mavio"
+                  placeholder={t("becomeRider.otherLocalityPlaceholder")}
                   required
                 />
               </div>
             )}
             <Button type="submit" className="w-full" disabled={saving}>
-              {saving ? "Submitting…" : "Submit application"}
+              {saving ? t("becomeRider.submitting") : t("becomeRider.submit")}
             </Button>
           </form>
         )}

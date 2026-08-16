@@ -91,17 +91,17 @@ function DashboardPage() {
             <Link to="/addresses" className="font-medium text-primary hover:underline">{t("address.title")} →</Link>
             <Link to="/orders" className="font-medium text-primary hover:underline">{t("order.myOrders")} →</Link>
             {!roles.includes("rider") && (
-              <Link to="/become-rider" className="font-medium text-primary hover:underline">Become a Rider →</Link>
+              <Link to="/become-rider" className="font-medium text-primary hover:underline">{t("becomeRider.navLabel")} →</Link>
             )}
             {roles.includes("admin") ? (
               <>
                 <Link to="/admin/cylinders" className="font-medium text-primary hover:underline">{t("admin.cylinderPricing")} →</Link>
                 <Link to="/admin/orders" className="font-medium text-primary hover:underline">{t("admin.orders")} →</Link>
-                <Link to="/admin/finance" className="font-medium text-primary hover:underline">Finance & Cylinders →</Link>
-                <Link to="/admin/riders" className="font-medium text-primary hover:underline">Rider Applications →</Link>
-                <Link to="/admin/commission-settings" className="font-medium text-primary hover:underline">Commission Settings →</Link>
+                <Link to="/admin/finance" className="font-medium text-primary hover:underline">{t("admin.finance.title")} →</Link>
+                <Link to="/admin/riders" className="font-medium text-primary hover:underline">{t("admin.riderApplications.title")} →</Link>
+                <Link to="/admin/commission-settings" className="font-medium text-primary hover:underline">{t("admin.commissionSettings.title")} →</Link>
                 {roles.includes("super_admin") && (
-                  <Link to="/admin/admins" className="font-medium text-primary hover:underline">Manage Admins →</Link>
+                  <Link to="/admin/admins" className="font-medium text-primary hover:underline">{t("admin.manageAdmins.title")} →</Link>
                 )}
               </>
             ) : null}
