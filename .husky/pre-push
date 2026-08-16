@@ -13,18 +13,21 @@
 # here means the exact same failure would happen on Vercel's build.
 
 echo ""
-echo "🔍 Running pre-push checks (type-check + build)..."
+echo "🔍 Running pre-push checks (type-check + tests + build)..."
 echo ""
 
 npm run typecheck
 TYPECHECK_EXIT=$?
 
+npm run test
+TEST_EXIT=$?
+
 npm run build
 BUILD_EXIT=$?
 
-if [ $TYPECHECK_EXIT -ne 0 ] || [ $BUILD_EXIT -ne 0 ]; then
+if [ $TYPECHECK_EXIT -ne 0 ] || [ $TEST_EXIT -ne 0 ] || [ $BUILD_EXIT -ne 0 ]; then
   echo ""
-  echo "❌ Push blocked — the type-check or build failed above."
+  echo "❌ Push blocked — the type-check, tests, or build failed above."
   echo "   Fix the error shown above, then try pushing again."
   echo "   (To push anyway, in an emergency: git push --no-verify)"
   echo ""
@@ -32,5 +35,5 @@ if [ $TYPECHECK_EXIT -ne 0 ] || [ $BUILD_EXIT -ne 0 ]; then
 fi
 
 echo ""
-echo "✅ Type-check and build both passed — pushing now."
+echo "✅ Type-check, tests, and build all passed — pushing now."
 echo ""

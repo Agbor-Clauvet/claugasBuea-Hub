@@ -9,7 +9,6 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as TestErrorRouteImport } from './routes/test-error'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as PrivacyRouteImport } from './routes/privacy'
@@ -31,11 +30,6 @@ import { Route as AuthenticatedAdminCylindersRouteImport } from './routes/_authe
 import { Route as AuthenticatedAdminCommissionSettingsRouteImport } from './routes/_authenticated/admin.commission-settings'
 import { Route as AuthenticatedAdminAdminsRouteImport } from './routes/_authenticated/admin.admins'
 
-const TestErrorRoute = TestErrorRouteImport.update({
-  id: '/test-error',
-  path: '/test-error',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
@@ -152,7 +146,6 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
   '/terms': typeof TermsRoute
-  '/test-error': typeof TestErrorRoute
   '/addresses': typeof AuthenticatedAddressesRoute
   '/become-rider': typeof AuthenticatedBecomeRiderRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -174,7 +167,6 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
   '/terms': typeof TermsRoute
-  '/test-error': typeof TestErrorRoute
   '/addresses': typeof AuthenticatedAddressesRoute
   '/become-rider': typeof AuthenticatedBecomeRiderRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -198,7 +190,6 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
   '/terms': typeof TermsRoute
-  '/test-error': typeof TestErrorRoute
   '/_authenticated/addresses': typeof AuthenticatedAddressesRoute
   '/_authenticated/become-rider': typeof AuthenticatedBecomeRiderRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
@@ -222,7 +213,6 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/reset-password'
     | '/terms'
-    | '/test-error'
     | '/addresses'
     | '/become-rider'
     | '/dashboard'
@@ -244,7 +234,6 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/reset-password'
     | '/terms'
-    | '/test-error'
     | '/addresses'
     | '/become-rider'
     | '/dashboard'
@@ -267,7 +256,6 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/reset-password'
     | '/terms'
-    | '/test-error'
     | '/_authenticated/addresses'
     | '/_authenticated/become-rider'
     | '/_authenticated/dashboard'
@@ -291,18 +279,10 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   TermsRoute: typeof TermsRoute
-  TestErrorRoute: typeof TestErrorRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/test-error': {
-      id: '/test-error'
-      path: '/test-error'
-      fullPath: '/test-error'
-      preLoaderRoute: typeof TestErrorRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/terms': {
       id: '/terms'
       path: '/terms'
@@ -491,7 +471,6 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   TermsRoute: TermsRoute,
-  TestErrorRoute: TestErrorRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
