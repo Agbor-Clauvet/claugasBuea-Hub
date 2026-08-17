@@ -1,0 +1,44 @@
+name: CI
+
+# Runs the exact same three checks as the local pre-push hook
+# (typecheck, tests, build) — but on GitHub's own servers, not the
+# developer's machine. This matters because the local hook can be
+# skipped with `git push --no-verify`, a teammate might not have it
+# set up yet, or someone could push from a fresh clone that hasn't
+# run `npm install` (which is what installs husky's hooks in the
+# first place). This workflow can't be skipped that way — it runs
+# on GitHub's infrastructure regardless of what happened locally.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  checks:
+    name: Type-check, test, and build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      # Pinned to Node 24 to match what Vercel/Nitro actually runs in
+      # production (see "Using nodejs24.x runtime" in the build logs) —
+      # keeps CI honest about what will really happen on deploy.
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type-check
+        run: npm run typecheck
+
+      - name: Run tests
+        run: npm run test
+
+      - name: Build
+        run: npm run build
