@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
+import { Trash2 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin/cylinders")({
   head: () => ({ meta: [{ title: "Admin · Cylinder Pricing — ClauGas" }] }),
@@ -42,6 +43,7 @@ function AdminCylindersPage() {
   const [newImageFile, setNewImageFile] = useState<File | null>(null);
   const [newImagePreview, setNewImagePreview] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -160,6 +162,37 @@ function AdminCylindersPage() {
     toast.success(t("admin.statusUpdated"));
   }
 
+  async function deleteCylinder(id: string, name: string) {
+    if (!window.confirm(t("admin.confirmDelete", { name }))) return;
+    setDeletingId(id);
+    try {
+      // Try a real delete first — this only succeeds for products that
+      // have never been ordered. If the product has order history, the
+      // database itself blocks this (to protect past orders/receipts),
+      // and we fall back to hiding it instead.
+      const { error } = await supabase.from("cylinders").delete().eq("id", id);
+      if (error) {
+        if (error.code === "23503") {
+          const { error: hideError } = await supabase
+            .from("cylinders")
+            .update({ is_active: false, in_stock: false })
+            .eq("id", id);
+          if (hideError) throw hideError;
+          setRows((rs) => rs.filter((r) => r.id !== id));
+          toast.success(t("admin.hiddenHasOrders"));
+          return;
+        }
+        throw error;
+      }
+      setRows((rs) => rs.filter((r) => r.id !== id));
+      toast.success(t("admin.productDeleted"));
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : t("admin.deleteFailed"));
+    } finally {
+      setDeletingId(null);
+    }
+  }
+
   if (isAdmin === false)
     return (
       <div className="flex min-h-screen flex-col">
@@ -241,10 +274,20 @@ function AdminCylindersPage() {
         <div className="space-y-3">
           {rows.map((r) => (
             <Card key={r.id}>
-              <CardHeader>
+              <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle className="text-base">
                   {r.name} <span className="text-xs text-muted-foreground">({r.size_kg} kg)</span>
                 </CardTitle>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="text-destructive hover:text-destructive"
+                  disabled={deletingId === r.id}
+                  onClick={() => deleteCylinder(r.id, r.name)}
+                  aria-label={t("admin.deleteProduct")}
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
               </CardHeader>
               <CardContent className="flex flex-wrap items-end gap-3">
                 <div className="flex-1 min-w-[180px]">

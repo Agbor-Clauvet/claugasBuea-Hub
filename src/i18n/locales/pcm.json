@@ -254,6 +254,11 @@
     "imageTooLarge": "Image no suppose pass 5MB",
     "productAdded": "Product don add",
     "createFailed": "We no fit add the product. Try again.",
+    "deleteProduct": "Delete product",
+    "confirmDelete": "Delete \"{{name}}\"? If nobody don order am before, e no go fit come back.",
+    "productDeleted": "Product don delete",
+    "hiddenHasOrders": "This product get order before, so we hide am from customer instead of delete am, so order history no go spoil.",
+    "deleteFailed": "We no fit delete the product. Try again.",
     "riderApplications": {
       "title": "Rider Applications",
       "subtitle": "Riders wey don tell us their area. Approve am make dem fit start delivery.",

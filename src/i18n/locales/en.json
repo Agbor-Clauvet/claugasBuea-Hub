@@ -254,6 +254,11 @@
     "imageTooLarge": "Image must be under 5MB",
     "productAdded": "Product added",
     "createFailed": "Couldn't add the product. Please try again.",
+    "deleteProduct": "Delete product",
+    "confirmDelete": "Delete \"{{name}}\"? This can't be undone if it's never been ordered.",
+    "productDeleted": "Product deleted",
+    "hiddenHasOrders": "This product has past orders, so it's been hidden from customers instead of deleted, to keep order history intact.",
+    "deleteFailed": "Couldn't delete the product. Please try again.",
     "riderApplications": {
       "title": "Rider Applications",
       "subtitle": "Riders who've declared a locality. Approve to grant delivery access.",
