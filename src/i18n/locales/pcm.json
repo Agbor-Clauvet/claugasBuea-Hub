@@ -313,6 +313,24 @@
       "superAdminRemovedToast": "Super admin access don remove.",
       "adminRemovedToast": "Admin access don remove."
     },
+    "analytics": {
+      "title": "Analytics",
+      "subtitle": "Where demand dey come from, and how e look like — for market targeting and resource planning.",
+      "accessDenied": "Na admin only.",
+      "noData": "No order dey for this period yet.",
+      "noLocationData": "No address data dey available yet.",
+      "ordersLabel": "orders",
+      "heatmapTitle": "Demand by quarter",
+      "heatmapDesc": "How many order and how much money per delivery quarter — the darker the color, the more the demand.",
+      "lineTitle": "Revenue trend",
+      "lineDesc": "Total order value per day for the period wey you select.",
+      "histogramTitle": "Order value spread",
+      "histogramDesc": "How many order dey fall for each price range.",
+      "scatterTitle": "Distance vs. order value",
+      "scatterDesc": "Every dot na one order — how far from depot, and how much e cost.",
+      "distanceLabel": "Distance",
+      "orderValueLabel": "Order value"
+    },
     "finance": {
       "title": "Finance & Cylinders",
       "subtitle": "Wetin don comot per cylinder, and wetin don enter for cash — delivered order dem only.",

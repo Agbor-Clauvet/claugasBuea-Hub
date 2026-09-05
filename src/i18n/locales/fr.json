@@ -313,6 +313,24 @@
       "superAdminRemovedToast": "Accès super admin retiré.",
       "adminRemovedToast": "Accès admin retiré."
     },
+    "analytics": {
+      "title": "Analytique",
+      "subtitle": "D'où vient la demande, et à quoi elle ressemble — pour cibler le marché et planifier les ressources.",
+      "accessDenied": "Réservé aux admins.",
+      "noData": "Aucune commande sur cette période pour l'instant.",
+      "noLocationData": "Aucune donnée d'adresse disponible pour l'instant.",
+      "ordersLabel": "commandes",
+      "heatmapTitle": "Demande par quartier",
+      "heatmapDesc": "Nombre de commandes et revenu par quartier de livraison — plus c'est foncé, plus la demande est forte.",
+      "lineTitle": "Tendance du revenu",
+      "lineDesc": "Valeur totale des commandes par jour sur la période sélectionnée.",
+      "histogramTitle": "Distribution de la valeur des commandes",
+      "histogramDesc": "Combien de commandes se situent dans chaque tranche de prix.",
+      "scatterTitle": "Distance vs. valeur de la commande",
+      "scatterDesc": "Chaque point est une commande — sa distance par rapport au dépôt et sa valeur.",
+      "distanceLabel": "Distance",
+      "orderValueLabel": "Valeur de la commande"
+    },
     "finance": {
       "title": "Finances & Bouteilles",
       "subtitle": "Ce qui est sorti par type de bouteille, et ce qui est entré par mode de paiement — commandes livrées uniquement.",

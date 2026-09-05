@@ -98,6 +98,7 @@ function DashboardPage() {
                 <Link to="/admin/cylinders" className="font-medium text-primary hover:underline">{t("admin.cylinderPricing")} →</Link>
                 <Link to="/admin/orders" className="font-medium text-primary hover:underline">{t("admin.orders")} →</Link>
                 <Link to="/admin/finance" className="font-medium text-primary hover:underline">{t("admin.finance.title")} →</Link>
+                <Link to="/admin/analytics" className="font-medium text-primary hover:underline">{t("admin.analytics.title")} →</Link>
                 <Link to="/admin/riders" className="font-medium text-primary hover:underline">{t("admin.riderApplications.title")} →</Link>
                 <Link to="/admin/commission-settings" className="font-medium text-primary hover:underline">{t("admin.commissionSettings.title")} →</Link>
                 {roles.includes("super_admin") && (

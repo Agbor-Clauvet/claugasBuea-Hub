@@ -313,6 +313,24 @@
       "superAdminRemovedToast": "Super admin access removed.",
       "adminRemovedToast": "Admin access removed."
     },
+    "analytics": {
+      "title": "Analytics",
+      "subtitle": "Where demand is coming from, and what it looks like — for market targeting and resource planning.",
+      "accessDenied": "Admins only.",
+      "noData": "No orders in this period yet.",
+      "noLocationData": "No address data available yet.",
+      "ordersLabel": "orders",
+      "heatmapTitle": "Demand by quarter",
+      "heatmapDesc": "Order count and revenue per delivery quarter — darker means more demand.",
+      "lineTitle": "Revenue trend",
+      "lineDesc": "Total order value per day over the selected period.",
+      "histogramTitle": "Order value distribution",
+      "histogramDesc": "How many orders fall into each price range.",
+      "scatterTitle": "Distance vs. order value",
+      "scatterDesc": "Each dot is one order — how far from the depot, and how much it was worth.",
+      "distanceLabel": "Distance",
+      "orderValueLabel": "Order value"
+    },
     "finance": {
       "title": "Finance & Cylinders",
       "subtitle": "What's gone out per cylinder, and what's come in by payment method — delivered orders only.",
