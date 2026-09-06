@@ -29,7 +29,9 @@ export const Route = createFileRoute("/_authenticated/admin/analytics")({
 
 type Period = "30d" | "90d" | "all";
 
-type AddressJoin = { quarter: string | null; latitude: number | null; longitude: number | null } | null;
+type AddressJoin = { quarter: string | null } | null;
+
+type QuarterCoord = { quarter: string; lat: number; lng: number };
 
 type OrderRow = {
   id: string;
@@ -61,6 +63,7 @@ function AdminAnalyticsPage() {
   const [period, setPeriod] = useState<Period>("30d");
   const [orders, setOrders] = useState<OrderRow[]>([]);
   const [retailerCoords, setRetailerCoords] = useState<Coordinates | null>(null);
+  const [quarterCoords, setQuarterCoords] = useState<QuarterCoord[]>([]);
 
   async function loadData() {
     setLoading(true);
@@ -71,7 +74,7 @@ function AdminAnalyticsPage() {
     // in-transit order is just as meaningful a signal as a delivered one.
     let orderQuery = supabase
       .from("orders")
-      .select("id,total,status,created_at,addresses(quarter,latitude,longitude)")
+      .select("id,total,status,created_at,addresses(quarter)")
       .neq("status", "cancelled");
 
     if (period !== "all") {
@@ -86,6 +89,12 @@ function AdminAnalyticsPage() {
     const { data: retailerData } = await supabase.from("retailers").select("lat,lng").limit(1).maybeSingle();
     const rc = retailerData as unknown as { lat: number | null; lng: number | null } | null;
     if (rc?.lat != null && rc?.lng != null) setRetailerCoords({ lat: rc.lat, lng: rc.lng });
+
+    // Coordinates per quarter come from service_areas, the same source
+    // the actual booking/delivery-fee flow uses — addresses themselves
+    // only store the quarter name, never their own lat/lng.
+    const { data: areas } = await supabase.from("service_areas").select("quarter,lat,lng");
+    setQuarterCoords(((areas ?? []) as QuarterCoord[]).filter((a) => a.lat != null && a.lng != null));
 
     setLoading(false);
   }
@@ -141,19 +150,21 @@ function AdminAnalyticsPage() {
   }, [orders]);
 
   const scatterData = useMemo(() => {
-    if (!retailerCoords) return [];
+    if (!retailerCoords || quarterCoords.length === 0) return [];
     return orders
-      .filter((o) => o.addresses?.latitude != null && o.addresses?.longitude != null)
-      .map((o) => ({
-        distance: Number(
-          haversineDistanceKm(retailerCoords, {
-            lat: o.addresses!.latitude!,
-            lng: o.addresses!.longitude!,
-          }).toFixed(1)
-        ),
-        value: o.total,
-      }));
-  }, [orders, retailerCoords]);
+      .map((o) => {
+        const q = o.addresses?.quarter?.trim();
+        const coord = q ? quarterCoords.find((c) => c.quarter === q) : undefined;
+        if (!coord) return null;
+        return {
+          distance: Number(
+            haversineDistanceKm(retailerCoords, { lat: coord.lat, lng: coord.lng }).toFixed(1)
+          ),
+          value: o.total,
+        };
+      })
+      .filter((d): d is { distance: number; value: number } => d !== null);
+  }, [orders, retailerCoords, quarterCoords]);
 
   const maxHeatCount = heatmapData[0]?.count ?? 1;
 
