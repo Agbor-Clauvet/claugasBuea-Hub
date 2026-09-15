@@ -389,6 +389,10 @@
   },
   "dashboard": {
     "welcome": "Bienvenue",
+    "googleNotLinked": "Vous voulez vous connecter avec Google la prochaine fois ?",
+    "googleLinked": "La connexion Google est liée à ce compte.",
+    "linkGoogle": "Lier Google",
+    "linking": "Liaison en cours…",
     "profile": "Profil",
     "yourAccount": "Votre compte",
     "name": "Nom",

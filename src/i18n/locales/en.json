@@ -389,6 +389,10 @@
   },
   "dashboard": {
     "welcome": "Welcome",
+    "googleNotLinked": "Want to sign in with Google next time?",
+    "googleLinked": "Google sign-in is linked to this account.",
+    "linkGoogle": "Link Google",
+    "linking": "Linking…",
     "profile": "Profile",
     "yourAccount": "Your account",
     "name": "Name",
