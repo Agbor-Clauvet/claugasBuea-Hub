@@ -30,6 +30,30 @@ function DashboardPage() {
   const [cylindersCount, setCylindersCount] = useState<number | null>(null);
   const [ordersCount, setOrdersCount] = useState<number | null>(null);
   const [rlsCheck, setRlsCheck] = useState<string>("pending");
+  const [googleLinked, setGoogleLinked] = useState<boolean | null>(null);
+  const [linking, setLinking] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const { data, error } = await supabase.auth.getUserIdentities();
+      if (error) return;
+      setGoogleLinked((data?.identities ?? []).some((i) => i.provider === "google"));
+    })();
+  }, []);
+
+  async function linkGoogle() {
+    setLinking(true);
+    const { error } = await supabase.auth.linkIdentity({
+      provider: "google",
+      options: { redirectTo: window.location.href },
+    });
+    if (error) {
+      setLinking(false);
+      toast.error(error.message);
+    }
+    // On success the browser navigates away to Google, so nothing else
+    // to do here — it comes back to this same page once linked.
+  }
 
   useEffect(() => {
     (async () => {
@@ -87,6 +111,17 @@ function DashboardPage() {
               <Badge key={r} variant="secondary">{r}</Badge>
             ))}
           </div>
+          {googleLinked === false && (
+            <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
+              <span className="text-muted-foreground">{t("dashboard.googleNotLinked")}</span>
+              <Button size="sm" variant="outline" disabled={linking} onClick={linkGoogle}>
+                {linking ? t("dashboard.linking") : t("dashboard.linkGoogle")}
+              </Button>
+            </div>
+          )}
+          {googleLinked === true && (
+            <p className="mt-3 text-sm text-muted-foreground">✓ {t("dashboard.googleLinked")}</p>
+          )}
           <div className="mt-3 flex flex-wrap gap-4 text-sm">
             <Link to="/addresses" className="font-medium text-primary hover:underline">{t("address.title")} →</Link>
             <Link to="/orders" className="font-medium text-primary hover:underline">{t("order.myOrders")} →</Link>

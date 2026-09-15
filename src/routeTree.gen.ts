@@ -28,6 +28,7 @@ import { Route as AuthenticatedAdminOrdersRouteImport } from './routes/_authenti
 import { Route as AuthenticatedAdminFinanceRouteImport } from './routes/_authenticated/admin.finance'
 import { Route as AuthenticatedAdminCylindersRouteImport } from './routes/_authenticated/admin.cylinders'
 import { Route as AuthenticatedAdminCommissionSettingsRouteImport } from './routes/_authenticated/admin.commission-settings'
+import { Route as AuthenticatedAdminAnalyticsRouteImport } from './routes/_authenticated/admin.analytics'
 import { Route as AuthenticatedAdminAdminsRouteImport } from './routes/_authenticated/admin.admins'
 
 const TermsRoute = TermsRouteImport.update({
@@ -133,6 +134,12 @@ const AuthenticatedAdminCommissionSettingsRoute =
     path: '/admin/commission-settings',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminAnalyticsRoute =
+  AuthenticatedAdminAnalyticsRouteImport.update({
+    id: '/admin/analytics',
+    path: '/admin/analytics',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminAdminsRoute =
   AuthenticatedAdminAdminsRouteImport.update({
     id: '/admin/admins',
@@ -151,6 +158,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/orders': typeof AuthenticatedOrdersRoute
   '/admin/admins': typeof AuthenticatedAdminAdminsRoute
+  '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/admin/commission-settings': typeof AuthenticatedAdminCommissionSettingsRoute
   '/admin/cylinders': typeof AuthenticatedAdminCylindersRoute
   '/admin/finance': typeof AuthenticatedAdminFinanceRoute
@@ -172,6 +180,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/orders': typeof AuthenticatedOrdersRoute
   '/admin/admins': typeof AuthenticatedAdminAdminsRoute
+  '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/admin/commission-settings': typeof AuthenticatedAdminCommissionSettingsRoute
   '/admin/cylinders': typeof AuthenticatedAdminCylindersRoute
   '/admin/finance': typeof AuthenticatedAdminFinanceRoute
@@ -195,6 +204,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/orders': typeof AuthenticatedOrdersRoute
   '/_authenticated/admin/admins': typeof AuthenticatedAdminAdminsRoute
+  '/_authenticated/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/_authenticated/admin/commission-settings': typeof AuthenticatedAdminCommissionSettingsRoute
   '/_authenticated/admin/cylinders': typeof AuthenticatedAdminCylindersRoute
   '/_authenticated/admin/finance': typeof AuthenticatedAdminFinanceRoute
@@ -218,6 +228,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/orders'
     | '/admin/admins'
+    | '/admin/analytics'
     | '/admin/commission-settings'
     | '/admin/cylinders'
     | '/admin/finance'
@@ -239,6 +250,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/orders'
     | '/admin/admins'
+    | '/admin/analytics'
     | '/admin/commission-settings'
     | '/admin/cylinders'
     | '/admin/finance'
@@ -261,6 +273,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/orders'
     | '/_authenticated/admin/admins'
+    | '/_authenticated/admin/analytics'
     | '/_authenticated/admin/commission-settings'
     | '/_authenticated/admin/cylinders'
     | '/_authenticated/admin/finance'
@@ -416,6 +429,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminCommissionSettingsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/analytics': {
+      id: '/_authenticated/admin/analytics'
+      path: '/admin/analytics'
+      fullPath: '/admin/analytics'
+      preLoaderRoute: typeof AuthenticatedAdminAnalyticsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/admins': {
       id: '/_authenticated/admin/admins'
       path: '/admin/admins'
@@ -432,6 +452,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedOrdersRoute: typeof AuthenticatedOrdersRoute
   AuthenticatedAdminAdminsRoute: typeof AuthenticatedAdminAdminsRoute
+  AuthenticatedAdminAnalyticsRoute: typeof AuthenticatedAdminAnalyticsRoute
   AuthenticatedAdminCommissionSettingsRoute: typeof AuthenticatedAdminCommissionSettingsRoute
   AuthenticatedAdminCylindersRoute: typeof AuthenticatedAdminCylindersRoute
   AuthenticatedAdminFinanceRoute: typeof AuthenticatedAdminFinanceRoute
@@ -449,6 +470,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedOrdersRoute: AuthenticatedOrdersRoute,
   AuthenticatedAdminAdminsRoute: AuthenticatedAdminAdminsRoute,
+  AuthenticatedAdminAnalyticsRoute: AuthenticatedAdminAnalyticsRoute,
   AuthenticatedAdminCommissionSettingsRoute:
     AuthenticatedAdminCommissionSettingsRoute,
   AuthenticatedAdminCylindersRoute: AuthenticatedAdminCylindersRoute,
