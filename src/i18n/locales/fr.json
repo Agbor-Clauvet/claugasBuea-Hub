@@ -92,6 +92,8 @@
   "auth": {
     "title": "Connectez-vous ou créez un compte",
     "resetTitle": "Réinitialiser votre mot de passe",
+    "continueWithGoogle": "Continuer avec Google",
+    "orContinueWith": "ou continuer avec",
     "signIn": "Se connecter",
     "register": "S'inscrire",
     "email": "Email",
